@@ -27,7 +27,7 @@ public class PartyRouteWizard extends Composite
 
     private ICallback finishCb;
 
-    private final Map<WizardStep, Integer> map = new HashMap<WizardStep, Integer>();
+            private final Map<WizardStep, Integer> map = new HashMap<WizardStep, Integer>();
     private final Map<HTML, Integer> headers = new HashMap<HTML, Integer>();
     private WizardStep currentstep = null;
 
