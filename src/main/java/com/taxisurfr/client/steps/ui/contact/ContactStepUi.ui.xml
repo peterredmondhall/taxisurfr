@@ -1,0 +1,181 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
+
+	<ui:with field='messages' type='com.taxisurfr.client.resources.ClientMessages' />
+
+	<ui:style>
+		.labelDiv {
+			display: inline;
+			float: left;
+			font-size: 14px;
+			margin-top: 2px;
+			text-align: right;
+			margin-right: 15px;
+			width: 300px;
+	}
+
+	.title { font-weight:bold; color: #62ba37; margin-bottom:
+		10px; font-size:
+		30px;}
+
+	</ui:style>
+	
+	<g:HTMLPanel ui:field="mainPanel">
+	   <g:Label styleName="{style.title}"  ui:field="labelBooking">
+			
+		</g:Label>
+	   <g:Label styleName="{style.title}" ui:field="labelSharing1">
+			You are creating a share request.
+		</g:Label>
+	   <g:Label ui:field="labelSharing2">
+			We will forward your details to the person who wants to share their taxi and they will contact you directly.
+		</g:Label>
+	   	   	   	    
+		<g:Grid>
+			<!-- Date -->
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="dateMsg">Date of pickup *</g:Label>
+				</g:customCell>
+				<g:customCell >
+					<d:DateBox ui:field="dateBox" />
+				</g:customCell>
+				<g:customCell styleName="optionalBarCellStyle">
+					<g:Label styleName="errMsg" ui:field="dateErrorMsg"></g:Label>
+				</g:customCell>
+			</g:row>
+			
+						<!-- Flight no. -->
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="labelFlightNo">Flight no. *</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:TextBox styleName="widgetDiv" ui:field="flightNo" />
+				</g:customCell>
+				<g:customCell styleName="optionalBarCellStyle">
+					<g:Label styleName="errMsg" ui:field="flightErrorMsg"></g:Label>
+				</g:customCell>
+			</g:row>
+						
+			<!-- Landing time -->
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="labelFlightLandingTime">Approx. landing time *</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:TextBox styleName="widgetDiv" ui:field="flightLandingTime"/>
+				</g:customCell>
+				<g:customCell styleName="optionalBarCellStyle">
+					<g:Label styleName="errMsg" ui:field="arrivalErrorMsg"></g:Label>
+				</g:customCell>
+							</g:row>
+			
+			<!-- No. passengers -->
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label>Number of passengers</g:Label>
+				</g:customCell>
+				<g:customCell >
+					<g:ListBox styleName="listbox" ui:field="pax"/>
+				</g:customCell>
+			</g:row>
+						
+			
+			<!-- First name -->			
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="firstNameMsg">First name *</g:Label>
+				</g:customCell>
+				<g:customCell >
+					<g:TextBox styleName="widgetDiv" ui:field="firstName" />
+				</g:customCell>
+				<g:customCell styleName="optionalBarCellStyle">
+					<g:Label styleName="errMsg" ui:field="firstNameErrorMsg"></g:Label>
+				</g:customCell>
+			</g:row>
+			
+			<!-- Surname -->			
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="lastNameMsg">Last name *</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:TextBox styleName="widgetDiv" ui:field="lastName" />
+				</g:customCell>
+				<g:customCell styleName="optionalBarCellStyle">
+					<g:Label styleName="errMsg" ui:field="lastNameErrorMsg"></g:Label>
+				</g:customCell>
+			</g:row>
+						
+			<!-- want to share -->			
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="labelWanttoShare">Interested in sharing</g:Label>
+				</g:customCell>
+				<g:customCell >
+					<g:CheckBox ui:field="checkboxWanttoShare" />
+				</g:customCell>
+			</g:row>
+						
+						<!-- email -->			
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="labelEmailMsg">Email *</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:TextBox styleName="widgetDiv" ui:field="email" />
+				</g:customCell>
+				<g:customCell styleName="optionalBarCellStyle">
+					<g:Label styleName="errMsg" ui:field="emailErrorMsg"></g:Label>
+				</g:customCell>
+			</g:row>
+			
+			<!-- email repeat -->			
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="labelEmail2Msg">Email (repeat) *</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:TextBox styleName="widgetDiv" ui:field="email2" />
+				</g:customCell>
+				<g:customCell styleName="optionalBarCellStyle">
+					<g:Label styleName="errMsg" ui:field="email2ErrorMsg"></g:Label>
+				</g:customCell>
+			</g:row>
+			
+			<!-- No. surfboards -->
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="surfboardsLabel">Number of surfboards</g:Label>
+				</g:customCell>
+				<g:customCell >
+					<g:ListBox styleName="listbox" ui:field="surfboards"/>
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label ui:field="labelRequirementsField">Other requirements:</g:Label>
+				</g:customCell>
+				<g:customCell >
+					<g:TextArea ui:field="requirementsBox" styleName="widgetDiv"/>
+				</g:customCell>
+				
+			</g:row>
+			<g:row>
+				<g:customCell   styleName="{style.labelDiv}" >
+					<g:Label />				
+					</g:customCell>
+					<g:customCell >
+				<g:Button ui:field="nextButtonContact" text="Next" styleName="btn btn-primary" />
+				</g:customCell>
+				
+			</g:row>
+
+						
+		</g:Grid>
+
+	</g:HTMLPanel>
+
+</ui:UiBinder> 

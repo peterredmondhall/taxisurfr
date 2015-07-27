@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.github.branflake2267:gwt-maps-api:3.10.0-alpha-7-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/branflake2267/gwt-maps-api/3.10.0-alpha-7-SNAPSHOT/gwt-maps-api-3.10.0-alpha-7-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/branflake2267/gwt-maps-api/3.10.0-alpha-7-SNAPSHOT/gwt-maps-api-3.10.0-alpha-7-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/github/branflake2267/gwt-maps-api/3.10.0-alpha-7-SNAPSHOT/gwt-maps-api-3.10.0-alpha-7-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

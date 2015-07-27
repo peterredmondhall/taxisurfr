@@ -1,0 +1,30 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
+
+	<ui:with field='messages' type='com.taxisurfr.client.resources.ClientMessages' />
+
+	<ui:style>
+		.title { font-weight:bold; color: #62ba37; margin-bottom:
+		10px; font-size:
+		30px;}
+	</ui:style>
+
+	<g:HTMLPanel ui:field="mainPanel">
+		<g:Label styleName="{style.title}">Congratulations</g:Label>
+		<g:Label ui:field="label1" />
+		<g:Label ui:field="labelConfirmationEmail" />
+		<g:Label ui:field="label2" />
+		<g:VerticalPanel ui:field="panelOrderForm">
+			<g:Anchor ui:field="orderForm" href="/myurl">Here is your order form.</g:Anchor>
+		</g:VerticalPanel>
+		<g:VerticalPanel ui:field="panelShareLink">
+			<g:Anchor ui:field="shareLink" href="/myurl">Share this link so that
+				others can join you.</g:Anchor>
+				        
+        <g:Anchor href="http://www.facebook.com/sharer/sharer.php?u=https://www.facebook.com/taxisurfr" target="_blank">Share on facebook.</g:Anchor>
+			
+		</g:VerticalPanel>
+	</g:HTMLPanel>
+
+</ui:UiBinder> 

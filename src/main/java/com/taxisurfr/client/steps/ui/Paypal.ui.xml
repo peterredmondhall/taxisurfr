@@ -1,0 +1,20 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
+
+        <g:HTMLPanel ui:field="paypalPanel">
+    	<form id="paypalForm" method="post"> 
+        <input id="hiddenBusiness" type="hidden" name="business" />
+		<input type="hidden" name="cmd" value="_xclick"/>
+		<input type="hidden" name="item_name" value="Taxi Arugam Bay"/>
+		<input id="hiddenAmount" type="hidden" name="amount"/>
+		<input type="hidden" name="currency_code" value="USD"/>
+		<input id="hiddenReturn" type="hidden" name="return" value="http://localhost:8080/paypalsample/return.html"/>
+		<input type="hidden" name="rm" value="2"/>
+		<input id="hiddenCancelReturn" type="hidden" name="cancel_return" value="http://localhost:8080/paypalsample/return.html"/> 
+		<input type="image" name="submit" border="0"
+		src="https://www.paypal.com/en_US/i/btn/btn_buynow_LG.gif" alt="PayPal - The safer, easier way to pay online"/>
+		<img id="paypalImage"  alt="" border="0" width="1" height="1" src="https://www.paypal.com/en_US/i/scr/pixel.gif" /> 
+		</form>
+		</g:HTMLPanel>
+</ui:UiBinder> 

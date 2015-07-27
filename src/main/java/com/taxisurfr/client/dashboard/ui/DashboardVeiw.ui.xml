@@ -1,0 +1,50 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.heading {
+			font-weight: bold;
+			text-align: center;
+			border-color: #285e8e !important;
+			font-size: 16px;
+			padding-bottom: 5px;
+			margin-bottom: 10px;
+		}
+		.menu {
+			color: white !important;
+			border-radius: 4px 4px 0px 0px;
+			background-color: #357ebd;
+			padding-bottom: 15px;
+			padding-top: 5px;
+			width: 100%;
+		}
+	
+		.menu a {
+			color: white !important;
+			padding: 5px 0px 5px 2px;
+			float: left;
+			font-size: 14px;
+		}
+		.menu td {
+			border-bottom: 1px dashed;
+		}
+		.border-bottom {
+			boder-bottom: 1px dashed white;
+		}
+	</ui:style>
+
+	<g:HTMLPanel styleName="dashboardMain">
+		<g:HTMLPanel ui:field="menuContainer" styleName="dashboardMenuContainer">
+			<g:VerticalPanel styleName="{style.menu}">
+				<g:HTML styleName="{style.heading}">Dashboard</g:HTML>
+				<g:Anchor ui:field="adminManagement">Admin</g:Anchor>
+				<g:Anchor ui:field="bookingManagement">Bookings</g:Anchor>
+				<g:Anchor ui:field="routeManagement">Routes</g:Anchor>
+				<g:Anchor ui:field="contractorManagement">Contractors</g:Anchor>
+				<g:Anchor ui:field="financeManagement">Finances</g:Anchor>
+							</g:VerticalPanel>
+		</g:HTMLPanel>
+		<g:HTMLPanel ui:field="dataContainer" styleName="dashboardDataContainer">
+		</g:HTMLPanel>
+	</g:HTMLPanel>
+</ui:UiBinder> 

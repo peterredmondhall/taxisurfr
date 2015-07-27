@@ -1,0 +1,127 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client"
+	xmlns:my="urn:import:com.gwt.wizard.client.steps.ui">
+
+	<ui:with field='messages' type='com.taxisurfr.client.resources.ClientMessages' />
+
+	<ui:style>
+		.labelDiv {
+		display: inline;
+		float: left;
+		font-size: 14px;
+		margin-top: 2px;
+		text-align: right;
+		margin-right: 15px;
+		width: 100px;
+		}
+		.title { font-weight:bold; color: #62ba37; margin-bottom:
+		10px; font-size:
+		30px;}
+
+	</ui:style>
+
+	<g:HTMLPanel ui:field="mainPanel">
+		<g:Label styleName="{style.title}" ui:field="summaryTitle" />
+		<g:Label ui:field="summaryDetails" />
+		<g:Grid>
+			<!-- Datum -->
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label>Date of arrival</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelDate" />
+				</g:customCell>
+			</g:row>
+			<!-- Hinfahrt von -->
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label ui:field="labelPickupDetail">Flight no.</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelFlightNo" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label ui:field="labelPickupTimeDetail">Time of landing</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelLandingTime" />
+				</g:customCell>
+			</g:row>
+			<!-- Abholung am von -->
+			<!-- Rückfahr von -->
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label ui:field="labelRPP">No. of passengers</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelPax" />
+				</g:customCell>
+			</g:row>
+			<!-- Abholung am von -->
+			<!-- Total no. passengers -->
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label>Name</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelName" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label ui:field="labelInterestedSharingField">Interested in sharing</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelInterestedSharing" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label>Email</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelEmail" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label ui:field="labelRPT">No. of surfboards</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelSurfboards" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label ui:field="labelRequirementsField">Other requirements:</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelRequirements" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label ui:field="pay1">Price</g:Label>
+				</g:customCell>
+				<g:customCell>
+					<g:Label ui:field="labelPrice" />
+				</g:customCell>
+			</g:row>
+			<g:row>
+				<g:customCell styleName="{style.labelDiv}">
+					<g:Label />
+				</g:customCell>
+				<g:customCell>
+					<g:Button ui:field="nextButtonSummary" text="Next"
+						styleName="btn btn-primary" />
+				</g:customCell>
+			</g:row>
+		</g:Grid>
+
+	</g:HTMLPanel>
+
+</ui:UiBinder> 
