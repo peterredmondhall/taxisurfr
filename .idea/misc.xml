@@ -52,6 +52,19 @@
       </list>
     </option>
   </component>
+  <component name="ProjectFacetManager">
+    <default-configurations>
+      <entry facet-type="gwt">
+        <default-facet-configuration>
+          <configuration>
+            <setting name="compilerMaxHeapSize" value="1024" />
+            <setting name="gwtScriptOutputStyle" value="DETAILED" />
+            <setting name="gwtSdkUrl" value="file://C:/SWTOOLS/gwt-2.7.0" />
+          </configuration>
+        </default-facet-configuration>
+      </entry>
+    </default-configurations>
+  </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
     <OptionsSetting value="true" id="Remove" />

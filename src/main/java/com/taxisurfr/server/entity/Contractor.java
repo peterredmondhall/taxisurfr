@@ -4,34 +4,21 @@ import static com.google.common.collect.Lists.newArrayList;
 
 import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
 import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Index;
 import com.taxisurfr.shared.model.ContractorInfo;
 
 @Entity
 public class Contractor extends ArugamEntity<ContractorInfo>
 {
 
-    public Key getKey()
-    {
-        return key;
-    }
-
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Key key;
-
-    @Override
-    public void setKey(Key key)
-    {
-        this.key = key;
-    }
+    @Id public Long id;
 
     private String name;
     private String email;
@@ -58,6 +45,7 @@ public class Contractor extends ArugamEntity<ContractorInfo>
         this.address = address;
     }
 
+    @Index
     private Long agentId;
 
     public static Contractor getContractor(ContractorInfo contractorInfo)
@@ -94,7 +82,7 @@ public class Contractor extends ArugamEntity<ContractorInfo>
     public ContractorInfo getInfo()
     {
         ContractorInfo contractorInfo = new ContractorInfo();
-        contractorInfo.setId(key.getId());
+        contractorInfo.setId(id);
         contractorInfo.setName(name);
         contractorInfo.setAgentId(agentId);
         contractorInfo.setEmail(email);

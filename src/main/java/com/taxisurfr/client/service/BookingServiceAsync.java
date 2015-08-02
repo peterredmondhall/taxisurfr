@@ -58,7 +58,6 @@ public interface BookingServiceAsync
 
     void addRating(RatingInfo statInfo, AsyncCallback<Void> asyncCallback);
 
-    void getBookingForTransaction(String ref, AsyncCallback<BookingInfo> callback);
 
     void handleShareAccepted(Long id, AsyncCallback<List<BookingInfo>> callback);
 
@@ -71,8 +70,6 @@ public interface BookingServiceAsync
     void payWithStripe(String token, BookingInfo bookingInfo, AsyncCallback<BookingInfo> callback);
 
     void sendStat(StatInfo statInfo, AsyncCallback<Void> asyncCallback);
-
-    void createDefaultUser(AsyncCallback<AgentInfo> asyncCallback);
 
     void getFinances(AgentInfo agentInfo, AsyncCallback<List<FinanceInfo>> asyncCallback);
 

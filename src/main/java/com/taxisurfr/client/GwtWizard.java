@@ -104,18 +104,11 @@ public class GwtWizard implements EntryPoint
         shareConfirmationStep = new ShareConfirmationStep();
         ratingStep = new RatingStep();
 
-        String transaction = Window.Location.getParameter("tx");
         String shareId = Window.Location.getParameter("share");
         String review = Window.Location.getParameter("review");
         String nick = Window.Location.getParameter("nick");
-        String defaultuser = Window.Location.getParameter("defaultagent");
         String routeId = Window.Location.getParameter("route");
 
-        if (defaultuser != null)
-        {
-            createDefaultUser();
-            return;
-        }
         if (review != null)
         {
             Wizard.RATINGINFO = new RatingInfo();
@@ -126,11 +119,7 @@ public class GwtWizard implements EntryPoint
             completeSetup(ratingStep, l);
             return;
         }
-        if (transaction != null)
-        {
-            handleTransaction(transaction);
-        }
-        else if (shareId != null)
+        if (shareId != null)
         {
             handleShareAccepted(Long.parseLong(shareId));
         }
@@ -142,34 +131,34 @@ public class GwtWizard implements EntryPoint
         }
     }
 
-    private void createDefaultUser()
-    {
-        SERVICE.createDefaultUser(new AsyncCallback<AgentInfo>()
-        {
-
-            @Override
-            public void onSuccess(AgentInfo agentInfo)
-            {
-                if (agentInfo != null)
-                {
-                    RootPanel.get().add(new Label("agent created:" + agentInfo.getEmail()));
-
-                }
-                else
-                {
-                    RootPanel.get().add(new Label("agent not created"));
-
-                }
-            }
-
-            @Override
-            public void onFailure(Throwable caught)
-            {
-                Window.alert("problem creating default user");
-            }
-        });
-
-    }
+//    private void createDefaultUser()
+//    {
+//        SERVICE.createDefaultUser(new AsyncCallback<AgentInfo>()
+//        {
+//
+//            @Override
+//            public void onSuccess(AgentInfo agentInfo)
+//            {
+//                if (agentInfo != null)
+//                {
+//                    RootPanel.get().add(new Label("agent created:" + agentInfo.getEmail()));
+//
+//                }
+//                else
+//                {
+//                    RootPanel.get().add(new Label("agent not created"));
+//
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Throwable caught)
+//            {
+//                Window.alert("problem creating default user");
+//            }
+//        });
+//
+//    }
 
     private void collectStats(String src, String currency)
     {
@@ -232,29 +221,6 @@ public class GwtWizard implements EntryPoint
 //
 //        Name of the city from which the request originated. For example, a request from the city of Mountain View might have the header value mountain view.
 //        X-AppEngine-CityLatLong        
-    }
-
-    private void handleTransaction(String transaction)
-    {
-        SERVICE.getBookingForTransaction(transaction, new AsyncCallback<BookingInfo>()
-        {
-
-            @Override
-            public void onFailure(Throwable caught)
-            {
-                Window.alert("Failed handling transaction");
-            }
-
-            @Override
-            public void onSuccess(BookingInfo bi)
-            {
-                Wizard.BOOKINGINFO = bi;
-                confirmationStep.setBookingInfo(Wizard.BOOKINGINFO);
-                completeSetup(confirmationStep, ImmutableList.of((WizardStep) confirmationStep));
-
-            }
-        });
-
     }
 
     private void handleShareAccepted(Long shareId)

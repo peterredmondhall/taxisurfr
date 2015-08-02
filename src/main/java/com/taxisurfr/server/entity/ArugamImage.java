@@ -1,9 +1,8 @@
 package com.taxisurfr.server.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.datastore.Key;
@@ -12,24 +11,12 @@ import com.taxisurfr.shared.model.ArugamImageInfo;
 @Entity
 public class ArugamImage extends ArugamEntity<ArugamImageInfo>
 {
-    public Key getKey()
-    {
-        return key;
-    }
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Key key;
+    @Id Long id;
 
     private Blob image;
-
-    @Override
-    public void setKey(Key key)
-    {
-        this.key = key;
-    }
 
     public Blob getImage()
     {
@@ -45,7 +32,7 @@ public class ArugamImage extends ArugamEntity<ArugamImageInfo>
     public ArugamImageInfo getInfo()
     {
         ArugamImageInfo info = new ArugamImageInfo();
-        info.setId(key.getId());
+        info.setId(id);
         info.setContent(image.getBytes());
         return info;
     }

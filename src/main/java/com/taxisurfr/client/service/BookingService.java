@@ -57,7 +57,6 @@ public interface BookingService extends RemoteService
 
     void addRating(RatingInfo routeInfo) throws IllegalArgumentException;
 
-    BookingInfo getBookingForTransaction(String ref) throws IllegalArgumentException;
 
     List<BookingInfo> handleShareAccepted(Long id) throws IllegalArgumentException;
 
@@ -67,7 +66,6 @@ public interface BookingService extends RemoteService
 
     void sendStat(StatInfo statInfo);
 
-    AgentInfo createDefaultUser();
 
     List<FinanceInfo> getFinances(AgentInfo agentInfo);
 

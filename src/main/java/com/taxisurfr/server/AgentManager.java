@@ -4,10 +4,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-
 import com.google.common.collect.Lists;
+import com.googlecode.objectify.Objectify;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.util.Closeable;
 import com.taxisurfr.server.entity.Agent;
 import com.taxisurfr.shared.model.AgentInfo;
 
@@ -18,67 +18,39 @@ public class AgentManager extends Manager
     public AgentInfo createAgent(String agentEmail)
     {
         // check local user
-        EntityManager em = getEntityManager();
+        Objectify ofy = ObjectifyService.ofy();
+
         AgentInfo agentInfo = null;
-        try
-        {
             // To create new user for testing
-            createTestAgent(agentEmail, em);
 
-            // TODO remove only for local testing
-            createTestAgent("agent@example.com", em);
+            Agent agent = createAgent(agentEmail,true);
 
-            Agent agent = (Agent) em.createQuery("select u from Agent u where u.userEmail = '" + agentEmail + "'").getSingleResult();
-            agentInfo = agent.getInfo();
-        }
-        catch (Exception e)
-        {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
-        finally
-        {
-            em.close();
-        }
-        return agentInfo;
+            return  agent.getInfo();
+
     }
 
-    private void createTestAgent(String testAgent, EntityManager em)
+    private Agent createAgent(String email,boolean admin)
     {
 
-        try
+        Agent agent = ObjectifyService.ofy().load().type(Agent.class).filter("userEmail", email).first().now();
+        if (agent == null)
         {
-            em.createQuery("select u from Agent u where u.userEmail = '" + testAgent + "'").getSingleResult();
+            agent = new Agent();
+            agent.setUserEmail(email);
+            agent.setAdmin(admin);
+            ObjectifyService.ofy().save().entity(agent).now();
         }
-        catch (NoResultException ex)
-        {
-            em.getTransaction().begin();
-            Agent agent = new Agent();
-            agent.setUserEmail(testAgent);
-            agent.setAdmin(true);
-            em.persist(agent);
-            em.getTransaction().commit();
-
-        }
+        return agent;
     }
 
     public AgentInfo getAgent(String email)
     {
-
-        EntityManager em = getEntityManager();
         AgentInfo agentInfo = null;
-        try
+        Agent agent = ObjectifyService.ofy().load().type(Agent.class).filter("userEmail =", email).first().now();
+        if (agent != null)
         {
-            Agent agent = (Agent) em.createQuery("select u from Agent u where u.userEmail = '" + email + "'").getSingleResult();
             agentInfo = agent.getInfo();
             logger.info("getUser for email " + email + " returned " + agentInfo.getEmail() + "  " + agentInfo.getId() + " " + agentInfo.isAdmin());
-        }
-        catch (NoResultException ex)
-        {
-
-        }
-        finally
-        {
-            em.close();
         }
         return agentInfo;
     }
@@ -86,24 +58,14 @@ public class AgentManager extends Manager
     public List<AgentInfo> getAgents()
     {
         List<AgentInfo> list = Lists.newArrayList();
-        EntityManager em = getEntityManager();
-        try
-        {
-            List<Agent> agents = em.createQuery("select u from Agent u ").getResultList();
-            for (Agent agent : agents)
-            {
-                list.add(agent.getInfo());
-            }
-        }
-        catch (NoResultException ex)
-        {
+        List<Agent> agents = ObjectifyService.ofy().load().type(Agent.class).list();
 
-        }
-        finally
+        for (Agent agent : agents)
         {
-            em.close();
+            list.add(agent.getInfo());
         }
         return list;
+
     }
 
 }

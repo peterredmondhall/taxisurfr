@@ -9,7 +9,7 @@ abstract public class ArugamEntity<T extends Info> implements Serializable
 {
     private static final long serialVersionUID = 1L;
 
-    abstract public void setKey(Key key);
+   // abstract public void setKey(Key key);
 
     abstract public T getInfo();
 }

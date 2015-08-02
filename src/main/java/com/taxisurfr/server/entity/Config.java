@@ -2,25 +2,28 @@ package com.taxisurfr.server.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
 
 import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
 @Entity
 public class Config implements Serializable
 {
     private static final long serialVersionUID = 1L;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Key key;
+    @Id Long id;
     private String profil;
     private Boolean maintenceAllowed;
-    private  String fbAppKey;
-    private  String fbAppSecret;
+    private String fbAppKey;
+    private String fbAppSecret;
+    private static Config config;
+
+    public static Config getConfig()
+    {
+        return ObjectifyService.ofy().load().type(Config.class).first().now();
+    }
 
     public String getProfil()
     {
@@ -52,8 +55,4 @@ public class Config implements Serializable
         this.maintenceAllowed = maintenceAllowed;
     }
 
-    public static Config getConfig(EntityManager em)
-    {
-        return (Config) em.createQuery("select t from Config t").getSingleResult();
-    }
 }

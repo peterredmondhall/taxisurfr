@@ -2,10 +2,8 @@ package com.taxisurfr.server;
 
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
-import com.google.appengine.api.datastore.KeyFactory;
 import com.google.common.collect.Lists;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.Agent;
 import com.taxisurfr.server.entity.ArugamEntity;
 import com.taxisurfr.server.entity.ArugamImage;
@@ -13,7 +11,6 @@ import com.taxisurfr.server.entity.Booking;
 import com.taxisurfr.server.entity.Contractor;
 import com.taxisurfr.server.entity.Rating;
 import com.taxisurfr.server.entity.Route;
-import com.taxisurfr.server.jpa.EMF;
 import com.taxisurfr.shared.model.AgentInfo;
 import com.taxisurfr.shared.model.ArugamImageInfo;
 import com.taxisurfr.shared.model.BookingInfo;
@@ -26,47 +23,32 @@ import com.thoughtworks.xstream.XStream;
 public class Manager<T extends Info, K extends ArugamEntity<?>>
 {
 
-    protected static EntityManager getEntityManager()
-    {
-        return EMF.get().createEntityManager();
-    }
-
     public void deleteAll(Class<?> entityType)
     {
-        EntityManager em = getEntityManager();
-        @SuppressWarnings("unchecked")
-        List<K> resultList = em.createQuery("select t from " + entityType.getName() + " t").getResultList();
+        List<K> resultList = getAll(entityType);
         for (K entity : resultList)
         {
-            em.getTransaction().begin();
-            em.remove(entity);
-            em.getTransaction().commit();
+            ObjectifyService.ofy().delete().entity(entity);
         }
-        em.close();
     }
 
     @SuppressWarnings("unchecked")
     public List<T> getAllInfo(Class<?> entityType)
     {
-        EntityManager em = getEntityManager();
-        List<K> resultList = em.createQuery("select t from " + entityType.getName() + " t").getResultList();
+        List<K> resultList = getAll(entityType);
         List<T> list = Lists.newArrayList();
         for (K entity : resultList)
         {
-            em.detach(entity);
             list.add((T) entity.getInfo());
         }
-        em.close();
         return list;
     }
 
     @SuppressWarnings("unchecked")
     public List<K> getAll(Class<?> entityType)
     {
-        EntityManager em = getEntityManager();
-        List<K> resultList = em.createQuery("select t from " + entityType.getName() + " t").getResultList();
-        em.close();
-        return resultList;
+        List<K> agents = (List<K>) ObjectifyService.ofy().load().type(entityType).list();
+        return agents;
     }
 
     public void importDataset(String dataset, Class<?> type)
@@ -122,12 +104,7 @@ public class Manager<T extends Info, K extends ArugamEntity<?>>
 
     public void save(ArugamEntity<?> entity, Class type, Info info)
     {
-        EntityManager em = getEntityManager();
-        entity.setKey(KeyFactory.createKey(type.getSimpleName(), info.getId()));
-        em.getTransaction().begin();
-        em.persist(entity);
-        em.getTransaction().commit();
-        em.close();
+        ObjectifyService.ofy().save().entity(entity);
 
     }
 

@@ -3,12 +3,11 @@ package com.taxisurfr.server.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
 
 import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 import com.taxisurfr.shared.Currency;
 import com.taxisurfr.shared.OrderStatus;
 import com.taxisurfr.shared.OrderType;
@@ -31,15 +30,7 @@ public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntit
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Key key;
-
-    @Override
-    public void setKey(Key key)
-    {
-        this.key = key;
-    }
+    @Id Long id;
 
     private Date date;
 
@@ -276,7 +267,7 @@ public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntit
     public BookingInfo getBookingInfo(RouteInfo routeInfo)
     {
         BookingInfo bookingInfo = new BookingInfo();
-        bookingInfo.setId(key.getId());
+        bookingInfo.setId(id);
         bookingInfo.setDate(getDate());
         bookingInfo.setDateText(getDateText());
         bookingInfo.setEmail(getEmail());
@@ -365,13 +356,13 @@ public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntit
         FinanceInfo info = new FinanceInfo();
         info.setName(name);
         info.setDate(date);
-        info.setId(key.getId());
+        info.setId(id);
         return info;
     }
 
     public String generateRef()
     {
-        String idString = Long.toString(key.getId());
+        String idString = Long.toString(id);
         int len = idString.length();
         if (len > 5)
         {

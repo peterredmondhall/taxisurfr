@@ -78,22 +78,6 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
         return bookingServiceManager.getBookings(agentInfo.getId());
     }
 
-    @Override
-    public BookingInfo getBookingForTransaction(String tx) throws IllegalArgumentException
-    {
-        Profil profil = bookingServiceManager.getProfil();
-        OrderStatus hasPaid = new PaypalPaymentChecker(tx, profil).hasClientPaid();
-
-        BookingInfo bookingInfo = bookingServiceManager.getBookingForTransactionWithClient(profil, getClient(), hasPaid);
-        if (bookingInfo != null)
-        {
-            ContractorInfo contractorInfo = bookingServiceManager.getContractor(bookingInfo);
-            AgentInfo agentInfo = bookingServiceManager.getAgent(contractorInfo);
-            Mailer.sendConfirmation(bookingInfo, profil, agentInfo, contractorInfo);
-        }
-        return bookingInfo;
-
-    }
 
     @Override
     public ProfilInfo getPaypalProfil() throws IllegalArgumentException
@@ -210,61 +194,6 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     public void addRating(RatingInfo ratingInfo) throws IllegalArgumentException
     {
         ratingManager.add(ratingInfo);
-    }
-
-    @Override
-    public AgentInfo createDefaultUser()
-    {
-        String DEFAULTUSEREMAIL = "test@example.com";
-        if (bookingServiceManager.getMaintenceAllowed())
-        {
-            for (String testAgent : new String[] { "test", "agent" })
-            {
-                String agentEmail = testAgent + "@example.com";
-                AgentInfo agentInfo = agentManager.getAgent(agentEmail);
-                if (agentInfo != null)
-                {
-                    List<RouteInfo> routes = routeServiceManager.getRoutes(agentInfo);
-                    for (RouteInfo routeInfo : routes)
-                    {
-                        routeServiceManager.deleteRoute(agentInfo, routeInfo);
-                    }
-                    List<ContractorInfo> listContractors = contractorManager.getContractors(agentInfo);
-                    for (ContractorInfo contractorInfo : listContractors)
-                    {
-                        contractorManager.delete(contractorInfo);
-                    }
-                }
-                else
-                {
-                    agentInfo = new AgentManager().createAgent(agentEmail);
-
-                }
-                for (int i = 0; i < 2; i++)
-                {
-                    ContractorInfo contractorInfo = new ContractorInfo();
-                    contractorInfo.setAgentId(agentInfo.getId());
-                    contractorInfo.setName(testAgent + ":contractor" + i);
-                    contractorInfo = new ContractorManager().createContractor(contractorInfo);
-
-                    RouteInfo simpleRouteInfo = new RouteInfo();
-                    simpleRouteInfo.setStart(testAgent + "simple_Contractor" + i);
-                    simpleRouteInfo.setEnd(testAgent + ":end" + i);
-                    simpleRouteInfo.setPickupType(RouteInfo.PickupType.AIRPORT);
-                    simpleRouteInfo.setCents(101L);
-                    simpleRouteInfo.setAgentCents(100L);
-                    simpleRouteInfo.setContractorId(contractorInfo.getId());
-                    new RouteServiceManager().saveRoute(agentInfo, simpleRouteInfo, RouteInfo.SaveMode.ADD).get(0);
-
-                }
-            }
-            return new AgentManager().getAgent(DEFAULTUSEREMAIL);
-        }
-        else
-        {
-            logger.info("maintence not allowed");
-            return null;
-        }
     }
 
     @Override

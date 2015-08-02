@@ -9,13 +9,17 @@
     <artifactId>taxisurfr</artifactId>
 
     <properties>
-        <app.id>your-app-id</app.id>
-        <app.version>1</app.version>
+        <app.id>gobygang</app.id>
+        <app.version>2</app.version>
         <appengine.version>1.9.24</appengine.version>
-        <gcloud.plugin.version>0.9.58.v20150505</gcloud.plugin.version>
+        <gwt.version>2.7.0</gwt.version>
+        <gcloud.plugin.version>1.9.17a</gcloud.plugin.version>
+        <!--maven-datanucleus-plugin.version>3.2.0-m2</maven-datanucleus-plugin.version-->
 
         <objectify.version>5.1.5</objectify.version>
         <guava.version>18.0</guava.version>
+        <selenium.version>2.46.0</selenium.version>
+        <datanucleus.version>3.1.1</datanucleus.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
@@ -43,15 +47,35 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.geronimo.specs</groupId>
             <artifactId>geronimo-jpa_2.0_spec</artifactId>
             <version>1.1</version>
         </dependency>
         <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-user</artifactId>
-            <version>2.7.0</version>
+            <groupId>com.google.appengine.orm</groupId>
+            <artifactId>datanucleus-appengine</artifactId>
+            <version>2.1.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-core</artifactId>
+            <version>${datanucleus.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.datanucleus</groupId>
+            <artifactId>datanucleus-api-jpa</artifactId>
+            <version>${datanucleus.version}</version>
+        </dependency-->
+        <dependency>
+        <groupId>com.google.gwt</groupId>
+        <artifactId>gwt-user</artifactId>
+        <version>${gwt.version}</version>
+        </dependency>
+        <dependency>
+        <groupId>com.google.gwt</groupId>
+        <artifactId>gwt-dev</artifactId>
+        <version>${gwt.version}</version>
         </dependency>
 
         <dependency>
@@ -139,45 +163,73 @@
             <version>${appengine.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- [START Objectify_Dependencies] -->
         <dependency>
-            <groupId>com.github.branflake2267</groupId>
-            <artifactId>gwt-maps-api</artifactId>
-            <version>3.10.0-alpha-7-SNAPSHOT</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.branflake2267</groupId>
-            <artifactId>gwt-maps-api</artifactId>
-            <version>3.10.0-alpha-7-SNAPSHOT</version>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava-gwt</artifactId>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.branflake2267</groupId>
-            <artifactId>gwt-maps-api</artifactId>
-            <version>3.10.0-alpha-7-SNAPSHOT</version>
+            <groupId>com.googlecode.objectify</groupId>
+            <artifactId>objectify</artifactId>
+            <version>${objectify.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.github.branflake2267</groupId>
-            <artifactId>gwt-maps-api</artifactId>
-            <version>3.10.0-alpha-7-SNAPSHOT</version>
-        </dependency>
+        <!-- [END Objectify_Dependencies] -->
+
+
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>1.3.1</version>
         </dependency>
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-api-1.0-sdk</artifactId>
-            <version>1.9.17</version>
-        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.4.2</version>
+            <version>2.4.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.google.gwt</groupId>
-            <artifactId>gwt-dev</artifactId>
-            <version>2.6.1</version>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-support</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-firefox-driver</artifactId>
+            <version>${selenium.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.applitools</groupId>
+            <artifactId>eyes-selenium-java</artifactId>
+            <version>2.19</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>1.9</version>
         </dependency>
     </dependencies>
 
@@ -188,7 +240,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>versions-maven-plugin</artifactId>
-                <version>2.1</version>
+                <version>2.2</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -201,7 +253,7 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <version>3.2</version>
+                <version>3.3</version>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.7</source>
@@ -251,15 +303,15 @@
                     <set_default>true</set_default>
                 </configuration>
             </plugin>
-            <plugin>
+            <!--plugin>
                 <groupId>org.datanucleus</groupId>
-                <artifactId>maven-datanucleus-plugin</artifactId>
-                <version>3.2.0-m1</version>
+                <artifactId>datanucleus-maven-plugin</artifactId>
+                <version>${datanucleus.version}</version>
                 <configuration>
-                    <api>JDO</api>
-                    <props>${basedir}/datanucleus.properties</props>
+                    <api>JPA</api>
+                    <fork>false</fork>
+                    <persistenceUnitName>transactions-optional</persistenceUnitName>
                     <verbose>true</verbose>
-                    <enhancerName>ASM</enhancerName>
                 </configuration>
                 <executions>
                     <execution>
@@ -269,14 +321,7 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.datanucleus</groupId>
-                        <artifactId>datanucleus-api-jdo</artifactId>
-                        <version>3.1.3</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+            </plugin-->
         </plugins>
     </build>
 </project>

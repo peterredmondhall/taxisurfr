@@ -1,6 +1,7 @@
 package com.taxisurfr.servlet;
 
 import com.google.common.collect.ImmutableMap;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.CurrencyManager;
 import com.taxisurfr.server.StatManager;
 import com.taxisurfr.shared.Currency;
@@ -33,6 +34,7 @@ public class StatServlet extends HttpServlet
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws IOException
     {
+        ObjectifyService.begin();
         String country = req.getHeader("X-AppEngine-Country");
         String cityLatLong = req.getHeader("X-AppEngine-CityLatLong");
         String region = req.getHeader("X-AppEngine-Region");

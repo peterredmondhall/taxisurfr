@@ -27,7 +27,7 @@ public class PartyRouteWizard extends Composite
 
     private ICallback finishCb;
 
-            private final Map<WizardStep, Integer> map = new HashMap<WizardStep, Integer>();
+    private final Map<WizardStep, Integer> map = new HashMap<WizardStep, Integer>();
     private final Map<HTML, Integer> headers = new HashMap<HTML, Integer>();
     private WizardStep currentstep = null;
 
@@ -109,15 +109,15 @@ public class PartyRouteWizard extends Composite
         currentstep.getContent().setVisible(false);
 
         if (current == (map.size() - 1))
-        {	// finished
+        {    // finished
             if (finishCb != null)
                 finishCb.execute();
 
             current += 1;
 
             // clear all
-//            clearAll();
-//            current = 1;
+            //            clearAll();
+            //            current = 1;
 
         }
         else
@@ -138,7 +138,7 @@ public class PartyRouteWizard extends Composite
     {
         // just move to step 1
         currentstep.getContent().setVisible(false);
-        currentstep = getStep(1);	// get first step
+        currentstep = getStep(1);    // get first step
         updateButtons();
 
         currentstep.getContent().setVisible(true);

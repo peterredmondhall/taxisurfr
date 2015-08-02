@@ -1,9 +1,8 @@
 package com.taxisurfr.server.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
 
 import com.google.appengine.api.datastore.Key;
 import com.taxisurfr.shared.model.RouteInfo;
@@ -14,9 +13,8 @@ public class Route extends ArugamEntity<RouteInfo>
     private static final long serialVersionUID = 1L;
     public static final long NO_ASSOCIATED = 0L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Key key;
+
+    @Id Long id;
 
     private String start;
     private String end;
@@ -47,11 +45,6 @@ public class Route extends ArugamEntity<RouteInfo>
     public void setDescription(String description)
     {
         this.description = description;
-    }
-
-    public Key getKey()
-    {
-        return key;
     }
 
     public String getStart()
@@ -104,11 +97,6 @@ public class Route extends ArugamEntity<RouteInfo>
         return cents;
     }
 
-    @Override
-    public void setKey(Key key)
-    {
-        this.key = key;
-    }
 
     public static Route getRoute(RouteInfo routeInfo)
     {
@@ -129,7 +117,7 @@ public class Route extends ArugamEntity<RouteInfo>
     public RouteInfo getInfo()
     {
         RouteInfo routeInfo = new RouteInfo();
-        routeInfo.setId(key.getId());
+        routeInfo.setId(id);
         routeInfo.setStart(start);
         routeInfo.setEnd(end);
         routeInfo.setDescription(description);

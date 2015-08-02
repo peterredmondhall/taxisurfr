@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.persistence.EntityManager;
 
 import com.taxisurfr.server.entity.Agent;
 import com.taxisurfr.server.entity.Route;
@@ -36,129 +35,137 @@ public class FinanceManager extends Manager
 
     public List<FinanceInfo> getFinance(AgentInfo agentInfo)
     {
-        List<FinanceInfo> list = Lists.newArrayList();
-        EntityManager em = getEntityManager();
-        try
-        {
-            String query = "select t from Finance t";
-            @SuppressWarnings("unchecked")
-            List<Finance> resultList = em.createQuery(query).getResultList();
-            if (resultList.size() == 0)
-            {
-                Finance transfer = new Finance();
-                em.getTransaction().begin();
-                em.persist(transfer);
-                em.getTransaction().commit();
-                em.detach(transfer);
-            }
-            else
-            {
-                query = "select t from Finance t where agentId=" + agentInfo.getId();
-                resultList = em.createQuery(query).getResultList();
-                for (Finance transfer : resultList)
-                {
-                    em.detach(transfer);
-                    FinanceInfo info = transfer.getInfo();
-                    list.add(transfer.getInfo());
-                }
-            }
+        throw new RuntimeException();
 
-        }
-        finally
-        {
-            em.close();
-        }
-        Collections.sort(list, new FinanceInfoComparator());
-        return list;
+//        List<FinanceInfo> list = Lists.newArrayList();
+//        EntityManager em = getEntityManager();
+//        try
+//        {
+//            String query = "select t from Finance t";
+//            @SuppressWarnings("unchecked")
+//            List<Finance> resultList = em.createQuery(query).getResultList();
+//            if (resultList.size() == 0)
+//            {
+//                Finance transfer = new Finance();
+//                em.getTransaction().begin();
+//                em.persist(transfer);
+//                em.getTransaction().commit();
+//                em.detach(transfer);
+//            }
+//            else
+//            {
+//                query = "select t from Finance t where agentId=" + agentInfo.getId();
+//                resultList = em.createQuery(query).getResultList();
+//                for (Finance transfer : resultList)
+//                {
+//                    em.detach(transfer);
+//                    FinanceInfo info = transfer.getInfo();
+//                    list.add(transfer.getInfo());
+//                }
+//            }
+//
+//        }
+//        finally
+//        {
+//            em.close();
+//        }
+//        Collections.sort(list, new FinanceInfoComparator());
+//        return list;
     }
 
     public List<FinanceInfo> addTransfer(FinanceInfo financeInfo)
     {
-        EntityManager em = getEntityManager();
+        throw new RuntimeException();
 
-        try
-        {
-            Finance finance = new Finance();
-            finance.setAgentId(financeInfo.getAgentId());
-            finance.setType(FinanceInfo.Type.TRANSFER);
-            finance.setDate(financeInfo.getDate());
-            finance.setName(financeInfo.getName());
-            finance.setAmount(financeInfo.getAmount());
-            finance.setBookingId(null);
-            finance.setOrderRef(null);
-
-            em.getTransaction().begin();
-            em.persist(finance);
-            em.getTransaction().commit();
-            em.detach(finance);
-        }
-        finally
-        {
-            em.close();
-        }
-        AgentInfo agentInfo = new AgentInfo();
-        agentInfo.setId(financeInfo.getAgentId());
-        return getFinance(agentInfo);
+//        EntityManager em = getEntityManager();
+//
+//        try
+//        {
+//            Finance finance = new Finance();
+//            finance.setAgentId(financeInfo.getAgentId());
+//            finance.setType(FinanceInfo.Type.TRANSFER);
+//            finance.setDate(financeInfo.getDate());
+//            finance.setName(financeInfo.getName());
+//            finance.setAmount(financeInfo.getAmount());
+//            finance.setBookingId(null);
+//            finance.setOrderRef(null);
+//
+//            em.getTransaction().begin();
+//            em.persist(finance);
+//            em.getTransaction().commit();
+//            em.detach(finance);
+//        }
+//        finally
+//        {
+//            em.close();
+//        }
+//        AgentInfo agentInfo = new AgentInfo();
+//        agentInfo.setId(financeInfo.getAgentId());
+//        return getFinance(agentInfo);
     }
 
     public void addPayment(BookingInfo bookingInfo, Date date)
     {
-        Route route = getEntityManager().find(Route.class, bookingInfo.getRouteId());
-        Contractor contractor = getEntityManager().find(Contractor.class, route.getContractorId());
-        Agent agent = getEntityManager().find(Agent.class, contractor.getAgentId());
-        AgentInfo agentInfo = agent.getInfo();
-        Long amount = route.getAgentCents() != null ? route.getAgentCents() : (long) (route.getCents() * 0.90);
-        logger.info("addpayment:" + amount);
+        throw new RuntimeException();
 
-        EntityManager em = getEntityManager();
-
-        try
-        {
-            Finance finance = new Finance();
-            finance.setAgentId(agentInfo.getId());
-            finance.setType(FinanceInfo.Type.PAYMENT);
-            finance.setDate(date);
-            finance.setName(bookingInfo.getName());
-            finance.setAmount(amount);
-            finance.setBookingId(bookingInfo.getId());
-            finance.setOrderRef(bookingInfo.getOrderRef());
-            finance.setAgentId(agentInfo.getId());
-            finance.setDeliveryDate(bookingInfo.getDate());
-
-            em.getTransaction().begin();
-            em.persist(finance);
-            em.getTransaction().commit();
-            em.detach(finance);
-        }
-        finally
-        {
-            em.close();
-        }
+//        Route route = getEntityManager().find(Route.class, bookingInfo.getRouteId());
+//        Contractor contractor = getEntityManager().find(Contractor.class, route.getContractorId());
+//        Agent agent = getEntityManager().find(Agent.class, contractor.getAgentId());
+//        AgentInfo agentInfo = agent.getInfo();
+//        Long amount = route.getAgentCents() != null ? route.getAgentCents() : (long) (route.getCents() * 0.90);
+//        logger.info("addpayment:" + amount);
+//
+//        EntityManager em = getEntityManager();
+//
+//        try
+//        {
+//            Finance finance = new Finance();
+//            finance.setAgentId(agentInfo.getId());
+//            finance.setType(FinanceInfo.Type.PAYMENT);
+//            finance.setDate(date);
+//            finance.setName(bookingInfo.getName());
+//            finance.setAmount(amount);
+//            finance.setBookingId(bookingInfo.getId());
+//            finance.setOrderRef(bookingInfo.getOrderRef());
+//            finance.setAgentId(agentInfo.getId());
+//            finance.setDeliveryDate(bookingInfo.getDate());
+//
+//            em.getTransaction().begin();
+//            em.persist(finance);
+//            em.getTransaction().commit();
+//            em.detach(finance);
+//        }
+//        finally
+//        {
+//            em.close();
+//        }
 
     }
 
     public void cancel(Long bookingId)
     {
-        EntityManager em = getEntityManager();
-        try
-        {
-            String query = "select t from Finance t where bookingId=" + bookingId;
-            @SuppressWarnings("unchecked")
-            Finance finance = (Finance) em.createQuery(query).getSingleResult();
-            em.getTransaction().begin();
-            finance.setAmount(0L);
-            em.persist(finance);
-            em.getTransaction().commit();
+        throw new RuntimeException();
 
-        }
-        catch (Exception thrown)
-        {
-            logger.log(Level.SEVERE, "finance not found for bookingId" + bookingId, thrown);
-        }
-        finally
-        {
-            em.close();
-        }
+//        EntityManager em = getEntityManager();
+//        try
+//        {
+//            String query = "select t from Finance t where bookingId=" + bookingId;
+//            @SuppressWarnings("unchecked")
+//            Finance finance = (Finance) em.createQuery(query).getSingleResult();
+//            em.getTransaction().begin();
+//            finance.setAmount(0L);
+//            em.persist(finance);
+//            em.getTransaction().commit();
+//
+//        }
+//        catch (Exception thrown)
+//        {
+//            logger.log(Level.SEVERE, "finance not found for bookingId" + bookingId, thrown);
+//        }
+//        finally
+//        {
+//            em.close();
+//        }
     }
 
 }
