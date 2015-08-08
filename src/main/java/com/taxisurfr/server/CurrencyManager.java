@@ -18,52 +18,34 @@ public class CurrencyManager extends Manager
 
     public void update(Map<Currency, Float> currencyUpdateList)
     {
-        throw new RuntimeException();
 
-        //        Float usRateBase = currencyUpdateList.get(Currency.USD);
-        //        EntityManager em = getEntityManager();
-        //        update(usRateBase, 1f, em, Currency.EUR);
-        //        try
-        //        {
-        //            for (Currency currency : Currency.values())
-        //            {
-        //                if (currency != Currency.EUR)
-        //                {
-        //                    Float euroRate = currencyUpdateList.get(currency);
-        //                    update(usRateBase, euroRate, em, currency);
-        //                }
-        //            }
-        //        }
-        //        finally
-        //        {
-        //            em.close();
-        //        }
+        Float usRateBase = currencyUpdateList.get(Currency.USD);
+        update(usRateBase, 1f, Currency.EUR);
+        for (Currency currency : Currency.values())
+        {
+            if (currency != Currency.EUR)
+            {
+                Float euroRate = currencyUpdateList.get(currency);
+                update(usRateBase, euroRate, currency);
+            }
+        }
     }
 
-    //    private Float update(Float usRateBase, Float euroRate, EntityManager em, Currency currency)
-    //    {
-    //        CurrencyRate currencyRate;
-    //        Float usRate = null;
-    //        try
-    //        {
-    //            usRate = euroRate != null && usRateBase != null ? euroRate / usRateBase : null;
-    //            currencyRate = (CurrencyRate) em.createQuery("select u from CurrencyRate u where u.code = '" + currency.name() + "'").getSingleResult();
-    //            currencyRate.setRate(usRate);
-    //            em.getTransaction().begin();
-    //            em.persist(currencyRate);
-    //            em.getTransaction().commit();
-    //        }
-    //        catch (NoResultException e)
-    //        {
-    //            currencyRate = new CurrencyRate();
-    //            currencyRate.setCode(currency.name());
-    //            currencyRate.setRate(usRate);
-    //            em.getTransaction().begin();
-    //            em.persist(currencyRate);
-    //            em.getTransaction().commit();
-    //        }
-    //        return usRate;
-    //    }
+    private Float update(Float usRateBase, Float euroRate, Currency currency)
+    {
+        CurrencyRate currencyRate;
+        Float usRate = null;
+        usRate = euroRate != null && usRateBase != null ? euroRate / usRateBase : null;
+        currencyRate = ObjectifyService.ofy().load().type(CurrencyRate.class).filter("code =", currency.name()).first().now();
+        if (currencyRate == null)
+        {
+            currencyRate = new CurrencyRate();
+            currencyRate.setCode(currency.name());
+        }
+        currencyRate.setRate(usRate);
+        ofy().save().entity(currencyRate).now();
+        return usRate;
+    }
 
     public Float getRate(Currency currency)
     {
@@ -74,7 +56,7 @@ public class CurrencyManager extends Manager
             CurrencyRate currencyRate = ofy().load().type(CurrencyRate.class).filter("code =", currency.name()).first().now();
             if (currencyRate != null)
             {
-                currencyRate.getRate();
+                rate =currencyRate.getRate();
             }
         }
         return rate;

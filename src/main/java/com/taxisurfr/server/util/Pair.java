@@ -8,9 +8,9 @@ public class Pair<T, T1> {
     String second;
 
     public static Pair<String, String> of(String date, String print) {
-        Pair pair = new Pair();
+        Pair<String,String> pair = new Pair();
         pair.first = date;
         pair.second = print;
-        return null;
+        return pair;
     }
 }

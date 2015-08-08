@@ -7,6 +7,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Index;
 import com.taxisurfr.shared.model.FinanceInfo;
 
 @Entity
@@ -18,9 +19,12 @@ public class Finance extends ArugamEntity<FinanceInfo>
     private Date deliveryDate;
 
     public static final Double AGENT_MARGIN = 0.90;
+
+    @Index
     private Long bookingId;
 
     private Long amount;
+    @Index
     private Long agentId;
     private String name;
     private String orderRef;

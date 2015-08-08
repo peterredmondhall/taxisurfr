@@ -48,9 +48,9 @@ public class BookingServiceManager extends Manager
         ObjectifyService.register(Config.class);
         ObjectifyService.register(Profil.class);
         ObjectifyService.register(Agent.class);
-        ObjectifyService.register(Contractor.class);
         ObjectifyService.register(Route.class);
         ObjectifyService.register(Rating.class);
+        ObjectifyService.register(ArchivedBooking.class);
 
     }
 
@@ -175,8 +175,8 @@ public class BookingServiceManager extends Manager
         Booking booking = ofy().load().type(Booking.class).id(bi.getId()).now();
         booking.setStatus(orderStatus);
         ofy().save().entity(booking);
-        return booking.getInfo();
-
+        RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
+        return booking.getBookingInfo(routeInfo);
         //        EntityManager em = getEntityManager();
         //        BookingInfo bookingInfo = null;
         //        try
@@ -294,7 +294,7 @@ public class BookingServiceManager extends Manager
                     switch (booking.getOrderType())
                     {
                         case BOOKING:
-                            boolean bookingForRoute = (booking.getRoute() == routeInfo.getId()) || (booking.getRoute() == routeInfo.getAssociatedRoute());
+                            boolean bookingForRoute = (booking.getRoute().equals(routeInfo.getId())) || (booking.getRoute().equals(routeInfo.getAssociatedRoute()));
                             applies = bookingForRoute && (OrderStatus.PAID == booking.getStatus() && booking.getShareWanted());
                             break;
                         case SHARE:
@@ -351,53 +351,34 @@ public class BookingServiceManager extends Manager
 
     public BookingInfo getBooking(Long id)
     {
-        return ofy().load().type(Booking.class).id(id).now().getInfo();
+        BookingInfo bookingInfo = ofy().load().type(Booking.class).id(id).now().getInfo();
+        RouteInfo routeInfo = ofy().load().type(Route.class).id(bookingInfo.getRouteId()).now().getInfo();
+        bookingInfo.setRouteInfo(routeInfo);
+        return bookingInfo;
 
-        //        EntityManager em = getEntityManager();
-        //        Booking booking = em.find(Booking.class, id);
-        //        em.detach(booking);
-        //        return booking.getBookingInfo(getRouteInfo(booking.getRoute(), em));
     }
 
     public List<BookingInfo> getListFeedbackRequest()
     {
-        throw new RuntimeException();
+        List<BookingInfo> bookings = new ArrayList<>();
+        List<Booking> resultList = ofy().load().type(Booking.class).list();
+        for (Booking booking : resultList)
+        {
+            if (booking.getRated() != null && !booking.getRated() && OrderStatus.PAID.equals(booking.getStatus()))
+            {
+                DateTime bookingDate = new DateTime(booking.getDate());
+                if (bookingDate.plusDays(1).isBefore(DateTime.now()))
+                {
+                    booking.setRated(true);
+                    ofy().save().entity(booking).now();
 
-        //        EntityManager em = getEntityManager();
-        //        List<BookingInfo> bookings = new ArrayList<>();
-        //        try
-        //        {
-        //            @SuppressWarnings("unchecked")
-        //            List<Booking> resultList = em.createQuery("select t from Booking t").getResultList();
-        //            for (Booking booking : resultList)
-        //            {
-        //                if (booking.getRated() != null && !booking.getRated() && OrderStatus.PAID.equals(booking.getStatus()))
-        //                {
-        //                    DateTime bookingDate = new DateTime(booking.getDate());
-        //                    if (bookingDate.plusDays(1).isBefore(DateTime.now()))
-        //                    {
-        //                        em.getTransaction().begin();
-        //                        booking.setRated(true);
-        //                        em.persist(booking);
-        //                        em.getTransaction().commit();
-        //                        em.detach(booking);
-        //                        RouteInfo routeInfo = getRouteInfo(booking.getRoute(), em);
-        //                        BookingInfo bookingInfo = booking.getBookingInfo(routeInfo);
-        //                        bookings.add(bookingInfo);
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            logger.severe(ex.getMessage());
-        //        }
-        //        finally
-        //        {
-        //            em.close();
-        //        }
-        //        return bookings;
-
+                    RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
+                    BookingInfo bookingInfo = booking.getBookingInfo(routeInfo);
+                    bookings.add(bookingInfo);
+                }
+            }
+        }
+        return bookings;
     }
 
     public List<BookingInfo> getArchiveList()
@@ -408,7 +389,8 @@ public class BookingServiceManager extends Manager
         {
             if (new DateTime(booking.getDate()).plusDays(7).isBefore(DateTime.now()))
             {
-                bookings.add(booking.getInfo());
+                RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
+                bookings.add(booking.getBookingInfo(routeInfo));
             }
         }
         return bookings;
@@ -416,9 +398,10 @@ public class BookingServiceManager extends Manager
 
     public void archive(BookingInfo bookingInfo)
     {
-        Booking booking = ofy().load().type(Booking.class).id(bookingInfo.getRouteInfo().getId()).now();
+        Booking booking = ofy().load().type(Booking.class).id(bookingInfo.getId()).now();
         ArchivedBooking achivedBooking = booking.getArchivedBooking();
         ofy().save().entity(achivedBooking).now();
+        ofy().delete().entity(booking).now();
         //        em.getTransaction().begin();
         //        em.persist(achivedBooking);
         //        em.getTransaction().commit();

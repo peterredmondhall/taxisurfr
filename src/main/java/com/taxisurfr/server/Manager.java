@@ -28,7 +28,7 @@ public class Manager<T extends Info, K extends ArugamEntity<?>>
         List<K> resultList = getAll(entityType);
         for (K entity : resultList)
         {
-            ObjectifyService.ofy().delete().entity(entity);
+            ObjectifyService.ofy().delete().entity(entity).now();
         }
     }
 
@@ -104,7 +104,7 @@ public class Manager<T extends Info, K extends ArugamEntity<?>>
 
     public void save(ArugamEntity<?> entity, Class type, Info info)
     {
-        ObjectifyService.ofy().save().entity(entity);
+        ObjectifyService.ofy().save().entity(entity).now();
 
     }
 

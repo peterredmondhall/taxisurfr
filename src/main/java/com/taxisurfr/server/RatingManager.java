@@ -46,7 +46,8 @@ public class RatingManager extends Manager
 
     public List<RatingInfo> getRatings(RouteInfo routeInfo)
     {
-        return FluentIterable.from(ofy().load().type(Rating.class).filter("contractorId =", routeInfo.getContractorId()).list()).transform(RATING_TO_INFO).toList();
+        List<Rating> ratings = ofy().load().type(Rating.class).filter("contractorId =", routeInfo.getContractorId()).list();
+        return FluentIterable.from(ratings).transform(RATING_TO_INFO).toList();
 
 //        EntityManager em = getEntityManager();
 //        List<RatingInfo> ratings = newArrayList();
