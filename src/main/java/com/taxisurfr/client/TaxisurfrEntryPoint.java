@@ -15,7 +15,6 @@ import com.google.gwt.http.client.RequestException;
 import com.google.gwt.http.client.Response;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.client.core.WizardMobile;
@@ -32,7 +31,6 @@ import com.taxisurfr.client.steps.ShareStep;
 import com.taxisurfr.client.steps.SummaryStep;
 import com.taxisurfr.client.steps.TransportStep;
 import com.taxisurfr.shared.Currency;
-import com.taxisurfr.shared.model.AgentInfo;
 import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.ProfilInfo;
 import com.taxisurfr.shared.model.RatingInfo;
@@ -42,9 +40,9 @@ import com.taxisurfr.shared.model.StatInfo;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class GwtWizard implements EntryPoint
+public class TaxisurfrEntryPoint implements EntryPoint
 {
-    public static final Logger logger = Logger.getLogger(GwtWizard.class.getName());
+    public static final Logger logger = Logger.getLogger(TaxisurfrEntryPoint.class.getName());
     public static final BookingServiceAsync SERVICE = GWT.create(BookingService.class);
     public static ClientMessages MESSAGES = GWT.create(ClientMessages.class);
 

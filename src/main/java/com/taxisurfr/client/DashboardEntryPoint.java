@@ -13,7 +13,7 @@ import com.taxisurfr.shared.model.AgentInfo;
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
-public class GwtDashboard implements EntryPoint
+public class DashboardEntryPoint implements EntryPoint
 {
     private final BookingServiceAsync service = GWT.create(BookingService.class);
 

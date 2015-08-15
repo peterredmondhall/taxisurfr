@@ -28,7 +28,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.taxisurfr.client.GwtDashboard;
+import com.taxisurfr.client.DashboardEntryPoint;
 import com.taxisurfr.client.Refresh;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
@@ -81,7 +81,7 @@ public class BookingManagementVeiw extends Composite
     private void fetchBookings()
     {
 
-        service.getBookings(GwtDashboard.getAgentInfo(), new AsyncCallback<List<BookingInfo>>()
+        service.getBookings(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<BookingInfo>>()
         {
 
             @Override
@@ -251,7 +251,7 @@ public class BookingManagementVeiw extends Composite
                 {
                     if (selectionModel.isSelected(bookingInfo))
                     {
-                        service.cancelBooking(bookingInfo, GwtDashboard.getAgentInfo(), new AsyncCallback<List<BookingInfo>>()
+                        service.cancelBooking(bookingInfo, DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<BookingInfo>>()
                         {
 
                             @Override

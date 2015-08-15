@@ -13,7 +13,7 @@ import com.taxisurfr.client.steps.ui.summary.SummaryStepMobileUi;
 import com.taxisurfr.client.steps.ui.summary.SummaryStepUi;
 import com.taxisurfr.shared.OrderType;
 import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.client.GwtWizard;
+import com.taxisurfr.client.TaxisurfrEntryPoint;
 
 public class SummaryStep implements WizardStep
 {
@@ -36,7 +36,7 @@ public class SummaryStep implements WizardStep
     @Override
     public String getCaption()
     {
-        return Wizard.MOBILE ? "" : GwtWizard.MESSAGES.fourthPage();
+        return Wizard.MOBILE ? "" : TaxisurfrEntryPoint.MESSAGES.fourthPage();
     }
 
     @Override

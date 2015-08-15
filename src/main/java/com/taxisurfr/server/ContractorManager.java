@@ -18,10 +18,10 @@ public class ContractorManager extends Manager
     private static final Logger logger = Logger.getLogger(ContractorManager.class.getName());
 
     public ContractorManager()
-{
-    ObjectifyService.register(Contractor.class);
+    {
+        ObjectifyService.register(Contractor.class);
 
-}
+    }
 
     public ContractorInfo createContractor(ContractorInfo contractorInfo)
     {
@@ -31,29 +31,29 @@ public class ContractorManager extends Manager
         return contractor.getInfo();
     }
 
-    public ContractorInfo getContractor(Long contractorId) throws IllegalArgumentException
-    {
-        throw new RuntimeException();
-
-        //        EntityManager em = getEntityManager();
-        //        ContractorInfo contractorInfo = null;
-        //        {
-        //            try
-        //            {
-        //                contractorInfo = em.find(Contractor.class, contractorId).getInfo();
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                logger.log(Level.SEVERE, e.getMessage(), e);
-        //            }
-        //            finally
-        //            {
-        //                em.close();
-        //            }
-        //        }
-        //        return contractorInfo;
-
-    }
+//    public ContractorInfo getContractor(Long contractorId) throws IllegalArgumentException
+//    {
+//        ObjectifyService.ofy().load().
+//
+//        //        EntityManager em = getEntityManager();
+//        //        ContractorInfo contractorInfo = null;
+//        //        {
+//        //            try
+//        //            {
+//        //                contractorInfo = em.find(Contractor.class, contractorId).getInfo();
+//        //            }
+//        //            catch (Exception e)
+//        //            {
+//        //                logger.log(Level.SEVERE, e.getMessage(), e);
+//        //            }
+//        //            finally
+//        //            {
+//        //                em.close();
+//        //            }
+//        //        }
+//        //        return contractorInfo;
+//
+//    }
 
     @SuppressWarnings("unchecked")
     public List<ContractorInfo> getContractors(AgentInfo agentInfo)

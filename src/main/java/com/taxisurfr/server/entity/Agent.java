@@ -17,7 +17,7 @@ public class Agent extends ArugamEntity<AgentInfo>
     @Index
     private String userEmail;
     private boolean admin;
-
+    private Long orderCount;
     public String getUserEmail()
     {
         return userEmail;
@@ -37,6 +37,15 @@ public class Agent extends ArugamEntity<AgentInfo>
         agentInfo.setAdmin(admin);
         return agentInfo;
 
+    }
+
+    public Long getOrderCount()
+    {
+        if (orderCount==null)
+        {
+            orderCount = 0L;
+        }
+        return orderCount++;
     }
 
     public static Agent getAgent(AgentInfo agentInfo)

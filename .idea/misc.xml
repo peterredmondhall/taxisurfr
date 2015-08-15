@@ -43,6 +43,7 @@
   </component>
   <component name="FrameworkDetectionExcludesConfiguration">
     <file type="appengine-java" url="file://$PROJECT_DIR$" />
+    <file type="gwt" url="file://$PROJECT_DIR$" />
     <file type="web" url="file://$PROJECT_DIR$" />
   </component>
   <component name="MavenProjectsManager">

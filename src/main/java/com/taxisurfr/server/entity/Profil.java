@@ -7,6 +7,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Index;
 import com.taxisurfr.shared.model.ProfilInfo;
 
 @Entity
@@ -16,6 +17,8 @@ public class Profil implements Serializable
     @Id Long id;
 
     private boolean test;
+
+    @Index
     private String name;
     private String paypalURL;
     private String paypalAccount;

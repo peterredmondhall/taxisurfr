@@ -35,7 +35,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.taxisurfr.client.GwtDashboard;
+import com.taxisurfr.client.DashboardEntryPoint;
 import com.taxisurfr.client.Refresh;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
@@ -87,7 +87,7 @@ public class FinanceManagementVeiw extends Composite
 
     private void fetchFinancess()
     {
-        service.getFinances(GwtDashboard.getAgentInfo(), new AsyncCallback<List<FinanceInfo>>()
+        service.getFinances(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<FinanceInfo>>()
         {
 
             @Override
@@ -113,7 +113,7 @@ public class FinanceManagementVeiw extends Composite
             setTransferCellTable(financeList);
             setPaymentsCellTable(financeList);
         }
-        addTransferBtn.setVisible(GwtDashboard.isAdmin());
+        addTransferBtn.setVisible(DashboardEntryPoint.isAdmin());
     }
 
     private CellTable<FinanceInfo> setPaymentsCellTable(List<FinanceInfo> financeList)
@@ -451,7 +451,7 @@ public class FinanceManagementVeiw extends Composite
                 financeInfo.setName(editReferenceTxtBox.getText());
                 financeInfo.setDate(new Date());
                 financeInfo.setDate(new Date());
-                financeInfo.setAgentId(GwtDashboard.getAgentInfo().getId());
+                financeInfo.setAgentId(DashboardEntryPoint.getAgentInfo().getId());
 
                 service.savePayment(financeInfo, new AsyncCallback<List<FinanceInfo>>()
                 {

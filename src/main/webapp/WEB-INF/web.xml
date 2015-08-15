@@ -11,12 +11,13 @@
 
 	<servlet-mapping>
 		<servlet-name>BookingServiceServlet</servlet-name>
-		<url-pattern>/gwt_wizard/service</url-pattern>
+		<url-pattern>/taxisurfr/service</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>BookingServiceServlet</servlet-name>
-		<url-pattern>/gwt_dashboard/service</url-pattern>
+		<url-pattern>/taxisurfr_dashboard/service</url-pattern>
 	</servlet-mapping>
+
 	<servlet-mapping>
 		<servlet-name>ImageUploadServlet</servlet-name>
 		<url-pattern>*.gupld</url-pattern>
@@ -58,7 +59,7 @@
 
 	<servlet-mapping>
 		<servlet-name>LoginServlet</servlet-name>
-		<url-pattern>/gwt_wizard/login</url-pattern>
+		<url-pattern>/taxisurfr/login</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -102,7 +103,7 @@
 	
 	<servlet-mapping>
 	    <servlet-name>remoteLogging</servlet-name>
-	    <url-pattern>/gwt_wizard/remote_logging</url-pattern>
+	    <url-pattern>/taxisurfr/remote_logging</url-pattern>
 	</servlet-mapping>
 	
 	
@@ -121,11 +122,20 @@
 		<servlet-name>RecommendationServlet</servlet-name>
 		<servlet-class>com.taxisurfr.servlet.RecommendedServlet</servlet-class>
 	</servlet>
-	
+
 	<servlet-mapping>
 		<servlet-name>RecommendationServlet</servlet-name>
 		<url-pattern>/recommended</url-pattern>
 	</servlet-mapping>
+
+	<!--<servlet>-->
+		<!--<servlet-name>InitServlet</servlet-name>-->
+		<!--<servlet-class>com.taxisurfr.servlet.InitServlet</servlet-class>-->
+	<!--</servlet>-->
+	<!--<servlet-mapping>-->
+		<!--<servlet-name>InitServlet</servlet-name>-->
+		<!--<url-pattern>/init</url-pattern>-->
+	<!--</servlet-mapping>-->
 
 	<filter>
 		<filter-name>ObjectifyFilter</filter-name>
@@ -136,7 +146,7 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-		<!-- Default page to serve -->
+	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>

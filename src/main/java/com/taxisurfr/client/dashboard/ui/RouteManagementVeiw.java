@@ -49,7 +49,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.taxisurfr.client.GwtDashboard;
+import com.taxisurfr.client.DashboardEntryPoint;
 import com.taxisurfr.client.Refresh;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
@@ -154,7 +154,7 @@ public class RouteManagementVeiw extends Composite
     private void fetchContractorsAndRoutes()
     {
 
-        service.getContractors(GwtDashboard.getAgentInfo(), new AsyncCallback<List<ContractorInfo>>()
+        service.getContractors(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<ContractorInfo>>()
         {
 
             @Override
@@ -183,7 +183,7 @@ public class RouteManagementVeiw extends Composite
     private void fetchRoutes()
     {
 
-        service.getRoutes(GwtDashboard.getAgentInfo(), new AsyncCallback<List<RouteInfo>>()
+        service.getRoutes(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<RouteInfo>>()
         {
 
             @Override
@@ -237,7 +237,7 @@ public class RouteManagementVeiw extends Composite
                 {
                     if (selectionModel.isSelected(p))
                     {
-                        service.deleteRoute(GwtDashboard.getAgentInfo(), p, new AsyncCallback<List<RouteInfo>>()
+                        service.deleteRoute(DashboardEntryPoint.getAgentInfo(), p, new AsyncCallback<List<RouteInfo>>()
                         {
 
                             @Override
@@ -648,7 +648,7 @@ public class RouteManagementVeiw extends Composite
                         txSaveMode = editReturnCheckBox.getValue() ? RouteInfo.SaveMode.ADD_WITH_RETURN : RouteInfo.SaveMode.ADD;
                     }
 
-                    service.saveRoute(GwtDashboard.getAgentInfo(), routeInfo, txSaveMode, new AsyncCallback<List<RouteInfo>>()
+                    service.saveRoute(DashboardEntryPoint.getAgentInfo(), routeInfo, txSaveMode, new AsyncCallback<List<RouteInfo>>()
                     {
 
                         @Override
@@ -685,7 +685,7 @@ public class RouteManagementVeiw extends Composite
         addPopupPanel(startLabel, editStartTxtBox, grid, row++);
         addPopupPanel(destinationLabel, editEndTxtBox, grid, row++);
         addPopupPanel(priceLabel, editPriceTxtBox, grid, row++);
-        if (Boolean.TRUE.equals(GwtDashboard.isAdmin()))
+        if (Boolean.TRUE.equals(DashboardEntryPoint.isAdmin()))
         {
             addPopupPanel(agentCentsLabel, editAgentCentsBox, grid, row++);
         }

@@ -45,18 +45,14 @@ public class BookingServiceManager extends Manager
     public BookingServiceManager()
     {
         ObjectifyService.register(Booking.class);
-        ObjectifyService.register(Config.class);
         ObjectifyService.register(Profil.class);
-        ObjectifyService.register(Agent.class);
-        ObjectifyService.register(Route.class);
-        ObjectifyService.register(Rating.class);
         ObjectifyService.register(ArchivedBooking.class);
-
     }
 
     public BookingInfo addBookingWithClient(BookingInfo bookingInfo, String client) throws IllegalArgumentException
     {
         Booking booking = Booking.getBooking(bookingInfo, client);
+
         booking.setRoute(bookingInfo.getRouteId());
         ofy().save().entity(booking).now();
         RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
@@ -173,7 +169,13 @@ public class BookingServiceManager extends Manager
     public BookingInfo setPayed(Profil profil, BookingInfo bi, OrderStatus orderStatus) throws IllegalArgumentException
     {
         Booking booking = ofy().load().type(Booking.class).id(bi.getId()).now();
+        Route route = ofy().load().type(Route.class).id(booking.getRoute()).now();
+        Contractor contractor = ofy().load().type(Contractor.class).id(route.getContractorId()).now();
+        Agent agent = ofy().load().type(Agent.class).id(contractor.getAgentId()).now();
         booking.setStatus(orderStatus);
+        Long orderCount = agent.getOrderCount();
+        ofy().save().entity(agent).now();
+        booking.setRef(orderCount+"_"+booking.getName());
         ofy().save().entity(booking);
         RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
         return booking.getBookingInfo(routeInfo);
@@ -198,15 +200,14 @@ public class BookingServiceManager extends Manager
         //        return bookingInfo;
     }
 
-    public ProfilInfo getPaypalProfil() throws IllegalArgumentException
-    {
-        throw new RuntimeException();
-
-        //        ProfilInfo profilInfo = getProfil().getInfo();
-        //        logger.info(profilInfo.toString());
-        //        return profilInfo;
-
-    }
+//    public ProfilInfo getPaypalProfil() throws IllegalArgumentException
+//    {
+//
+//                ProfilInfo profilInfo = getProfil().getInfo();
+//                logger.info(profilInfo.toString());
+//                return profilInfo;
+//
+//    }
 
     public boolean getMaintenceAllowed()
     {
@@ -229,43 +230,8 @@ public class BookingServiceManager extends Manager
 
     public Profil getProfil()
     {
-
-        Profil profil = null;
-        Config config = null;
-        List<Config> configList = ofy().load().type(Config.class).list();
-
-        if (configList.size() == 0)
-        {
-            config = new Config();
-            config.setProfil("test");
-            config.setMaintenceAllowed(true);
-            ofy().save().entity(config);
-        }
-        else
-        {
-            config = configList.get(0);
-        }
-        logger.info("Using config profil:" + config.getProfil());
-        List<Profil> profilList = ofy().load().type(Profil.class).filter("name", config.getProfil()).list();
-
-        if (profilList.size() == 0)
-        {
-            profil = new Profil();
-            profil.setPaypalAccount(PaypalPaymentChecker.TEST_ACCT);
-            profil.setPaypalAT(PaypalPaymentChecker.TEST_AT);
-            profil.setPaypalURL(PaypalPaymentChecker.TEST_PAYPAL_URL);
-            profil.setTest(true);
-            profil.setName("test");
-            profil.setTaxisurfUrl("http://taxigangsurf.appspot.com");
-            ofy().save().entity(profil);
-
-        }
-        else
-        {
-            profil = profilList.get(0);
-            logger.info("Using config profil:" + profil.getName());
-        }
-        return profil;
+        Config config = new ConfigManager().getConfig();
+        return ofy().load().type(Profil.class).filter("name", config.getProfil()).first().now();
     }
 
     public class BookingInfoComparator implements Comparator<BookingInfo>
@@ -281,7 +247,6 @@ public class BookingServiceManager extends Manager
     @SuppressWarnings("rawtypes")
     public List<BookingInfo> getBookingsForRoute(final RouteInfo routeInfo) throws IllegalArgumentException
     {
-
         final Predicate<Booking> accept = new Predicate<Booking>()
         {
             @Override
@@ -290,17 +255,16 @@ public class BookingServiceManager extends Manager
                 boolean applies = false;
                 if (new DateTime(booking.getDate()).isAfter(now()) && booking.getOrderType() != null)
                 {
-
+                    boolean bookingForRoute = (booking.getRoute().equals(routeInfo.getId())) || (booking.getRoute().equals(routeInfo.getAssociatedRoute()));
                     switch (booking.getOrderType())
                     {
                         case BOOKING:
-                            boolean bookingForRoute = (booking.getRoute().equals(routeInfo.getId())) || (booking.getRoute().equals(routeInfo.getAssociatedRoute()));
                             applies = bookingForRoute && (OrderStatus.PAID == booking.getStatus() && booking.getShareWanted());
                             break;
                         case SHARE:
                             break;
                         case SHARE_ANNOUNCEMENT:
-                            applies = true;
+                            applies = bookingForRoute;
                             break;
                         default:
                             break;
@@ -435,7 +399,7 @@ public class BookingServiceManager extends Manager
 
     public AgentInfo getAgent(ContractorInfo contractorInfo)
     {
-        return ofy().load().type(Agent.class).id(contractorInfo.getId()).now().getInfo();
+        return ofy().load().type(Agent.class).id(contractorInfo.getAgentId()).now().getInfo();
 
         //        try
         //        {
@@ -451,6 +415,75 @@ public class BookingServiceManager extends Manager
         //            logger.severe(ex.getMessage());
         //        }
         //        return null;
+    }
+
+    public AgentInfo createAgentWithRoutes(String agentEmail)
+    {
+        ConfigManager configManager = new ConfigManager();
+        configManager.createTestConfig();
+        BookingServiceManager bookingServiceManager = new BookingServiceManager();
+        AgentManager agentManager = new AgentManager();
+        RouteServiceManager routeServiceManager = new RouteServiceManager();
+        ContractorManager contractorManager = new ContractorManager();
+
+        //agent
+        Agent testAgentEntity = new Agent();
+        testAgentEntity.setUserEmail(agentEmail);
+        ObjectifyService.ofy().save().entity(testAgentEntity).now();
+
+        //contractor 1
+        Contractor contractor1 = new Contractor();
+        contractor1.setAgentId(testAgentEntity.id);
+        contractor1.setName(testAgentEntity.getUserEmail() + ":contractor1");
+        ObjectifyService.ofy().save().entity(contractor1).now();
+
+        //contractor 2
+        Contractor contractor2 = new Contractor();
+        contractor2.setAgentId(testAgentEntity.id);
+        contractor2.setName(testAgentEntity.getUserEmail() + ":contractor2");
+        ObjectifyService.ofy().save().entity(contractor2).now();
+
+        //route 1 contractor 1
+        Route route11 = new Route();
+        route11.setStart("testAgent:" + "simple_Contractor1");
+        route11.setEnd("testAgent:" + "end");
+        route11.setPickupType(RouteInfo.PickupType.AIRPORT);
+        route11.setCents(101L);
+        route11.setAgentCents(100L);
+        route11.setContractorId(contractor1.id);
+        ObjectifyService.ofy().save().entity(route11).now();
+
+        //route 2 contractor 1
+        Route route21 = new Route();
+        route21.setStart("testAgent:" + "simple_Contractor1");
+        route21.setEnd("testAgent:" + "end");
+        route21.setPickupType(RouteInfo.PickupType.AIRPORT);
+        route21.setCents(101L);
+        route21.setAgentCents(100L);
+        route21.setContractorId(contractor1.id);
+        ObjectifyService.ofy().save().entity(route21).now();
+
+        //route 1 contractor 2
+        Route route12= new Route();
+        route12.setStart("testAgent:" + "simple_Contractor2");
+        route12.setEnd("testAgent:" + "end");
+        route12.setPickupType(RouteInfo.PickupType.AIRPORT);
+        route12.setCents(101L);
+        route12.setAgentCents(100L);
+        route12.setContractorId(contractor2.id);
+        ObjectifyService.ofy().save().entity(route12).now();
+
+        //route 2 contractor 1
+        Route route22 = new Route();
+        route22.setStart("testAgent:" + "simple_Contractor2");
+        route22.setEnd("testAgent:" + "end");
+        route22.setPickupType(RouteInfo.PickupType.AIRPORT);
+        route22.setCents(101L);
+        route22.setAgentCents(100L);
+        route22.setContractorId(contractor2.id);
+        ObjectifyService.ofy().save().entity(route22).now();
+
+        return  testAgentEntity.getInfo();
     }
 
 }

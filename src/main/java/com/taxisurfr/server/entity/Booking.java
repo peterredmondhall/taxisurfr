@@ -327,7 +327,7 @@ public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntit
 
     public void setRef(String ref)
     {
-        this.ref = ref;
+        this.ref =ref;
     }
 
     private String parentRef;
@@ -360,17 +360,6 @@ public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntit
         return info;
     }
 
-    public String generateRef()
-    {
-        String idString = Long.toString(id);
-        int len = idString.length();
-        if (len > 5)
-        {
-            return idString.substring(len - 5, len - 1);
-        }
-        else
-            return idString;
-    }
 
     private void setCurrency(Currency currency)
     {

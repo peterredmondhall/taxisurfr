@@ -134,7 +134,6 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     {
         logger.info("payWithStripe" + bookingInfo.getPaidPrice());
         Profil profil = bookingServiceManager.getProfil();
-        bookingInfo = bookingServiceManager.setBookingRef(bookingInfo);
         logger.info("payWithStripe" + bookingInfo.getPaidPrice());
         String refusal = stripePayment.charge(token, bookingInfo, profil.getStripeSecret());
         if (refusal == null)
@@ -146,6 +145,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
                 AgentInfo agentInfo = bookingServiceManager.getAgent(contractorInfo);
                 Mailer.sendConfirmation(bookingInfo, profil, agentInfo, contractorInfo);
                 financeManager.addPayment(bookingInfo, new Date());
+
             }
         }
         else

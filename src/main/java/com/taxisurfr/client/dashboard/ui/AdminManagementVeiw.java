@@ -1,6 +1,6 @@
 package com.taxisurfr.client.dashboard.ui;
 
-import static com.taxisurfr.client.GwtDashboard.getAgentInfo;
+import static com.taxisurfr.client.DashboardEntryPoint.getAgentInfo;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.taxisurfr.client.GwtDashboard;
+import com.taxisurfr.client.DashboardEntryPoint;
 import com.taxisurfr.client.Refresh;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
@@ -76,7 +76,7 @@ public class AdminManagementVeiw extends Composite
             public void onChange(ChangeEvent event)
             {
                 AgentInfo agentInfo = listAgents.get(agentListBox.getSelectedIndex());
-                GwtDashboard.setAgentInfo(agentInfo);
+                DashboardEntryPoint.setAgentInfo(agentInfo);
             }
         });
     }

@@ -19,7 +19,7 @@ import com.taxisurfr.client.steps.ui.creditcard.CreditCardStepUi;
 import com.taxisurfr.client.steps.ui.creditcard.CreditCardStepUi.ErrorMsg;
 import com.taxisurfr.shared.OrderStatus;
 import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.client.GwtWizard;
+import com.taxisurfr.client.TaxisurfrEntryPoint;
 
 public class CreditCardStep implements WizardStep
 {
@@ -60,19 +60,19 @@ public class CreditCardStep implements WizardStep
         ui.setErrorMsg("", ErrorMsg.NAME);
         if (ui.getCCName() == null || ui.getCCName().trim().length() == 0)
         {
-            ui.setErrorMsg(GwtWizard.MESSAGES.mayNotBeEmptyErrorMsg(), ErrorMsg.NAME);
+            ui.setErrorMsg(TaxisurfrEntryPoint.MESSAGES.mayNotBeEmptyErrorMsg(), ErrorMsg.NAME);
             return false;
         }
         ui.setErrorMsg("", ErrorMsg.NUMBER);
         if (ui.getCCNumber() == null || ui.getCCNumber().trim().length() == 0)
         {
-            ui.setErrorMsg(GwtWizard.MESSAGES.mayNotBeEmptyErrorMsg(), ErrorMsg.NUMBER);
+            ui.setErrorMsg(TaxisurfrEntryPoint.MESSAGES.mayNotBeEmptyErrorMsg(), ErrorMsg.NUMBER);
             return false;
         }
         ui.setErrorMsg("", ErrorMsg.CVC);
         if (ui.getCvc() == null || ui.getCvc().trim().length() == 0)
         {
-            ui.setErrorMsg(GwtWizard.MESSAGES.mayNotBeEmptyErrorMsg(), ErrorMsg.CVC);
+            ui.setErrorMsg(TaxisurfrEntryPoint.MESSAGES.mayNotBeEmptyErrorMsg(), ErrorMsg.CVC);
             return false;
         }
         ui.showProgress();

@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.LoadResult;
 import com.googlecode.objectify.ObjectifyService;
+import com.taxisurfr.server.entity.ArugamImage;
 import com.taxisurfr.server.entity.Contractor;
 import com.taxisurfr.server.entity.Route;
 import com.taxisurfr.shared.model.AgentInfo;
@@ -17,6 +18,11 @@ public class RouteServiceManager extends Manager
 {
     private static final Logger logger = Logger.getLogger(RouteServiceManager.class.getName());
 
+    public RouteServiceManager()
+    {
+
+        ObjectifyService.register(Route.class);
+    }
     public List<RouteInfo> deleteRoute(AgentInfo userInfo, RouteInfo routeInfo) throws IllegalArgumentException
     {
         Route route = ObjectifyService.ofy().load().type(Route.class).id(routeInfo.getId()).now();

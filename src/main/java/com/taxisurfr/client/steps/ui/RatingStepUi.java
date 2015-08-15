@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
-import com.taxisurfr.client.GwtWizard;
+import com.taxisurfr.client.TaxisurfrEntryPoint;
 import com.taxisurfr.client.core.Wizard;
 
 public class RatingStepUi extends Composite
@@ -184,7 +184,7 @@ public class RatingStepUi extends Composite
                 Wizard.RATINGINFO.setCritic(critic.getText());
                 Wizard.RATINGINFO.setAuthor(nicknameField.getText());
 
-                GwtWizard.SERVICE.addRating(Wizard.RATINGINFO, new AsyncCallback<Void>()
+                TaxisurfrEntryPoint.SERVICE.addRating(Wizard.RATINGINFO, new AsyncCallback<Void>()
                 {
                     @Override
                     public void onSuccess(Void xxx)

@@ -47,6 +47,8 @@ public class Manager<T extends Info, K extends ArugamEntity<?>>
     @SuppressWarnings("unchecked")
     public List<K> getAll(Class<?> entityType)
     {
+        new ImageManager();
+        new BookingServiceManager();
         List<K> agents = (List<K>) ObjectifyService.ofy().load().type(entityType).list();
         return agents;
     }

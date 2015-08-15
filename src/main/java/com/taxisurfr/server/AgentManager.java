@@ -15,6 +15,12 @@ public class AgentManager extends Manager
 {
     private static final Logger logger = Logger.getLogger(AgentManager.class.getName());
 
+    public AgentManager()
+    {
+
+        ObjectifyService.register(Agent.class);
+    }
+
     public AgentInfo createAgent(String agentEmail)
     {
         // check local user

@@ -1,5 +1,6 @@
 package com.taxisurfr.server;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 
@@ -7,7 +8,10 @@ import com.google.appengine.api.images.Image;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ImagesServiceFactory;
 import com.google.appengine.api.images.Transform;
+import com.googlecode.objectify.ObjectifyService;
+import com.taxisurfr.server.entity.Agent;
 import com.taxisurfr.server.entity.ArugamImage;
+import com.taxisurfr.server.entity.Finance;
 import com.taxisurfr.shared.model.ArugamImageInfo;
 
 /**
@@ -17,29 +21,27 @@ public class ImageManager extends Manager
 {
     private static final Logger logger = Logger.getLogger(ImageManager.class.getName());
 
+    public ImageManager()
+    {
+
+        ObjectifyService.register(ArugamImage.class);
+    }
     public Long addImage(byte[] image) throws IllegalArgumentException
     {
-        throw new RuntimeException();
 
-//        ImagesService imagesService = ImagesServiceFactory.getImagesService();
-//
-//        Image oldImage = ImagesServiceFactory.makeImage(image);
-//        Transform resize = ImagesServiceFactory.makeResize(200, 300);
-//
-//        Image newImage = imagesService.applyTransform(resize, oldImage);
-//        image = newImage.getImageData();
-//        Long id = null;
-//        EntityManager em = getEntityManager();
-//        try
-//        {
-//            ArugamImageInfo info = new ArugamImageInfo();
-//            info.setContent(image);
-//            ArugamImage arugamImage = ArugamImage.getArugamImage(info);
-//            em.getTransaction().begin();
-//            em.persist(arugamImage);
-//            em.getTransaction().commit();
-//            em.detach(arugamImage);
-//            id = arugamImage.getKey().getId();
+        ImagesService imagesService = ImagesServiceFactory.getImagesService();
+
+        Image oldImage = ImagesServiceFactory.makeImage(image);
+        Transform resize = ImagesServiceFactory.makeResize(200, 300);
+
+        Image newImage = imagesService.applyTransform(resize, oldImage);
+        image = newImage.getImageData();
+        Long id = null;
+            ArugamImageInfo info = new ArugamImageInfo();
+            info.setContent(image);
+            ArugamImage arugamImage = ArugamImage.getArugamImage(info);
+            ObjectifyService.ofy().save().entity(arugamImage).now();
+        return  arugamImage.id;
 //        }
 //        catch (Exception e)
 //        {
@@ -54,10 +56,9 @@ public class ImageManager extends Manager
 
     public byte[] getImage(Long imageId)
     {
-        throw new RuntimeException();
+        ArugamImage arugamImage = ObjectifyService.ofy().load().type(ArugamImage.class).id(imageId).now();
+        return arugamImage.getImage().getBytes();
 
-//        ArugamImage image = getEntityManager().find(ArugamImage.class, imageId);
-//        return image.getImage().getBytes();
     }
 
 //    public String dump()

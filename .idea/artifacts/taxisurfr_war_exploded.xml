@@ -52,6 +52,7 @@
         <element id="file-copy" path="$PROJECT_DIR$/target/taxisurfr-1.0-SNAPSHOT/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="taxisurfr/web/Web" />
+      <element id="gwt-compiler-output" facet="taxisurfr/gwt/GWT" />
     </root>
   </artifact>
 </component>

@@ -20,6 +20,7 @@ import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.common.collect.Maps;
 import com.taxisurfr.server.BookingServiceImpl;
+import com.taxisurfr.server.ConfigManager;
 import com.taxisurfr.server.CurrencyManager;
 import com.taxisurfr.server.StatManager;
 import com.taxisurfr.shared.Currency;
@@ -31,6 +32,7 @@ public class RatingServlet extends HttpServlet
     BookingServiceImpl bookingServiceManager = new BookingServiceImpl();
     StatManager statManager = new StatManager();
     CurrencyManager currencyManager = new CurrencyManager();
+    ConfigManager configManager = new ConfigManager();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException

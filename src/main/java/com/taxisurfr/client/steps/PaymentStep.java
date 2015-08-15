@@ -5,7 +5,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.client.core.WizardStep;
 import com.taxisurfr.client.steps.ui.ConfirmationStepUi;
-import com.taxisurfr.client.GwtWizard;
+import com.taxisurfr.client.TaxisurfrEntryPoint;
 
 public class PaymentStep implements WizardStep
 {
@@ -20,7 +20,7 @@ public class PaymentStep implements WizardStep
     @Override
     public String getCaption()
     {
-        return Wizard.MOBILE ? "" : GwtWizard.MESSAGES.fifthPage();
+        return Wizard.MOBILE ? "" : TaxisurfrEntryPoint.MESSAGES.fifthPage();
     }
 
     @Override

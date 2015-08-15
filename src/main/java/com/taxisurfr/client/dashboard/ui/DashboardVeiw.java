@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.taxisurfr.client.GwtDashboard;
+import com.taxisurfr.client.DashboardEntryPoint;
 
 public class DashboardVeiw extends Composite
 {
@@ -52,8 +52,8 @@ public class DashboardVeiw extends Composite
         initWidget(uiBinder.createAndBindUi(this));
         setMenu();
         dataContainer.add(displayContainer);
-        isAdmin = Boolean.TRUE.equals(GwtDashboard.getAgentInfo().isAdmin());
-        GwtDashboard.setAdmin(isAdmin);
+        isAdmin = Boolean.TRUE.equals(DashboardEntryPoint.getAgentInfo().isAdmin());
+        DashboardEntryPoint.setAdmin(isAdmin);
         adminManagement.setVisible(isAdmin);
 
     }

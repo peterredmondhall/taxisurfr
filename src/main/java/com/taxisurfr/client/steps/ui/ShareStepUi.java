@@ -22,7 +22,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.taxisurfr.client.GwtWizard;
+import com.taxisurfr.client.TaxisurfrEntryPoint;
 import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.shared.OrderType;
 import com.taxisurfr.shared.model.BookingInfo;
@@ -121,7 +121,7 @@ public class ShareStepUi extends Composite
                     Wizard.BOOKINGINFO.setParentId(bookingToShare.getId());
 
                     scrollPanel.remove(cellTable);
-                    GwtWizard.sendStat("step:Share(share request)", StatInfo.Update.TYPE);
+                    TaxisurfrEntryPoint.sendStat("step:Share(share request)", StatInfo.Update.TYPE);
                     wizard.onNextClick(null);
 
                 }
@@ -172,7 +172,7 @@ public class ShareStepUi extends Composite
                 @Override
                 public void onClick(ClickEvent event)
                 {
-                    GwtWizard.sendStat("step:Share(new Booking)", StatInfo.Update.TYPE);
+                    TaxisurfrEntryPoint.sendStat("step:Share(new Booking)", StatInfo.Update.TYPE);
                     wizard.onNextClick(null);
 
                 }

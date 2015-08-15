@@ -2,7 +2,7 @@ package com.taxisurfr.client.steps;
 
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
-import com.taxisurfr.client.GwtWizard;
+import com.taxisurfr.client.TaxisurfrEntryPoint;
 import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.client.core.WizardStep;
 import com.taxisurfr.client.steps.ui.transport.TransportStepMobileUi;
@@ -29,7 +29,7 @@ public class TransportStep implements WizardStep
     @Override
     public String getCaption()
     {
-        return Wizard.MOBILE ? "" : GwtWizard.MESSAGES.firstPage();
+        return Wizard.MOBILE ? "" : TaxisurfrEntryPoint.MESSAGES.firstPage();
     }
 
     @Override
@@ -46,7 +46,7 @@ public class TransportStep implements WizardStep
     @Override
     public Boolean onNext()
     {
-        GwtWizard.sendStat("step:Transport", StatInfo.Update.TYPE);
+        TaxisurfrEntryPoint.sendStat("step:Transport", StatInfo.Update.TYPE);
         return true;
     }
 

@@ -37,7 +37,7 @@ import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.SelectionModel;
-import com.taxisurfr.client.GwtDashboard;
+import com.taxisurfr.client.DashboardEntryPoint;
 import com.taxisurfr.client.Refresh;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
@@ -106,7 +106,7 @@ public class ContractorManagementVeiw extends Composite
     private void fetchContractors()
     {
 
-        service.getContractors(GwtDashboard.getAgentInfo(), new AsyncCallback<List<ContractorInfo>>()
+        service.getContractors(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<ContractorInfo>>()
         {
 
             @Override
@@ -338,7 +338,7 @@ public class ContractorManagementVeiw extends Composite
                 else
                 {
                     contractorInfo.setId(routeId);
-                    contractorInfo.setAgentId(GwtDashboard.getAgentInfo().getId());
+                    contractorInfo.setAgentId(DashboardEntryPoint.getAgentInfo().getId());
                     contractorInfo.setName(editContractorNameTxtBox.getText());
                     contractorInfo.setEmail(editContractorEmailTxtBox.getText());
                     List<String> addr = Lists.newArrayList();
@@ -347,7 +347,7 @@ public class ContractorManagementVeiw extends Composite
                         addr.add(addrNameTxtBox[i].getText());
                     }
                     contractorInfo.setAddress(addr);
-                    service.saveContractor(GwtDashboard.getAgentInfo(), contractorInfo, mode, new AsyncCallback<List<ContractorInfo>>()
+                    service.saveContractor(DashboardEntryPoint.getAgentInfo(), contractorInfo, mode, new AsyncCallback<List<ContractorInfo>>()
                     {
 
                         @Override

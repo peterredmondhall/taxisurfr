@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import com.google.common.base.Function;
 import com.google.common.collect.FluentIterable;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.Booking;
 import com.taxisurfr.server.entity.Rating;
 import com.taxisurfr.server.entity.Route;
@@ -19,6 +20,11 @@ public class RatingManager extends Manager
 {
     private static final Logger logger = Logger.getLogger(RatingManager.class.getName());
 
+    public RatingManager()
+    {
+
+        ObjectifyService.register(Rating.class);
+    }
     public void add(RatingInfo ratingInfo)
     {
         Booking booking = ofy().load().type(Booking.class).id(ratingInfo.getBookingId()).now();

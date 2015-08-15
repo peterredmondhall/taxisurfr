@@ -5,6 +5,7 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Index;
 import com.taxisurfr.shared.model.StatInfo;
 
 @Entity
@@ -38,6 +39,8 @@ public class SessionStat extends ArugamEntity<StatInfo>
     }
 
     String src;
+
+    @Index
     Long ident;
 
     public String getType()

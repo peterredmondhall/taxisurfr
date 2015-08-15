@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.SuggestBox;
 import com.google.gwt.user.client.ui.SuggestOracle;
 import com.google.gwt.user.client.ui.Widget;
-import com.taxisurfr.client.GwtWizard;
+import com.taxisurfr.client.TaxisurfrEntryPoint;
 import com.taxisurfr.client.Refresh;
 import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.client.service.BookingService;
@@ -226,7 +226,9 @@ public class TransportStepUi extends Composite
                     {
                         String displayString = event.getSelectedItem().getReplacementString();
                         RouteInfo routeInfo = mapRouteInfo.get(displayString);
+
                         Wizard.ROUTEINFO = routeInfo;
+                        logger.log(Level.INFO, "start:" + Wizard.ROUTEINFO.getStart());
                         displayRoute(/* suggestBox, */);
                     }
 
@@ -248,13 +250,20 @@ public class TransportStepUi extends Composite
 
     private Widget getDisclosure(String description)
     {
-        int defautlt = description.length() > 70 ? 70 : description.length();
-        int breakCount = description.indexOf('.') + 1;
-        breakCount = breakCount > 0 ? breakCount : defautlt;
+        String labelDescription0 = "no description!";
+        String labelDescription1 = "no description!";
+        if (description != null)
+        {
+            int defautlt = description.length() > 70 ? 70 : description.length();
+            int breakCount = description.indexOf('.') + 1;
+            breakCount = breakCount > 0 ? breakCount : defautlt;
+            labelDescription0 = description.substring(breakCount);
+            labelDescription1 = description.substring(0, breakCount);
+        }
+        Label descriptionLabel = new Label(labelDescription0);
 
-        DisclosurePanel advancedDisclosure = new DisclosurePanel(description.substring(0, breakCount));
+        DisclosurePanel advancedDisclosure = new DisclosurePanel(labelDescription1);
         advancedDisclosure.setAnimationEnabled(true);
-        Label descriptionLabel = new Label(description.substring(breakCount));
         advancedDisclosure.setContent(descriptionLabel);
 
         return advancedDisclosure;
@@ -305,7 +314,7 @@ public class TransportStepUi extends Composite
         panelDescription.add(getDisclosure(routeInfo.getDescription()));
 
         panelRoute.setVisible(true);
-        GwtWizard.SERVICE.getBookingsForRoute(Wizard.ROUTEINFO, new AsyncCallback<List<BookingInfo>>()
+        TaxisurfrEntryPoint.SERVICE.getBookingsForRoute(Wizard.ROUTEINFO, new AsyncCallback<List<BookingInfo>>()
         {
             @Override
             public void onSuccess(List<BookingInfo> list)
@@ -321,7 +330,7 @@ public class TransportStepUi extends Composite
             }
         });
 
-        GwtWizard.SERVICE.getRatings(Wizard.ROUTEINFO, new AsyncCallback<List<RatingInfo>>()
+        TaxisurfrEntryPoint.SERVICE.getRatings(Wizard.ROUTEINFO, new AsyncCallback<List<RatingInfo>>()
         {
             @Override
             public void onSuccess(List<RatingInfo> ratings)
@@ -337,7 +346,7 @@ public class TransportStepUi extends Composite
             {
             }
         });
-        GwtWizard.sendStat(routeInfo.getKey(""), StatInfo.Update.ROUTE);
+        TaxisurfrEntryPoint.sendStat(routeInfo.getKey(""), StatInfo.Update.ROUTE);
     }
 
     private void setSuggestBoxWidth(SuggestBox suggestBox)

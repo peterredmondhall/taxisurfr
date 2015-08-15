@@ -14,7 +14,7 @@ public class ArugamImage extends ArugamEntity<ArugamImageInfo>
 
     private static final long serialVersionUID = 1L;
 
-    @Id Long id;
+    @Id public Long id;
 
     private Blob image;
 

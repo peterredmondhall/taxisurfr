@@ -60,6 +60,7 @@ public class Mailer
 
         String html = BookingUtil.toConfirmationRequestHtml(bookingInfo, getFile(SHARE_REQUEST), profil);
         html = html.replace(" __NAME__", "Hi " + parentBooking.getName());
+        html = html.replace("__CONFIMATION__", "Share Request.");
         send(parentBooking.getEmail(), html, null, "booker");
         send(profil.getMonitorEmail(), html, null, "monitor");
     }
@@ -68,6 +69,7 @@ public class Mailer
     {
         String html = BookingUtil.toConfirmationEmailHtml(parentBookingInfo, getFile(SHARE_ACCEPTED), profil);
         html = html.replace(" __NAME__", "Hi " + shareBookingInfo.getName());
+        html = html.replace("__CONFIMATION__", "Share Accepted");
         send(email, html, null, "sharer");
         send(profil.getMonitorEmail(), html, null, "monitor");
 
@@ -79,6 +81,7 @@ public class Mailer
         String html = "error";
         html = BookingUtil.toConfirmationEmailHtml(bookingInfo, getFile(CONFIRMATION), profil);
         html = html.replace("INSERT_ORDERFORM", profil.getTaxisurfUrl() + "/orderform?order=" + bookingInfo.getId());
+        html = html.replace("__CONFIMATION__", "Booking Confirmation");
 
         byte[] pdfData = new PdfUtil().generateTaxiOrder("template/order.pdf", bookingInfo, agentInfo, contractorInfo);
         String email = bookingInfo.getEmail();

@@ -1,6 +1,6 @@
 package com.taxisurfr.client.steps;
 
-import static com.taxisurfr.client.GwtWizard.MESSAGES;
+import static com.taxisurfr.client.TaxisurfrEntryPoint.MESSAGES;
 
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;

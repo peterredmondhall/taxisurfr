@@ -9,17 +9,18 @@
     <artifactId>taxisurfr</artifactId>
 
     <properties>
+        <!--<app.id>taxigangsurf</app.id>-->
+        <!--<app.version>33</app.version>-->
         <app.id>gobygang</app.id>
-        <app.version>2</app.version>
+        <app.version>1</app.version>
         <appengine.version>1.9.24</appengine.version>
         <gwt.version>2.7.0</gwt.version>
         <gcloud.plugin.version>1.9.17a</gcloud.plugin.version>
-        <!--maven-datanucleus-plugin.version>3.2.0-m2</maven-datanucleus-plugin.version-->
+        <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 
         <objectify.version>5.1.5</objectify.version>
         <guava.version>18.0</guava.version>
         <selenium.version>2.46.0</selenium.version>
-        <datanucleus.version>3.1.1</datanucleus.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
@@ -47,37 +48,18 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-        <!--dependency>
-            <groupId>org.apache.geronimo.specs</groupId>
-            <artifactId>geronimo-jpa_2.0_spec</artifactId>
-            <version>1.1</version>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
-            <groupId>com.google.appengine.orm</groupId>
-            <artifactId>datanucleus-appengine</artifactId>
-            <version>2.1.2</version>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <version>${gwt.version}</version>
+            <!--<scope>test</scope>-->
         </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-core</artifactId>
-            <version>${datanucleus.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.datanucleus</groupId>
-            <artifactId>datanucleus-api-jpa</artifactId>
-            <version>${datanucleus.version}</version>
-        </dependency-->
-        <dependency>
-        <groupId>com.google.gwt</groupId>
-        <artifactId>gwt-user</artifactId>
-        <version>${gwt.version}</version>
-        </dependency>
-        <dependency>
-        <groupId>com.google.gwt</groupId>
-        <artifactId>gwt-dev</artifactId>
-        <version>${gwt.version}</version>
-        </dependency>
-
         <dependency>
             <groupId>com.arcbees.stripe</groupId>
             <artifactId>gwt-stripe</artifactId>
@@ -303,25 +285,27 @@
                     <set_default>true</set_default>
                 </configuration>
             </plugin>
-            <!--plugin>
-                <groupId>org.datanucleus</groupId>
-                <artifactId>datanucleus-maven-plugin</artifactId>
-                <version>${datanucleus.version}</version>
-                <configuration>
-                    <api>JPA</api>
-                    <fork>false</fork>
-                    <persistenceUnitName>transactions-optional</persistenceUnitName>
-                    <verbose>true</verbose>
-                </configuration>
+            <!-- GWT Maven Plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
                 <executions>
                     <execution>
-                        <phase>process-classes</phase>
                         <goals>
-                            <goal>enhance</goal>
+                            <goal>compile</goal>
+                            <goal>test</goal>
+                            <!--<goal>generateAsync</goal>-->
                         </goals>
                     </execution>
                 </executions>
-            </plugin-->
+                <configuration>
+                    <runTarget>index.html</runTarget>
+                    <hostedWebapp>${webappDirectory}</hostedWebapp>
+                    <extraJvmArgs>-XX:MaxPermSize=512m -Xmx1024m -Xss10m</extraJvmArgs>
+                    <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
