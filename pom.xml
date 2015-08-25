@@ -8,7 +8,6 @@
     <groupId>taxisurfr</groupId>
     <artifactId>taxisurfr</artifactId>
 
-
     <properties>
         <app.id>taxigangsurf</app.id>
         <app.version>35</app.version>
