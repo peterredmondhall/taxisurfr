@@ -1,7 +1,43 @@
 package com.taxisurfr.shared.model;
 
+import com.taxisurfr.shared.Currency;
+
 public class StatInfo extends Info
 {
+    private String sessionId;
+    private Currency currency;
+    private Float currencyRate;
+
+    public void setSessionId(String sessionId)
+    {
+        this.sessionId = sessionId;
+    }
+
+    public String getSessionId()
+    {
+        return sessionId;
+    }
+
+    public void setCurrency(Currency currency)
+    {
+        this.currency = currency;
+    }
+
+    public void setCurrencyRate(Float currencRate)
+    {
+        this.currencyRate = currencRate;
+    }
+
+    public Currency getCurrency()
+    {
+        return currency;
+    }
+
+    public Float getCurrencyRate()
+    {
+        return currencyRate;
+    }
+
     public enum Update
     {
         TYPE,
@@ -14,6 +50,18 @@ public class StatInfo extends Info
     private static final long serialVersionUID = 1L;
     String country;
     String detail;
+
+    public String getIp()
+    {
+        return ip;
+    }
+
+    public void setIp(String ip)
+    {
+        this.ip = ip;
+    }
+
+    String ip;
     StatInfo.Update update;
 
     public StatInfo.Update getUpdate()
@@ -37,17 +85,6 @@ public class StatInfo extends Info
     }
 
     String src;
-    Long ident;
-
-    public Long getIdent()
-    {
-        return ident;
-    }
-
-    public void setIdent(Long ident)
-    {
-        this.ident = ident;
-    }
 
     public String getSrc()
     {

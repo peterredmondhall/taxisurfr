@@ -1,27 +1,23 @@
 package com.taxisurfr.server;
 
-import static com.taxisurfr.shared.OrderStatus.SHARE_ACCEPTED;
+import com.google.appengine.api.users.User;
+import com.google.common.collect.Lists;
+import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.taxisurfr.client.service.BookingService;
+import com.taxisurfr.server.entity.Agent;
+import com.taxisurfr.server.entity.Profil;
+import com.taxisurfr.server.entity.Route;
+import com.taxisurfr.server.util.Mailer;
+import com.taxisurfr.shared.Currency;
+import com.taxisurfr.shared.OrderStatus;
+import com.taxisurfr.shared.model.*;
 
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.google.appengine.api.users.User;
-import com.google.common.collect.Lists;
-import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import com.taxisurfr.client.service.BookingService;
-import com.taxisurfr.server.entity.Profil;
-import com.taxisurfr.server.util.Mailer;
-import com.taxisurfr.shared.Currency;
-import com.taxisurfr.shared.OrderStatus;
-import com.taxisurfr.shared.model.AgentInfo;
-import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.shared.model.ContractorInfo;
-import com.taxisurfr.shared.model.FinanceInfo;
-import com.taxisurfr.shared.model.ProfilInfo;
-import com.taxisurfr.shared.model.RatingInfo;
-import com.taxisurfr.shared.model.RouteInfo;
-import com.taxisurfr.shared.model.StatInfo;
+import static com.googlecode.objectify.ObjectifyService.ofy;
+import static com.taxisurfr.shared.OrderStatus.SHARE_ACCEPTED;
 
 /**
  * The server-side implementation of the RPC service.
@@ -135,17 +131,22 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
         logger.info("payWithStripe" + bookingInfo.getPaidPrice());
         Profil profil = bookingServiceManager.getProfil();
         logger.info("payWithStripe" + bookingInfo.getPaidPrice());
-        String refusal = stripePayment.charge(token, bookingInfo, profil.getStripeSecret());
+        Route route = ofy().load().type(Route.class).id(bookingInfo.getRouteId()).now();
+        ContractorInfo contractorInfo = bookingServiceManager.getContractor(bookingInfo);
+        Agent agent = ofy().load().type(Agent.class).id(contractorInfo.getAgentId()).now();
+        Long orderCount = agent.getOrderCount();
+        String orderRef = orderCount+"_"+bookingInfo.getName();
+
+        String refusal = stripePayment.charge(token, bookingInfo, profil.getStripeSecret(),orderRef);
         if (refusal == null)
         {
-            bookingInfo = bookingServiceManager.setPayed(profil, bookingInfo, OrderStatus.PAID);
+            bookingInfo = bookingServiceManager.setPayed(profil, bookingInfo, OrderStatus.PAID,orderRef);
             if (bookingInfo != null)
             {
-                ContractorInfo contractorInfo = bookingServiceManager.getContractor(bookingInfo);
                 AgentInfo agentInfo = bookingServiceManager.getAgent(contractorInfo);
                 Mailer.sendConfirmation(bookingInfo, profil, agentInfo, contractorInfo);
                 financeManager.addPayment(bookingInfo, new Date());
-
+                ofy().save().entity(agent).now();
             }
         }
         else

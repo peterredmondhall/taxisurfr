@@ -1,131 +1,143 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:gwt="urn:import:com.google.gwt.user.client.ui">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client" xmlns:gwt="urn:import:com.google.gwt.user.client.ui">
 
-	<ui:with field='messages' type='com.taxisurfr.client.resources.ClientMessages' />
-	<ui:style>
-		.title { font-weight:bold; color: #62ba37; margin-bottom:
-		10px; font-size:
-		30px;}
-		.desc { font-weight:bold; margin-bottom: 10px;
-		font-size: 15px;}
-		.image { margin-right: 10px;}
+    <ui:with field='messages' type='com.taxisurfr.client.resources.ClientMessages'/>
+    <ui:style>
+        .title {
+            font-weight: bold;
+            color: #62ba37;
+            margin-bottom: 10px;
+            font-size: 30px;
+        }
 
-		.selectContainerStyle
-		{
-		width: 100%;
-		margin-left:10px;
-		}
+        .desc {
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
 
-		.brd {
-		borderx: 1px solid silver;
-		padding: 2px;
-		margin-bottom:6px;
-		width:767px;
-		}
-		.ratingspanel {
-		borderx:
-		1px solid silver;
-		padding: 2px;
-		margin-bottom:6px;
-		height:100px;
-		}
-		.tarea {
-		width: 100%;
-		max-width: 320px; /* Will be AT MOST 320px wide */
-		}
-		.imageSearch {
-		src: 'images/search-512.png';
-		}
-		.imageSpinner {
-		src:
-		'images/spinner.gif';
-		}
+        .image {
+            margin-right: 10px;
+        }
 
-		.imagePlace {
-		max-width: 300px;
-		margin-right:6px;
-		}
-		.description {
-		margin-left:6px;
-		}
+        .selectContainerStyle {
+            width: 100%;
+            margin-left: 10px;
+        }
 
+        .brd {
+            borderx: 1px solid silver;
+            padding: 2px;
+            margin-bottom: 6px;
+            width: 767px;
+        }
 
-		.callaction {
-		margin-top:0px;
-		margin-left:0px;
-		margin-right:100px;
-		margin-bottom:20px;
-		font-size: 20px;
-		}
+        .ratingspanel {
+            borderx: 1px solid silver;
+            padding: 2px;
+            margin-bottom: 6px;
+            height: 100px;
+        }
 
-		.motivation {
-		margin-top:20px;
-		margin-left:100px;
-		}
+        .tarea {
+            width: 100%;
+            max-width: 320px; /* Will be AT MOST 320px wide */
+        }
 
-		.advantages-style {
-		font-family: Arial, Helvetica, sans-serif;
-		.advantages-style {
-		font-family: Arial, Helvetica, sans-serif;
-		}
+        .imageSearch {
+            src: 'images/search-512.png';
+        }
 
-		.buttontable {
-			height: 140px;
-		}
+        .imageSpinner {
+            src: 'images/spinner.gif';
+        }
 
-	</ui:style>
-	<g:HTMLPanel ui:field="mainPanel">
+        .imagePlace {
+            max-width: 300px;
+            margin-right: 6px;
+        }
 
-		<g:VerticalPanel styleName="{style.brd}">
-			<g:HorizontalPanel ui:field="dp">
-			</g:HorizontalPanel>
-			<g:HorizontalPanel>
-				<g:Image ui:field="imageSearch" url="images/search-512.png"
-					width="32px" height="32px" />
-				<g:Image ui:field="imageSpinner" url="images/spinner.gif"
-					width="32px" height="32px" />
-				<g:FlowPanel ui:field="routeSuggestionPanel" styleName="{style.selectContainerStyle}">
-				</g:FlowPanel>
+        .description {
+            margin-left: 6px;
+        }
 
-			</g:HorizontalPanel>
-			<g:VerticalPanel ui:field="panelMotivation"
-				styleName="{style.motivation}">
-				<!-- <div style="width: 324px"> -->
-				<!-- <img height="24" src="images/big-tick.jpg" width="27" class="advantages-style" 
-					/> -->
-				<!-- <span class="advantages-style">Guaranteed refund up to 24 hours</span></div> -->
+        .callaction {
+            margin-top: 0px;
+            margin-left: 0px;
+            margin-right: 100px;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
 
-				<g:Label styleName="{style.callaction}">
-					Enter your route in the search box.
-				</g:Label>
-			</g:VerticalPanel>
-			<g:VerticalPanel ui:field="panelRoute">
-				<g:Label styleName="{style.title}" ui:field="labelRouteName" />
-				<g:HorizontalPanel>
-					<g:Image ui:field="imageVehicle" styleName="{style.imagePlace}" />
-					<g:VerticalPanel styleName="{style.description}">
-						<g:Label styleName="{style.desc}">Description</g:Label>
-						<g:VerticalPanel ui:field="panelDescription" />
+        .motivation {
+            margin-top: 20px;
+            margin-left: 100px;
+        }
 
-					</g:VerticalPanel>
-					<gwt:FlexTable ui:field="buttontable" styleName="{style.buttontable}"/>
-<!-- 					<g:VerticalPanel styleName="buttonbox"> -->
-<!-- 						<g:HorizontalPanel styleName="top_right"> -->
-<!-- 							<g:Button ui:field="buttonOrder" text="Book this taxi." -->
-<!-- 								styleName="btn btn-primary" /> -->
-<!-- 						</g:HorizontalPanel> -->
-<!-- 						<g:HorizontalPanel styleName="bottom_right"> -->
-<!-- 							<g:Button ui:field="buttonAnnounce" text="Announce share." -->
-<!-- 								styleName="btn btn-primary" /> -->
-<!-- 						</g:HorizontalPanel> -->
-<!-- 					</g:VerticalPanel> -->
-				</g:HorizontalPanel>
-			</g:VerticalPanel>
-			<g:HorizontalPanel ui:field="ratingsPanel"
-				styleName="{style.brd}">
+        .advantages-style {
+            font-family: Arial, Helvetica, sans-serif;
 
-			</g:HorizontalPanel>
-		</g:VerticalPanel>
-	</g:HTMLPanel>
+        .advantages-style {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .buttontable {
+            height: 140px;
+        }
+
+    </ui:style>
+    <g:HTMLPanel ui:field="mainPanel">
+
+        <g:VerticalPanel styleName="{style.brd}">
+            <g:HorizontalPanel ui:field="dp">
+            </g:HorizontalPanel>
+            <g:HorizontalPanel>
+                <g:Image ui:field="imageSearch" url="images/search-512.png"
+                         width="32px" height="32px"/>
+                <g:Image ui:field="imageSpinner" url="images/spinner.gif"
+                         width="32px" height="32px"/>
+                <g:FlowPanel ui:field="routeSuggestionPanel" styleName="{style.selectContainerStyle}">
+                </g:FlowPanel>
+
+            </g:HorizontalPanel>
+            <g:VerticalPanel ui:field="panelMotivation"
+                             styleName="{style.motivation}">
+                <!-- <div style="width: 324px"> -->
+                <!-- <img height="24" src="images/big-tick.jpg" width="27" class="advantages-style"
+                    /> -->
+                <!-- <span class="advantages-style">Guaranteed refund up to 24 hours</span></div> -->
+
+                <g:Label styleName="{style.callaction}">
+                    Enter your route in the search box.
+                </g:Label>
+            </g:VerticalPanel>
+            <g:VerticalPanel ui:field="panelRoute">
+                <g:Label styleName="{style.title}" ui:field="labelRouteName"/>
+                <g:HorizontalPanel>
+                    <g:Image ui:field="imageVehicle" styleName="{style.imagePlace}"/>
+                    <g:VerticalPanel styleName="{style.description}">
+                        <g:Label styleName="{style.desc}">Description</g:Label>
+                        <g:VerticalPanel ui:field="panelDescription"/>
+
+                    </g:VerticalPanel>
+                    <gwt:FlexTable ui:field="buttontable" styleName="{style.buttontable}"/>
+                    <!-- 					<g:VerticalPanel styleName="buttonbox"> -->
+                    <!-- 						<g:HorizontalPanel styleName="top_right"> -->
+                    <!-- 							<g:Button ui:field="buttonOrder" text="Book this taxi." -->
+                    <!-- 								styleName="btn btn-primary" /> -->
+                    <!-- 						</g:HorizontalPanel> -->
+                    <!-- 						<g:HorizontalPanel styleName="bottom_right"> -->
+                    <!-- 							<g:Button ui:field="buttonAnnounce" text="Announce share." -->
+                    <!-- 								styleName="btn btn-primary" /> -->
+                    <!-- 						</g:HorizontalPanel> -->
+                    <!-- 					</g:VerticalPanel> -->
+                </g:HorizontalPanel>
+            </g:VerticalPanel>
+            <g:HorizontalPanel ui:field="ratingsPanel"
+                               styleName="{style.brd}">
+
+            </g:HorizontalPanel>
+        </g:VerticalPanel>
+    </g:HTMLPanel>
 </ui:UiBinder> 

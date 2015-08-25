@@ -1,6 +1,8 @@
 package com.taxisurfr.shared;
 
-public enum Currency
+import java.io.Serializable;
+
+public enum Currency implements Serializable
 {
     EUR("EUR €"),
     USD("$US"),

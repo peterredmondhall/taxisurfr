@@ -1,18 +1,10 @@
 package com.taxisurfr.client;
 
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import com.google.common.base.Splitter;
+import com.github.nmorel.gwtjackson.client.ObjectMapper;
 import com.google.common.collect.ImmutableList;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.http.client.Request;
-import com.google.gwt.http.client.RequestBuilder;
-import com.google.gwt.http.client.RequestCallback;
-import com.google.gwt.http.client.RequestException;
-import com.google.gwt.http.client.Response;
+import com.google.gwt.http.client.*;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
@@ -22,20 +14,13 @@ import com.taxisurfr.client.core.WizardStep;
 import com.taxisurfr.client.resources.ClientMessages;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
-import com.taxisurfr.client.steps.ConfirmationStep;
-import com.taxisurfr.client.steps.ContactStep;
-import com.taxisurfr.client.steps.CreditCardStep;
-import com.taxisurfr.client.steps.RatingStep;
-import com.taxisurfr.client.steps.ShareConfirmationStep;
-import com.taxisurfr.client.steps.ShareStep;
-import com.taxisurfr.client.steps.SummaryStep;
-import com.taxisurfr.client.steps.TransportStep;
+import com.taxisurfr.client.steps.*;
 import com.taxisurfr.shared.Currency;
-import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.shared.model.ProfilInfo;
-import com.taxisurfr.shared.model.RatingInfo;
-import com.taxisurfr.shared.model.RouteInfo;
-import com.taxisurfr.shared.model.StatInfo;
+import com.taxisurfr.shared.model.*;
+
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
@@ -61,7 +46,7 @@ public class TaxisurfrEntryPoint implements EntryPoint
     public static final int SUMMARY = 4;
     public static final int CREDITCARD = 5;
     public static final int CONFIRMATION = 6;
-    private static Long SESSION_IDENT = Double.doubleToLongBits(Math.random());
+    private static String sessionID = Double.toString(Double.doubleToLongBits(Math.random()));
     private Wizard wizard;
 
     /**
@@ -71,7 +56,6 @@ public class TaxisurfrEntryPoint implements EntryPoint
     public void onModuleLoad()
     {
         Window.setTitle("taxisurfr");
-
         Wizard.SCREEN_WIDTH = Window.getClientWidth();
         Wizard.SCREEN_HEIGHT = Window.getClientHeight();
         Wizard.MOBILE = Wizard.SCREEN_WIDTH < 500;
@@ -128,40 +112,12 @@ public class TaxisurfrEntryPoint implements EntryPoint
             displayRoute(transportStep, routeId);
         }
     }
-
-//    private void createDefaultUser()
-//    {
-//        SERVICE.createDefaultUser(new AsyncCallback<AgentInfo>()
-//        {
-//
-//            @Override
-//            public void onSuccess(AgentInfo agentInfo)
-//            {
-//                if (agentInfo != null)
-//                {
-//                    RootPanel.get().add(new Label("agent created:" + agentInfo.getEmail()));
-//
-//                }
-//                else
-//                {
-//                    RootPanel.get().add(new Label("agent not created"));
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Throwable caught)
-//            {
-//                Window.alert("problem creating default user");
-//            }
-//        });
-//
-//    }
-
+    public static interface StatInfoMapper extends ObjectMapper<StatInfo>
+    {}
     private void collectStats(String src, String currency)
     {
         String protocol = Window.Location.getProtocol();
-        String url = protocol + "//" + Window.Location.getHost() + "/stat?src=" + src + "&session=" + SESSION_IDENT + "&curr=" + currency;
+        String url = protocol + "//" + Window.Location.getHost() + "/stat?src=" + src + "&session=" + sessionID + "&curr=" + currency;
         RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
 
         try
@@ -178,23 +134,30 @@ public class TaxisurfrEntryPoint implements EntryPoint
                 {
                     try
                     {
-                        String currencyRate = response.getText();
-                        logger.log(Level.INFO, "currencyRate:" + currencyRate);
-                        List<String> on = Splitter.on("/").splitToList(currencyRate);
-                        Currency currency = Currency.valueOf(on.get(0));
-                        Float rate = 1f;
-                        try
-                        {
-                            rate = Float.parseFloat(on.get(1));
-                        }
-                        catch (Exception ex)
-                        {
-                            rate = 1f;
-                            currency = Currency.USD;
-                        }
+                        StatInfoMapper mapper = GWT.create(StatInfoMapper.class);
+                        Wizard.STATINFO = mapper.read(response.getText());
+                        Currency currency1 = Wizard.STATINFO.getCurrency();
+                        logger.log(Level.SEVERE, "XXXXXXXXXXXXXXXX"+ currency1.name());
+                        logger.log(Level.SEVERE, "XXXXXXXXXXXXXXXX"+ Wizard.STATINFO.getCurrencyRate());
+
+
+                        //                        String currencyRate = response.getText();
+//                        logger.log(Level.INFO, "currencyRate:" + currencyRate);
+//                        List<String> on = Splitter.on("/").splitToList(currencyRate);
+//                        Currency currency = Currency.valueOf(on.get(0));
+//                        Float rate = 1f;
+//                        try
+//                        {
+//                            rate = Float.parseFloat(on.get(1));
+//                        }
+//                        catch (Exception ex)
+//                        {
+//                            rate = 1f;
+//                            currency = Currency.USD;
+//                        }
                         Wizard.BOOKINGINFO = new BookingInfo();
-                        Wizard.BOOKINGINFO.setCurrency(currency);
-                        Wizard.BOOKINGINFO.setRate(rate);
+                        Wizard.BOOKINGINFO.setCurrency(currency1);
+                        Wizard.BOOKINGINFO.setRate(Wizard.STATINFO.getCurrencyRate());
                         logger.log(Level.INFO, "after getCurrencyRate currency=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
                         wizard.setCurrencyResolved(true);
                     }
@@ -284,11 +247,8 @@ public class TaxisurfrEntryPoint implements EntryPoint
 
     public static void sendStat(String detail, StatInfo.Update update)
     {
-        StatInfo statInfo = new StatInfo();
-        statInfo.setIdent(SESSION_IDENT);
-        statInfo.setDetail(detail);
-        statInfo.setUpdate(update);
-        SERVICE.sendStat(statInfo, new AsyncCallback<Void>()
+        Wizard.STATINFO.setUpdate(update);
+        SERVICE.sendStat(Wizard.STATINFO, new AsyncCallback<Void>()
         {
 
             @Override

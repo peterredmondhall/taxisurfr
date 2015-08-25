@@ -1,13 +1,12 @@
 package com.taxisurfr.server;
 
-import java.util.List;
-import java.util.logging.Logger;
-
-
 import com.googlecode.objectify.ObjectifyService;
-import com.taxisurfr.server.entity.*;
+import com.taxisurfr.server.entity.SessionStat;
 import com.taxisurfr.server.util.Mailer;
 import com.taxisurfr.shared.model.StatInfo;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 public class StatManager extends Manager
 {
@@ -21,7 +20,7 @@ public class StatManager extends Manager
     }
     public void updateSessionStat(StatInfo statInfo)
     {
-        SessionStat sessionStat = ObjectifyService.ofy().load().type(SessionStat.class).filter("ident", statInfo.getIdent()).first().now();
+        SessionStat sessionStat = ObjectifyService.ofy().load().type(SessionStat.class).filter("sessionId", statInfo.getSessionId()).first().now();
         switch (statInfo.getUpdate())
         {
             case TYPE:

@@ -18,6 +18,7 @@
   <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
   <inherits name="com.google.common.collect.Collect"/>
   <inherits name="com.arcbees.stripe.GwtStripe"/>
+  <inherits name="com.github.nmorel.gwtjackson.GwtJackson" />
   <!-- Load dinamically predefined styles in the library when the application starts -->
   
   <!-- Other module inherits                                      -->

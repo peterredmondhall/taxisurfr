@@ -1,5 +1,6 @@
 package com.taxisurfr.servlet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.CurrencyManager;
@@ -19,13 +20,16 @@ public class StatServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
     public static final Logger log = Logger.getLogger(StatServlet.class.getName());
-    private static final Map<String, Currency> currencyMap = ImmutableMap.of(
-            "GB", Currency.GBP,
-            "CZ", Currency.EUR,
-            "AU", Currency.AUD,
-            "DE", Currency.EUR,
-            "FR", Currency.EUR
-    );
+    private static final Map<String, Currency> currencyMap = new ImmutableMap.Builder()
+            .put("GB", Currency.GBP)
+            .put("CZ", Currency.EUR)
+            .put("AU", Currency.AUD)
+            .put("DE", Currency.EUR)
+            .put("IT", Currency.EUR)
+            .put("ES", Currency.EUR)
+            .put("FR", Currency.EUR)
+            .put("AT", Currency.EUR)
+            .build();
 
     StatManager statManager = new StatManager();
     CurrencyManager currencyManager = new CurrencyManager();
@@ -40,7 +44,6 @@ public class StatServlet extends HttpServlet
         String region = req.getHeader("X-AppEngine-Region");
         String city = req.getHeader("X-AppEngine-City");
         String src = req.getParameter("src");
-        Long session = Long.parseLong(req.getParameter("session"));
         if (country == null || country.trim().length() == 0)
         {
             country = "XXX";
@@ -53,8 +56,9 @@ public class StatServlet extends HttpServlet
         StatInfo statInfo = new StatInfo();
         statInfo.setDetail("country");
         statInfo.setSrc(src);
-        statInfo.setCountry(country);
-        statInfo.setIdent(session);
+        statInfo.setCountry(country+":"+city);
+        statInfo.setSessionId(req.getParameter("session"));
+        statInfo.setIp(ip);
         statManager.createSessionStat(statInfo);
 
         PrintWriter writer = resp.getWriter();
@@ -64,9 +68,17 @@ public class StatServlet extends HttpServlet
             currency = currencyMap.get(country) != null ? currencyMap.get(country).name() : "USD";
         }
         Currency curr = Currency.valueOf(currency);
-        Float rate = currencyManager.getRate(curr);
+        Float rate = currencyMap.get(country) != null ? currencyManager.getRate(curr): 1.0f;
+
+        statInfo.setCurrency(curr);
+        statInfo.setCurrencyRate(rate);
         log.info("currency:" + curr);
-        writer.print(curr + "/" + rate);
+
+        ObjectMapper mapper = new ObjectMapper();
+        String serialStatInfo = mapper.writeValueAsString(statInfo);
+
+        writer.print(serialStatInfo);
+        //writer.print(curr + "/" + rate);
         writer.close();
 
     }

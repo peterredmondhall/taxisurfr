@@ -1,9 +1,18 @@
 package com.taxisurfr.server;
 
-import static com.google.common.collect.FluentIterable.from;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.googlecode.objectify.ObjectifyService.ofy;
-import static org.joda.time.DateTime.now;
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
+import com.googlecode.objectify.ObjectifyService;
+import com.taxisurfr.server.entity.*;
+import com.taxisurfr.shared.OrderStatus;
+import com.taxisurfr.shared.model.AgentInfo;
+import com.taxisurfr.shared.model.BookingInfo;
+import com.taxisurfr.shared.model.ContractorInfo;
+import com.taxisurfr.shared.model.RouteInfo;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,27 +20,10 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import com.google.common.base.Function;
-import com.google.common.collect.FluentIterable;
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
-import com.taxisurfr.server.entity.*;
-import com.taxisurfr.server.util.Mailer;
-import com.taxisurfr.shared.OrderStatus;
-import com.taxisurfr.shared.OrderType;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import com.google.common.base.Predicate;
-import com.google.common.base.Function;
-import com.taxisurfr.shared.model.AgentInfo;
-import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.shared.model.ContractorInfo;
-import com.taxisurfr.shared.model.ProfilInfo;
-import com.taxisurfr.shared.model.RouteInfo;
-
-import javax.annotation.Nullable;
+import static com.google.common.collect.FluentIterable.from;
+import static com.google.common.collect.Lists.newArrayList;
+import static com.googlecode.objectify.ObjectifyService.ofy;
+import static org.joda.time.DateTime.now;
 
 /**
  * The server-side implementation of the RPC service.
@@ -58,50 +50,6 @@ public class BookingServiceManager extends Manager
         RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
         return booking.getBookingInfo(routeInfo);
 
-        //        logger.info(bookingInfo.toString());
-        //        EntityManager em = getEntityManager();
-        //        try
-        //        {
-        //            Route route = em.find(Route.class, bookingInfo.getRouteInfo().getId());
-        //
-        //            Booking booking = Booking.getBooking(bookingInfo, client);
-        //            em.getTransaction().begin();
-        //            em.persist(booking);
-        //            em.getTransaction().commit();
-        //            em.detach(booking);
-        //
-        //            bookingInfo = booking.getBookingInfo(route.getInfo());
-        //
-        //            booking = em.find(Booking.class, bookingInfo.getId());
-        //            booking.setRef(booking.generateRef());
-        //            em.getTransaction().begin();
-        //            em.persist(booking);
-        //            em.getTransaction().commit();
-        //            em.detach(booking);
-        //
-        //            bookingInfo = booking.getBookingInfo(route.getInfo());
-        //
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            e.printStackTrace();
-        //        }
-        //        finally
-        //        {
-        //            em.close();
-        //        }
-        //        try
-        //        {
-        //            if (bookingInfo.getOrderType().equals(OrderType.SHARE_ANNOUNCEMENT))
-        //            {
-        //                Mailer.sendShareAnnouncement(bookingInfo, getProfil());
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            ex.printStackTrace();
-        //        }
-        //        return bookingInfo;
     }
 
     final Function<Booking, BookingInfo> BOOKING_TO_INFO = new Function<Booking, BookingInfo>()
@@ -155,59 +103,17 @@ public class BookingServiceManager extends Manager
         return bookings;
     }
 
-    public BookingInfo setBookingRef(BookingInfo bookingInfo)
-    {
-        Booking booking = ofy().load().type(Booking.class).id(bookingInfo.getId()).now();
-        bookingInfo.setOrderRef(booking.getRef());
-        return bookingInfo;
 
-        //        Booking booking = getEntityManager().find(Booking.class, bookingInfo.getId());
-        //        bookingInfo.setOrderRef(booking.getRef());
-        //        return bookingInfo;
-    }
-
-    public BookingInfo setPayed(Profil profil, BookingInfo bi, OrderStatus orderStatus) throws IllegalArgumentException
+    public BookingInfo setPayed(Profil profil, BookingInfo bi, OrderStatus orderStatus, String orderRef) throws IllegalArgumentException
     {
         Booking booking = ofy().load().type(Booking.class).id(bi.getId()).now();
-        Route route = ofy().load().type(Route.class).id(booking.getRoute()).now();
-        Contractor contractor = ofy().load().type(Contractor.class).id(route.getContractorId()).now();
-        Agent agent = ofy().load().type(Agent.class).id(contractor.getAgentId()).now();
         booking.setStatus(orderStatus);
-        Long orderCount = agent.getOrderCount();
-        ofy().save().entity(agent).now();
-        booking.setRef(orderCount+"_"+booking.getName());
+        booking.setRef(orderRef);
         ofy().save().entity(booking);
         RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
         return booking.getBookingInfo(routeInfo);
-        //        EntityManager em = getEntityManager();
-        //        BookingInfo bookingInfo = null;
-        //        try
-        //        {
-        //            Booking booking = em.find(Booking.class, bi.getId());
-        //
-        //            booking.setStatus(orderStatus);
-        //            em.getTransaction().begin();
-        //            em.persist(booking);
-        //            em.getTransaction().commit();
-        //
-        //            em.detach(booking);
-        //            bookingInfo = booking.getBookingInfo(getRouteInfo(booking.getRoute(), em));
-        //        }
-        //        finally
-        //        {
-        //            em.close();
-        //        }
-        //        return bookingInfo;
     }
 
-//    public ProfilInfo getPaypalProfil() throws IllegalArgumentException
-//    {
-//
-//                ProfilInfo profilInfo = getProfil().getInfo();
-//                logger.info(profilInfo.toString());
-//                return profilInfo;
-//
-//    }
 
     public boolean getMaintenceAllowed()
     {
@@ -298,19 +204,6 @@ public class BookingServiceManager extends Manager
         booking.setStatus(OrderStatus.SHARE_ACCEPTED);
         ofy().save().entity(booking).now();
         return booking.getInfo();
-        //            em.getTransaction().begin();
-        //            em.persist(booking);
-        //            em.getTransaction().commit();
-        //
-        //            em.detach(booking);
-        //            bookingInfo = booking.getBookingInfo(getRouteInfo(booking.getRoute(), em));
-        //
-        //        }
-        //        finally
-        //        {
-        //            em.close();
-        //        }
-        //        return bookingInfo;
     }
 
     public BookingInfo getBooking(Long id)

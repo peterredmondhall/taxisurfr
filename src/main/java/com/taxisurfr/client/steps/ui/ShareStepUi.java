@@ -1,9 +1,5 @@
 package com.taxisurfr.client.steps.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.logging.Logger;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -14,19 +10,16 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.HasKeyboardSelectionPolicy.KeyboardSelectionPolicy;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
-import com.taxisurfr.client.TaxisurfrEntryPoint;
 import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.shared.OrderType;
 import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.shared.model.StatInfo;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 public class ShareStepUi extends Composite
 {
@@ -121,7 +114,6 @@ public class ShareStepUi extends Composite
                     Wizard.BOOKINGINFO.setParentId(bookingToShare.getId());
 
                     scrollPanel.remove(cellTable);
-                    TaxisurfrEntryPoint.sendStat("step:Share(share request)", StatInfo.Update.TYPE);
                     wizard.onNextClick(null);
 
                 }
@@ -162,7 +154,6 @@ public class ShareStepUi extends Composite
             {
                 shareMap.put(bookingInfo.getId(), bookingInfo);
             }
-            logger.info("+++++++++++++++++++++++++++showShareNoShare" + shareMap.values().size());
             fillTable(Wizard.ROUTEINFO.getPickupType().getLocationType(), Wizard.ROUTEINFO.getPickupType().getTimeType());
             scrollPanel.add(cellTable);
 
@@ -172,9 +163,7 @@ public class ShareStepUi extends Composite
                 @Override
                 public void onClick(ClickEvent event)
                 {
-                    TaxisurfrEntryPoint.sendStat("step:Share(new Booking)", StatInfo.Update.TYPE);
                     wizard.onNextClick(null);
-
                 }
             });
 

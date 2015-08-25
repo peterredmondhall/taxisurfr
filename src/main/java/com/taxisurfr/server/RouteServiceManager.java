@@ -142,9 +142,7 @@ public class RouteServiceManager extends Manager
 
     public RouteInfo getRoute(Long routeId)
     {
-        RouteInfo routeInfo = null;
-        Route route = ObjectifyService.ofy().load().type(Route.class).first().now();
-        return route.getInfo();
+        return ObjectifyService.ofy().load().type(Route.class).id(routeId).now().getInfo();
     }
 
 }

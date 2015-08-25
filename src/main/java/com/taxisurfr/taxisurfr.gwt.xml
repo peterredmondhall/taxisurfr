@@ -24,10 +24,11 @@
 
   <inherits name="com.arcbees.stripe.GwtStripe"/>                        
   <inherits name="com.google.common.collect.Collect"/>
-    <inherits name="com.google.gwt.http.HTTP"/>
-  
+  <inherits name="com.google.gwt.http.HTTP"/>
+
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.taxisurfr.client.TaxisurfrEntryPoint'/>
+  <inherits name="com.github.nmorel.gwtjackson.GwtJackson" />
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>

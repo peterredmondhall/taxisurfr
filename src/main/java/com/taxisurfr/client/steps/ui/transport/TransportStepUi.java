@@ -1,12 +1,5 @@
 package com.taxisurfr.client.steps.ui.transport;
 
-import static com.taxisurfr.client.core.Wizard.BOOKINGINFO;
-
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.common.collect.Maps;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -17,21 +10,9 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DisclosurePanel;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.MultiWordSuggestOracle;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.SuggestBox;
-import com.google.gwt.user.client.ui.SuggestOracle;
-import com.google.gwt.user.client.ui.Widget;
-import com.taxisurfr.client.TaxisurfrEntryPoint;
+import com.google.gwt.user.client.ui.*;
 import com.taxisurfr.client.Refresh;
+import com.taxisurfr.client.TaxisurfrEntryPoint;
 import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
@@ -43,6 +24,13 @@ import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.RatingInfo;
 import com.taxisurfr.shared.model.RouteInfo;
 import com.taxisurfr.shared.model.StatInfo;
+
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.taxisurfr.client.core.Wizard.BOOKINGINFO;
 
 public class TransportStepUi extends Composite
 {
@@ -298,13 +286,13 @@ public class TransportStepUi extends Composite
 
     private void continueLoading()
     {
-        logger.log(Level.INFO, "routeInfo" + Wizard.ROUTEINFO.getKey(""));
-        logger.log(Level.INFO, "currency" + BOOKINGINFO.getCurrency() + "   rate:" + BOOKINGINFO.getRate());
-        logger.log(Level.INFO, "routeCents" + Wizard.ROUTEINFO.getCents());
+        logger.log(Level.FINE, "routeInfo" + Wizard.ROUTEINFO.getKey(""));
+        logger.log(Level.FINE, "currency" + BOOKINGINFO.getCurrency() + "   rate:" + BOOKINGINFO.getRate());
+        logger.log(Level.FINE, "routeCents" + Wizard.ROUTEINFO.getCents());
 
-        logger.log(Level.INFO, "paidPrice" + CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, BOOKINGINFO.getCurrency(), BOOKINGINFO.getRate()));
+        logger.log(Level.FINE, "paidPrice" + CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, BOOKINGINFO.getCurrency(), BOOKINGINFO.getRate()));
         BOOKINGINFO.setPaidPrice(CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, BOOKINGINFO.getCurrency(), BOOKINGINFO.getRate()));
-        logger.log(Level.INFO, "paidprice=" + BOOKINGINFO.getPaidPrice() + "rate=" + BOOKINGINFO.getRate());
+        logger.log(Level.FINE, "paidprice=" + BOOKINGINFO.getPaidPrice() + "rate=" + BOOKINGINFO.getRate());
 
         panelMotivation.setVisible(false);
         RouteInfo routeInfo = Wizard.ROUTEINFO;

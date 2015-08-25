@@ -1,8 +1,5 @@
 package com.taxisurfr.client.core;
 
-import java.util.List;
-import java.util.Map;
-
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gwt.core.client.GWT;
@@ -10,24 +7,14 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Widget;
-import com.taxisurfr.client.steps.ConfirmationStep;
-import com.taxisurfr.client.steps.CreditCardStep;
-import com.taxisurfr.client.steps.RatingStep;
-import com.taxisurfr.client.steps.ShareConfirmationStep;
-import com.taxisurfr.client.steps.ShareStep;
-import com.taxisurfr.client.steps.TransportStep;
+import com.google.gwt.user.client.ui.*;
+import com.taxisurfr.client.steps.*;
 import com.taxisurfr.shared.OrderStatus;
 import com.taxisurfr.shared.OrderType;
-import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.shared.model.ProfilInfo;
-import com.taxisurfr.shared.model.RatingInfo;
-import com.taxisurfr.shared.model.RouteInfo;
+import com.taxisurfr.shared.model.*;
+
+import java.util.List;
+import java.util.Map;
 
 public class Wizard extends Composite
 {
@@ -39,6 +26,7 @@ public class Wizard extends Composite
     }
 
     public static BookingInfo BOOKINGINFO;
+    public static StatInfo STATINFO;
     public static List<BookingInfo> EXISTING_BOOKINGS_ON_ROUTE;
     public static RouteInfo ROUTEINFO;
     public static ProfilInfo PROFILINFO;
