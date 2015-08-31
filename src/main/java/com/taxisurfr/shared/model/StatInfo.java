@@ -4,19 +4,8 @@ import com.taxisurfr.shared.Currency;
 
 public class StatInfo extends Info
 {
-    private String sessionId;
-    private Currency currency;
-    private Float currencyRate;
-
-    public void setSessionId(String sessionId)
-    {
-        this.sessionId = sessionId;
-    }
-
-    public String getSessionId()
-    {
-        return sessionId;
-    }
+    private Currency currency = Currency.USD;
+    private Float currencyRate = 1F;
 
     public void setCurrency(Currency currency)
     {
@@ -30,12 +19,12 @@ public class StatInfo extends Info
 
     public Currency getCurrency()
     {
-        return currency;
+        return currency != null ? currency : Currency.USD;
     }
 
     public Float getCurrencyRate()
     {
-        return currencyRate;
+        return currencyRate != null ? currencyRate : 1F;
     }
 
     public enum Update

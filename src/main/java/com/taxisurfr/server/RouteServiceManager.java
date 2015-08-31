@@ -1,18 +1,15 @@
 package com.taxisurfr.server;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.common.collect.Lists;
-import com.googlecode.objectify.LoadResult;
 import com.googlecode.objectify.ObjectifyService;
-import com.taxisurfr.server.entity.ArugamImage;
 import com.taxisurfr.server.entity.Contractor;
 import com.taxisurfr.server.entity.Route;
 import com.taxisurfr.shared.model.AgentInfo;
 import com.taxisurfr.shared.model.RouteInfo;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class RouteServiceManager extends Manager
 {
@@ -121,9 +118,9 @@ public class RouteServiceManager extends Manager
 
     }
 
-    public List<RouteInfo> getRoutes() throws IllegalArgumentException
+    public List<RouteInfo> getRoutes(String query) throws IllegalArgumentException
     {
-
+        query = query.toUpperCase();
         List<RouteInfo> routes = new ArrayList<>();
         List<Route> resultList = ObjectifyService.ofy().load().type(Route.class).list();
 
@@ -131,11 +128,12 @@ public class RouteServiceManager extends Manager
         for (Route route : resultList)
         {
             RouteInfo routeInfo = route.getInfo();
-            if (!routeInfo.isInactive())
+            if (!routeInfo.isInactive() && routeInfo.getStart().toUpperCase().startsWith(query))
             {
                 routes.add(routeInfo);
             }
         }
+        logger.info("get queried routes returned no. of routes" + routes.size());
         return routes;
 
     }

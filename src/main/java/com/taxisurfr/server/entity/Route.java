@@ -1,10 +1,8 @@
 package com.taxisurfr.server.entity;
 
-import com.google.appengine.api.datastore.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-
-import com.google.appengine.api.datastore.Key;
+import com.googlecode.objectify.annotation.Index;
 import com.taxisurfr.shared.model.RouteInfo;
 
 @Entity
@@ -16,6 +14,7 @@ public class Route extends ArugamEntity<RouteInfo>
 
     @Id Long id;
 
+    @Index
     private String start;
     private String end;
     private String description;

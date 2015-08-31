@@ -1,16 +1,9 @@
 package com.taxisurfr.client.service;
 
-import java.util.List;
-
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.taxisurfr.shared.model.AgentInfo;
-import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.shared.model.ContractorInfo;
-import com.taxisurfr.shared.model.FinanceInfo;
-import com.taxisurfr.shared.model.ProfilInfo;
-import com.taxisurfr.shared.model.RatingInfo;
-import com.taxisurfr.shared.model.RouteInfo;
-import com.taxisurfr.shared.model.StatInfo;
+import com.taxisurfr.shared.model.*;
+
+import java.util.List;
 
 /**
  * The async counterpart of <code>GreetingService</code>.
@@ -37,6 +30,8 @@ public interface BookingServiceAsync
     void getRoute(Long routeId, AsyncCallback<RouteInfo> callback);
 
     void getRoutes(AsyncCallback<List<RouteInfo>> callback);
+
+    void getRoutes(String query, AsyncCallback<List<RouteInfo>> callback);
 
     void deleteRoute(AgentInfo userInfo, RouteInfo placeInfo, AsyncCallback<List<RouteInfo>> callback)
             throws IllegalArgumentException;

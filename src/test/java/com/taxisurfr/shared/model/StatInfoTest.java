@@ -13,13 +13,13 @@ public class StatInfoTest
     public void should_serialize_and_deserialize() throws IOException
     {
         StatInfo statInfo = new StatInfo();
-        statInfo.setSessionId("xxxx");
+        statInfo.setIp("xxxx");
 
         ObjectMapper mapper = new ObjectMapper();
         String serial = mapper.writeValueAsString(statInfo);
 
         statInfo = mapper.readValue(serial, StatInfo.class);
 
-        Assert.assertTrue(statInfo.getSessionId().equals("xxxx"));
+        Assert.assertTrue(statInfo.getIp().equals("xxxx"));
     }
 }

@@ -1,7 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client"
-	xmlns:gwt="urn:import:com.google.gwt.user.client.ui">
+			 xmlns:g="urn:import:com.google.gwt.user.client.ui"
+		>
 
 	<ui:with field='messages' type='com.taxisurfr.client.resources.ClientMessages' />
 	<ui:style>
@@ -60,8 +60,6 @@
 			<g:HorizontalPanel>
 				<g:Image ui:field="imageSearch" url="images/search-512.png"
 					width="24px" height="24px" />
-				<g:Image ui:field="imageSpinner" url="images/spinner.gif"
-					width="32px" height="32px" />
 				<g:FlowPanel ui:field="routeSuggestionPanel" styleName="{style.selectContainerStyle}">
 				</g:FlowPanel>
 			</g:HorizontalPanel>
@@ -75,7 +73,7 @@
 				<g:HorizontalPanel>
 					<g:Image ui:field="imageVehicle" styleName="{style.imageRoute}" />
 					<g:VerticalPanel>
-					<gwt:FlexTable ui:field="buttontable" styleName="{style.buttontable}" />
+						<g:VerticalPanel ui:field="buttontable" styleName="{style.buttontable}"/>
 <!-- 					    						<g:Button ui:field="buttonOrder" text="Book this taxi." -->
 <!-- 							styleName="btn btn-primary" /> -->
 <!-- 						<g:VerticalPanel styleName="btnannounce"/> -->

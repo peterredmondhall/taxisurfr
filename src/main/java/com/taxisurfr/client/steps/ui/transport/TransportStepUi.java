@@ -4,6 +4,8 @@ import com.google.common.collect.Maps;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyUpEvent;
+import com.google.gwt.event.dom.client.KeyUpHandler;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -48,7 +50,7 @@ public class TransportStepUi extends Composite
     Panel mainPanel, ratingsPanel, dp, panelMotivation;
 
     @UiField
-    Image imageVehicle, imageSpinner, imageSearch;
+    Image imageVehicle, imageSearch;
 
     @UiField
     Panel routeSuggestionPanel, panelRoute;
@@ -62,11 +64,16 @@ public class TransportStepUi extends Composite
     private final Map<String, RouteInfo> mapRouteInfo = Maps.newHashMap();
     private final ScrollPanel sp = new ScrollPanel();
     private final FlowPanel fp = new FlowPanel();
+    MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+    final SuggestBox suggestBox = new SuggestBox(oracle);
 
 //    @UiField
     Button buttonOrder, buttonAnnounce, buttonShare;
+
     @UiField
-    FlexTable buttontable;
+    Panel buttontable;
+
+    VerticalPanel sharingPanel = new VerticalPanel();
 
     private final Wizard wizard;
 
@@ -74,7 +81,7 @@ public class TransportStepUi extends Composite
     {
         this.wizard = wizard;
         createUi();
-        fetchRoutes();
+        initOracle();
         panelRoute.setVisible(false);
         sp.setHeight(getPanelHeight());
         ratingsPanel.add(sp);
@@ -91,10 +98,9 @@ public class TransportStepUi extends Composite
         // containerGrid.setStyleName("progressbar-outer");
 
         panelMotivation.add(table);
-        imageSearch.setVisible(false);
 
         buttonOrder = ButtonFactory.getButton("Book taxi now.", "150px", "80px");
-        buttontable.setWidget(0, 0, buttonOrder);
+        buttontable.add(buttonOrder);
         buttonOrder.addClickHandler(new ClickHandler()
         {
 
@@ -103,48 +109,20 @@ public class TransportStepUi extends Composite
             {
                 wizard.onNextClick(null);
                 wizard.onNextClick(null);
-
             }
         });
+        initSharingPanel();
     }
 
-    private void createButtonTable()
+    private void initSharingPanel()
     {
-        ClickHandler shareBook = new ClickHandler()
-        {
 
-            @Override
-            public void onClick(ClickEvent event)
-            {
-                wizard.onNextClick(null);
+        //DecoratorPanel decPanel = new DecoratorPanel();
+        DisclosurePanel disclosurePanel = new DisclosurePanel("Sharing");
+        disclosurePanel.setAnimationEnabled(true);
+        disclosurePanel.setContent(sharingPanel);
 
-            }
-        };
-        int row = 1;
-        for (int i = row; i < buttontable.getRowCount(); i++)
-        {
-            buttontable.removeRow(i);
-        }
-        if (Wizard.shareAvailable())
-        {
-            buttonShare = ButtonFactory.getButton("Share.", "150px");
-            buttonShare.addClickHandler(shareBook);
-            buttontable.setWidget(row++, 0, buttonShare);
-        }
-        buttonAnnounce = ButtonFactory.getButton("Announce share.", "150px");
-        buttontable.setWidget(row++, 0, buttonAnnounce);
-
-        buttonAnnounce.addClickHandler(new ClickHandler()
-        {
-
-            @Override
-            public void onClick(ClickEvent event)
-            {
-                Wizard.BOOKINGINFO.setOrderType(OrderType.SHARE_ANNOUNCEMENT);
-                wizard.onNextClick(null);
-
-            }
-        });
+        buttontable.add(disclosurePanel);
     }
 
     private Image getImage()
@@ -184,17 +162,63 @@ public class TransportStepUi extends Composite
         prev.setVisible(false);
     }
 
-    private void fetchRoutes()
+    private void initOracle()
     {
-        service.getRoutes(new AsyncCallback<List<RouteInfo>>()
+        MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
+
+        setSuggestBoxWidth(suggestBox);
+        routeSuggestionPanel.add(suggestBox);
+        suggestBox.getElement().setAttribute("placeHolder", "eg. Colombo Airport Arugam Bay");
+
+        SelectionHandler<SuggestOracle.Suggestion> handler = new SelectionHandler<SuggestOracle.Suggestion>()
+        {
+            @Override
+            public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event)
+            {
+                String displayString = event.getSelectedItem().getReplacementString();
+                RouteInfo routeInfo = mapRouteInfo.get(displayString);
+
+                Wizard.ROUTEINFO = routeInfo;
+                logger.log(Level.INFO, "start:" + Wizard.ROUTEINFO.getStart());
+                displayRoute(/* suggestBox, */);
+            }
+
+        };
+
+        suggestBox.addSelectionHandler(handler);
+
+        suggestBox.addKeyUpHandler(new KeyUpHandler()
+        {
+            @Override public void onKeyUp(KeyUpEvent keyUpEvent)
+            {
+                String query = suggestBox.getText();
+                if (query.length() >= 3)
+                {
+                    Timer t = new Timer()
+                    {
+                        public void run()
+                        {
+                            fetchRoutes(suggestBox.getText());
+                        }
+                    };
+                    t.schedule(100);
+                }
+
+            }
+        });
+    }
+
+    private void fetchRoutes(String query)
+    {
+        service.getRoutes(query, new AsyncCallback<List<RouteInfo>>()
         {
 
             @Override
             public void onSuccess(final List<RouteInfo> routes)
             {
                 logger.log(Level.INFO, "fetchRoutes count = " + routes.size());
-                MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
 
+                oracle.clear();
                 for (RouteInfo routeInfo : routes)
                 {
                     String key = routeInfo.getKey("");
@@ -202,29 +226,6 @@ public class TransportStepUi extends Composite
 
                     oracle.add(key);
                 }
-                final SuggestBox suggestBox = new SuggestBox(oracle);
-                setSuggestBoxWidth(suggestBox);
-                routeSuggestionPanel.add(suggestBox);
-                suggestBox.getElement().setAttribute("placeHolder", "eg. Colombo Airport Arugam Bay");
-
-                SelectionHandler<SuggestOracle.Suggestion> handler = new SelectionHandler<SuggestOracle.Suggestion>()
-                {
-                    @Override
-                    public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event)
-                    {
-                        String displayString = event.getSelectedItem().getReplacementString();
-                        RouteInfo routeInfo = mapRouteInfo.get(displayString);
-
-                        Wizard.ROUTEINFO = routeInfo;
-                        logger.log(Level.INFO, "start:" + Wizard.ROUTEINFO.getStart());
-                        displayRoute(/* suggestBox, */);
-                    }
-
-                };
-
-                suggestBox.addSelectionHandler(handler);
-                imageSpinner.setVisible(false);
-                imageSearch.setVisible(true);
             }
 
             @Override
@@ -236,6 +237,40 @@ public class TransportStepUi extends Composite
         });
     }
 
+    private void fillSharingPanel()
+    {
+        sharingPanel.clear();
+        if (Wizard.shareAvailable())
+        {
+            ClickHandler shareBook = new ClickHandler()
+            {
+
+                @Override
+                public void onClick(ClickEvent event)
+                {
+                    wizard.onNextClick(null);
+
+                }
+            };
+            buttonShare = ButtonFactory.getButton("Share.", "150px");
+            buttonShare.addClickHandler(shareBook);
+            sharingPanel.add(buttonShare);
+        }
+        buttonAnnounce = ButtonFactory.getButton("Announce share.", "150px");
+        sharingPanel.add(buttonAnnounce);
+        buttonAnnounce.addClickHandler(new ClickHandler()
+        {
+
+            @Override
+            public void onClick(ClickEvent event)
+            {
+                Wizard.BOOKINGINFO.setOrderType(OrderType.SHARE_ANNOUNCEMENT);
+                wizard.onNextClick(null);
+
+            }
+        });
+
+    }
     private Widget getDisclosure(String description)
     {
         String labelDescription0 = "no description!";
@@ -308,7 +343,8 @@ public class TransportStepUi extends Composite
             public void onSuccess(List<BookingInfo> list)
             {
                 Wizard.EXISTING_BOOKINGS_ON_ROUTE = list;
-                createButtonTable();
+                fillSharingPanel();
+                //createButtonTable();
                 // suggestBox.getElement().setAttribute("placeHolder", "Enter a start or destination eg. Colombo or Arugam Bay");
             }
 

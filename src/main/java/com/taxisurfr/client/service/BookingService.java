@@ -1,17 +1,10 @@
 package com.taxisurfr.client.service;
 
-import java.util.List;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.taxisurfr.shared.model.AgentInfo;
-import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.shared.model.ContractorInfo;
-import com.taxisurfr.shared.model.FinanceInfo;
-import com.taxisurfr.shared.model.ProfilInfo;
-import com.taxisurfr.shared.model.RatingInfo;
-import com.taxisurfr.shared.model.RouteInfo;
-import com.taxisurfr.shared.model.StatInfo;
+import com.taxisurfr.shared.model.*;
+
+import java.util.List;
 
 /**
  * The client-side stub for the RPC service.
@@ -40,6 +33,8 @@ public interface BookingService extends RemoteService
     List<ContractorInfo> getContractors(AgentInfo userInfo) throws IllegalArgumentException;
 
     List<RouteInfo> getRoutes() throws IllegalArgumentException;
+
+    List<RouteInfo> getRoutes(String query) throws IllegalArgumentException;
 
     List<RouteInfo> deleteRoute(AgentInfo userInfo, RouteInfo placeInfo) throws IllegalArgumentException;
 

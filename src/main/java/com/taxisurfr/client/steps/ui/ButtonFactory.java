@@ -23,6 +23,7 @@ public class ButtonFactory
     {
         Button b = getButton(text);
         b.setWidth(width);
+        b.setStyleName("shareButton", true);
         return b;
     }
 

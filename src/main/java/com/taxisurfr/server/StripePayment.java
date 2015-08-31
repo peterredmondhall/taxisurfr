@@ -27,8 +27,8 @@ public class StripePayment
             chargeParams.put("card", card); // obtained with Stripe.js
             chargeParams.put("description", "Taxi Charges Sri Lanka - "+orderRef+" - Thank you!");
             logger.info("receipt to "+bookingInfo.getEmail());
-            //chargeParams.put("receipt_email", bookingInfo.getEmail());
-            chargeParams.put("receipt_email", "hall@silvermobilityservices.com");
+            chargeParams.put("receipt_email", bookingInfo.getEmail());
+            //chargeParams.put("receipt_email", "hall@silvermobilityservices.com");
 
 
             logger.info("charging cents " + bookingInfo.getCurrency().name().toLowerCase() + cents);

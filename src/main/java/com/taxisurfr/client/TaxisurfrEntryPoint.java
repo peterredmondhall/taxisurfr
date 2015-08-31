@@ -15,7 +15,6 @@ import com.taxisurfr.client.resources.ClientMessages;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
 import com.taxisurfr.client.steps.*;
-import com.taxisurfr.shared.Currency;
 import com.taxisurfr.shared.model.*;
 
 import java.util.List;
@@ -117,7 +116,7 @@ public class TaxisurfrEntryPoint implements EntryPoint
     private void collectStats(String src, String currency)
     {
         String protocol = Window.Location.getProtocol();
-        String url = protocol + "//" + Window.Location.getHost() + "/stat?src=" + src + "&session=" + sessionID + "&curr=" + currency;
+        String url = protocol + "//" + Window.Location.getHost() + "/stat?src=" + src + "&curr=" + currency;
         RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
 
         try
@@ -136,27 +135,8 @@ public class TaxisurfrEntryPoint implements EntryPoint
                     {
                         StatInfoMapper mapper = GWT.create(StatInfoMapper.class);
                         Wizard.STATINFO = mapper.read(response.getText());
-                        Currency currency1 = Wizard.STATINFO.getCurrency();
-                        logger.log(Level.SEVERE, "XXXXXXXXXXXXXXXX"+ currency1.name());
-                        logger.log(Level.SEVERE, "XXXXXXXXXXXXXXXX"+ Wizard.STATINFO.getCurrencyRate());
-
-
-                        //                        String currencyRate = response.getText();
-//                        logger.log(Level.INFO, "currencyRate:" + currencyRate);
-//                        List<String> on = Splitter.on("/").splitToList(currencyRate);
-//                        Currency currency = Currency.valueOf(on.get(0));
-//                        Float rate = 1f;
-//                        try
-//                        {
-//                            rate = Float.parseFloat(on.get(1));
-//                        }
-//                        catch (Exception ex)
-//                        {
-//                            rate = 1f;
-//                            currency = Currency.USD;
-//                        }
                         Wizard.BOOKINGINFO = new BookingInfo();
-                        Wizard.BOOKINGINFO.setCurrency(currency1);
+                        Wizard.BOOKINGINFO.setCurrency(Wizard.STATINFO.getCurrency());
                         Wizard.BOOKINGINFO.setRate(Wizard.STATINFO.getCurrencyRate());
                         logger.log(Level.INFO, "after getCurrencyRate currency=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
                         wizard.setCurrencyResolved(true);
@@ -173,15 +153,6 @@ public class TaxisurfrEntryPoint implements EntryPoint
         {
         }
 
-//        
-//
-//        X-AppEngine-Region
-//
-//        Name of region from which the request originated. This value only makes sense in the context of the country in X-AppEngine-Country. For example, if the country is "US" and the region is "ca", that "ca" means "California", not Canada.
-//        X-AppEngine-City
-//
-//        Name of the city from which the request originated. For example, a request from the city of Mountain View might have the header value mountain view.
-//        X-AppEngine-CityLatLong        
     }
 
     private void handleShareAccepted(Long shareId)

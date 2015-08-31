@@ -10,7 +10,7 @@
 
     <properties>
         <app.id>taxigangsurf</app.id>
-        <app.version>35</app.version>
+        <app.version>37</app.version>
         <!--<app.id>gobygang</app.id>-->
         <!--<app.version>1</app.version>-->
         <appengine.version>1.9.25</appengine.version>
@@ -26,6 +26,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
     </properties>
+
 
     <!--com.fasterxml.jackson.core:jackson-databind ........... 2.4.6 -> 2.6.1-->
     <!--[INFO]   com.google.guava:guava .............................. 18.0 -> 19.0-rc1-->
@@ -165,26 +166,11 @@
             <version>${appengine.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- [START Objectify_Dependencies] -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava-gwt</artifactId>
             <version>${guava.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.googlecode.objectify</groupId>
-            <artifactId>objectify</artifactId>
-            <version>${objectify.version}</version>
-        </dependency>
-        <!-- [END Objectify_Dependencies] -->
-
-
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>

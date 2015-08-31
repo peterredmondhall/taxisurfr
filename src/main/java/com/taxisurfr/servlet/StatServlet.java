@@ -1,6 +1,7 @@
 package com.taxisurfr.servlet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.appengine.repackaged.com.google.api.client.util.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.CurrencyManager;
@@ -56,14 +57,12 @@ public class StatServlet extends HttpServlet
         StatInfo statInfo = new StatInfo();
         statInfo.setDetail("country");
         statInfo.setSrc(src);
-        statInfo.setCountry(country+":"+city);
-        statInfo.setSessionId(req.getParameter("session"));
+        statInfo.setCountry(country + ":" + city);
         statInfo.setIp(ip);
-        statManager.createSessionStat(statInfo);
 
         PrintWriter writer = resp.getWriter();
         String currency = req.getParameter("curr");
-        if (currency == null || currency.equals("null"))
+        if (Strings.isNullOrEmpty(currency) || currency.equals("null"))
         {
             currency = currencyMap.get(country) != null ? currencyMap.get(country).name() : "USD";
         }
@@ -73,12 +72,12 @@ public class StatServlet extends HttpServlet
         statInfo.setCurrency(curr);
         statInfo.setCurrencyRate(rate);
         log.info("currency:" + curr);
+        statInfo = statManager.createSessionStat(statInfo);
 
         ObjectMapper mapper = new ObjectMapper();
         String serialStatInfo = mapper.writeValueAsString(statInfo);
 
         writer.print(serialStatInfo);
-        //writer.print(curr + "/" + rate);
         writer.close();
 
     }

@@ -106,7 +106,9 @@ a:VISITED {
 	width: 155px;
 }
 
-
+.shareButton {
+	margin: 10px;
+}
 .gwt-Button {
 	margin: 0;
 	padding: 3px 5px;

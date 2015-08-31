@@ -20,7 +20,7 @@ public class StatManager extends Manager
     }
     public void updateSessionStat(StatInfo statInfo)
     {
-        SessionStat sessionStat = ObjectifyService.ofy().load().type(SessionStat.class).filter("sessionId", statInfo.getSessionId()).first().now();
+        SessionStat sessionStat = ObjectifyService.ofy().load().type(SessionStat.class).filter("ip", statInfo.getIp()).first().now();
         switch (statInfo.getUpdate())
         {
             case TYPE:
@@ -48,8 +48,14 @@ public class StatManager extends Manager
 
     }
 
-    public void createSessionStat(StatInfo statInfo)
+    public StatInfo createSessionStat(StatInfo statInfo)
     {
-        ObjectifyService.ofy().save().entity(SessionStat.getSessionStat(statInfo)).now();
+        SessionStat sessionStat = ObjectifyService.ofy().load().type(SessionStat.class).filter("ip =", statInfo.getIp()).first().now();
+        if (sessionStat == null)
+        {
+            sessionStat = SessionStat.getSessionStat(statInfo);
+            ObjectifyService.ofy().save().entity(sessionStat).now();
+        }
+        return sessionStat.getInfo();
     }
 }
