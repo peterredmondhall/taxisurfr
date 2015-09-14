@@ -1,5 +1,7 @@
 package com.taxisurfr.client.steps.ui.transport;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -67,7 +69,7 @@ public class TransportStepUi extends Composite
     MultiWordSuggestOracle oracle = new MultiWordSuggestOracle();
     final SuggestBox suggestBox = new SuggestBox(oracle);
 
-//    @UiField
+    //    @UiField
     Button buttonOrder, buttonAnnounce, buttonShare;
 
     @UiField
@@ -76,6 +78,7 @@ public class TransportStepUi extends Composite
     VerticalPanel sharingPanel = new VerticalPanel();
 
     private final Wizard wizard;
+    List<RouteInfo> routes = Lists.<RouteInfo>newArrayList();
 
     public TransportStepUi(final Wizard wizard)
     {
@@ -192,16 +195,40 @@ public class TransportStepUi extends Composite
             @Override public void onKeyUp(KeyUpEvent keyUpEvent)
             {
                 String query = suggestBox.getText();
-                if (query.length() >= 3)
+                switch (query.length())
                 {
-                    Timer t = new Timer()
-                    {
-                        public void run()
+                    case 0:
+                        routes = Lists.<RouteInfo>newArrayList();
+                        loadRoutes();
+                    case 1:
+                    case 2:
+                    case 3:
+                        fetchRoutes(suggestBox.getText());
+                        //                        Timer t = new Timer()
+                        //                        {
+                        //                            public void run()
+                        //                            {
+                        //                                fetchRoutes(suggestBox.getText());
+                        //                            }
+                        //                        };
+                        //                        t.schedule(100);
+                        break;
+                    default:
+                        List<RouteInfo> list = Lists.newArrayList();
+                        for (RouteInfo routeInfo : routes)
                         {
-                            fetchRoutes(suggestBox.getText());
+                            for (String q : Splitter.on(' ').split(query))
+                            {
+                                logger.log(Level.INFO, "routeInfo.getStart().contains(q) " + routeInfo.getStart() + "  " + q);
+                                q = q.toUpperCase();
+                                if (!routeInfo.isInactive() && (routeInfo.getStart().toUpperCase().contains(q) || routeInfo.getEnd().toUpperCase().contains(q)))
+                                {
+                                    list.add(routeInfo);
+                                }
+                            }
+
                         }
-                    };
-                    t.schedule(100);
+                        loadRoutes(list);
                 }
 
             }
@@ -214,18 +241,9 @@ public class TransportStepUi extends Composite
         {
 
             @Override
-            public void onSuccess(final List<RouteInfo> routes)
+            public void onSuccess(final List<RouteInfo> routesFromQuery)
             {
-                logger.log(Level.INFO, "fetchRoutes count = " + routes.size());
-
-                oracle.clear();
-                for (RouteInfo routeInfo : routes)
-                {
-                    String key = routeInfo.getKey("");
-                    mapRouteInfo.put(key, routeInfo);
-
-                    oracle.add(key);
-                }
+                routes = routesFromQuery;
             }
 
             @Override
@@ -235,6 +253,24 @@ public class TransportStepUi extends Composite
                 Refresh.refresh();
             }
         });
+    }
+
+    private void loadRoutes()
+    {
+        loadRoutes(routes);
+    }
+
+    private void loadRoutes(List<RouteInfo> list)
+    {
+        logger.log(Level.INFO, "fetchRoutes count = " + list.size());
+
+        oracle.clear();
+        for (RouteInfo routeInfo : list)
+        {
+            String key = routeInfo.getKey("");
+            mapRouteInfo.put(key, routeInfo);
+            oracle.add(key);
+        }
     }
 
     private void fillSharingPanel()
@@ -271,6 +307,7 @@ public class TransportStepUi extends Composite
         });
 
     }
+
     private Widget getDisclosure(String description)
     {
         String labelDescription0 = "no description!";
@@ -321,13 +358,8 @@ public class TransportStepUi extends Composite
 
     private void continueLoading()
     {
-        logger.log(Level.FINE, "routeInfo" + Wizard.ROUTEINFO.getKey(""));
-        logger.log(Level.FINE, "currency" + BOOKINGINFO.getCurrency() + "   rate:" + BOOKINGINFO.getRate());
-        logger.log(Level.FINE, "routeCents" + Wizard.ROUTEINFO.getCents());
 
-        logger.log(Level.FINE, "paidPrice" + CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, BOOKINGINFO.getCurrency(), BOOKINGINFO.getRate()));
         BOOKINGINFO.setPaidPrice(CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, BOOKINGINFO.getCurrency(), BOOKINGINFO.getRate()));
-        logger.log(Level.FINE, "paidprice=" + BOOKINGINFO.getPaidPrice() + "rate=" + BOOKINGINFO.getRate());
 
         panelMotivation.setVisible(false);
         RouteInfo routeInfo = Wizard.ROUTEINFO;

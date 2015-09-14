@@ -1,9 +1,5 @@
 package com.taxisurfr.client.dashboard.ui;
 
-import static com.taxisurfr.client.DashboardEntryPoint.getAgentInfo;
-
-import java.util.List;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Float;
 import com.google.gwt.dom.client.Style.Unit;
@@ -14,21 +10,18 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.FileUpload;
-import com.google.gwt.user.client.ui.FormPanel;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteEvent;
 import com.google.gwt.user.client.ui.FormPanel.SubmitCompleteHandler;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.ListBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.taxisurfr.client.DashboardEntryPoint;
 import com.taxisurfr.client.Refresh;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
 import com.taxisurfr.shared.model.AgentInfo;
+
+import java.util.List;
+
+import static com.taxisurfr.client.DashboardEntryPoint.getAgentInfo;
 
 public class AdminManagementVeiw extends Composite
 {
@@ -50,6 +43,7 @@ public class AdminManagementVeiw extends Composite
     @UiField
     VerticalPanel layout;
     private Button uploadBtn;
+    private Button routeResetBtn;
 
     public AdminManagementVeiw()
     {
@@ -114,6 +108,7 @@ public class AdminManagementVeiw extends Composite
     private void setAdminManagementPanel()
     {
         setUploadBtn();
+        setRouteResetBtn();
     }
 
     private void setUploadBtn()
@@ -124,6 +119,65 @@ public class AdminManagementVeiw extends Composite
         uploadBtn.getElement().getStyle().setFloat(Float.RIGHT);
         uploadBtn.getElement().getStyle().setMargin(3, Unit.PX);
         btnContainer.add(getUploader(uploadBtn));
+    }
+
+    private void setRouteResetBtn()
+    {
+        routeResetBtn = new Button();
+        routeResetBtn.setStyleName("btn btn-primary");
+        routeResetBtn.setText("Reset Routes");
+        routeResetBtn.getElement().getStyle().setFloat(Float.RIGHT);
+        routeResetBtn.getElement().getStyle().setMargin(3, Unit.PX);
+        btnContainer.add(routeResetBtn);
+        routeResetBtn.addClickHandler(new ClickHandler()
+        {
+            @Override public void onClick(ClickEvent clickEvent)
+            {
+                service.resetRoutes(new AsyncCallback<Void>()
+                {
+                    @Override public void onFailure(Throwable throwable)
+                    {
+
+                    }
+
+                    @Override public void onSuccess(Void aVoid)
+                    {
+
+                    }
+                });
+            }
+        });
+
+    }
+
+    //TODO remove if practical
+    private void setInitBtn()
+    {
+        Button initBtn = new Button();
+        initBtn.setStyleName("btn btn-primary");
+        initBtn.setText("Initialize Test Routes");
+        initBtn.getElement().getStyle().setFloat(Float.RIGHT);
+        initBtn.getElement().getStyle().setMargin(3, Unit.PX);
+        btnContainer.add(initBtn);
+        initBtn.addClickHandler(new ClickHandler()
+        {
+            @Override public void onClick(ClickEvent clickEvent)
+            {
+                service.initTestRoutes(new AsyncCallback<Void>()
+                {
+                    @Override public void onFailure(Throwable throwable)
+                    {
+
+                    }
+
+                    @Override public void onSuccess(Void aVoid)
+                    {
+
+                    }
+                });
+            }
+        });
+
     }
 
     private Widget getUploader(final Button saveButton)

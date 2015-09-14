@@ -338,8 +338,8 @@ public class BookingServiceManager extends Manager
 
         //route 1 contractor 1
         Route route11 = new Route();
-        route11.setStart("testAgent:" + "simple_Contractor1");
-        route11.setEnd("testAgent:" + "end");
+        route11.setStart("colombo" + "simple_Contractor1");
+        route11.setEnd("hikkawaka:" + "end");
         route11.setPickupType(RouteInfo.PickupType.AIRPORT);
         route11.setCents(101L);
         route11.setAgentCents(100L);
@@ -348,8 +348,8 @@ public class BookingServiceManager extends Manager
 
         //route 2 contractor 1
         Route route21 = new Route();
-        route21.setStart("testAgent:" + "simple_Contractor1");
-        route21.setEnd("testAgent:" + "end");
+        route21.setStart("colombo" + "simple_Contractor1");
+        route21.setEnd("arugam bay" + "end");
         route21.setPickupType(RouteInfo.PickupType.AIRPORT);
         route21.setCents(101L);
         route21.setAgentCents(100L);

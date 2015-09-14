@@ -23,6 +23,10 @@ public interface BookingServiceAsync
 
     // void sendShareAccepted(List<BookingInfo> bookingInfo, AsyncCallback<BookingInfo> callback);
 
+    void resetRoutes(AsyncCallback<Void> callback);
+
+    void initTestRoutes(AsyncCallback<Void> callback);
+
     void getRoutes(AgentInfo userInfo, AsyncCallback<List<RouteInfo>> callback);
 
     void getContractors(AgentInfo userInfo, AsyncCallback<List<ContractorInfo>> callback);

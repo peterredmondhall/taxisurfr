@@ -1,14 +1,11 @@
 package com.taxisurfr.server.entity;
 
-import java.io.Serializable;
-
-import com.google.appengine.api.datastore.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-
-import com.google.appengine.api.datastore.Key;
 import com.googlecode.objectify.annotation.Index;
 import com.taxisurfr.shared.model.ProfilInfo;
+
+import java.io.Serializable;
 
 @Entity
 public class Profil implements Serializable
@@ -23,7 +20,6 @@ public class Profil implements Serializable
     private String paypalURL;
     private String paypalAccount;
     private String paypalAT;
-    private String arugamBayEmail;
     private String monitorEmail;
     private String contractorEmail;
     private String stripeSecret = "sk_test_TCIbuNPlBRe4VowPhqekTO1L";
@@ -111,16 +107,6 @@ public class Profil implements Serializable
     public void setPaypalAT(String paypalAT)
     {
         this.paypalAT = paypalAT;
-    }
-
-    public String getArugamBayEmail()
-    {
-        return arugamBayEmail;
-    }
-
-    public void setArugamBayEmail(String arugamBayEmail)
-    {
-        this.arugamBayEmail = arugamBayEmail;
     }
 
     public String getMonitorEmail()

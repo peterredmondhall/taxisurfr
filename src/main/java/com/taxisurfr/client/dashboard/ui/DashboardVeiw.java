@@ -52,10 +52,16 @@ public class DashboardVeiw extends Composite
         initWidget(uiBinder.createAndBindUi(this));
         setMenu();
         dataContainer.add(displayContainer);
-        isAdmin = Boolean.TRUE.equals(DashboardEntryPoint.getAgentInfo().isAdmin());
+        isAdmin = Boolean.TRUE.equals(DashboardEntryPoint.getAgentInfo().isAdmin()) || isDevelopmentMode();
         DashboardEntryPoint.setAdmin(isAdmin);
         adminManagement.setVisible(isAdmin);
 
+    }
+
+    boolean isDevelopmentMode()
+    {
+        return DashboardEntryPoint.getAgentInfo().getEmail().equals("test@example.com");
+        //        return !GWT.isProdMode();
     }
 
     private void setMenu()

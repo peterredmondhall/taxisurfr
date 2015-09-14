@@ -15,6 +15,8 @@ public class RouteServiceManager extends Manager
 {
     private static final Logger logger = Logger.getLogger(RouteServiceManager.class.getName());
 
+    private static List<Route> routeInfoCache;
+
     public RouteServiceManager()
     {
 
@@ -122,9 +124,18 @@ public class RouteServiceManager extends Manager
     {
         query = query.toUpperCase();
         List<RouteInfo> routes = new ArrayList<>();
-        List<Route> resultList = ObjectifyService.ofy().load().type(Route.class).list();
+        if (routeInfoCache == null)
+        {
+            routeInfoCache = ObjectifyService.ofy().load().type(Route.class).list();
+            logger.info("get all routes returned no. of routes" + routeInfoCache.size());
 
-        logger.info("get all routes returned no. of routes" + resultList.size());
+        }
+        else
+        {
+            logger.info("routes from cache no. of routes" + routeInfoCache.size());
+        }
+        List<Route> resultList = routeInfoCache;
+
         for (Route route : resultList)
         {
             RouteInfo routeInfo = route.getInfo();
@@ -143,4 +154,8 @@ public class RouteServiceManager extends Manager
         return ObjectifyService.ofy().load().type(Route.class).id(routeId).now().getInfo();
     }
 
+    public static void resetCache()
+    {
+        routeInfoCache = null;
+    }
 }

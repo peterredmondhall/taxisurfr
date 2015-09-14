@@ -1,31 +1,22 @@
 package com.taxisurfr.server.util;
 
+import com.google.common.collect.Maps;
+import com.taxisurfr.server.entity.Profil;
+import com.taxisurfr.shared.model.AgentInfo;
+import com.taxisurfr.shared.model.BookingInfo;
+import com.taxisurfr.shared.model.ContractorInfo;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.mail.*;
+import javax.mail.internet.*;
+import javax.mail.util.ByteArrayDataSource;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
-import javax.mail.util.ByteArrayDataSource;
-
-import com.google.common.collect.Maps;
-import com.taxisurfr.server.entity.Profil;
-import com.taxisurfr.shared.model.AgentInfo;
-import com.taxisurfr.shared.model.BookingInfo;
-import com.taxisurfr.shared.model.ContractorInfo;
 
 public class Mailer
 {
@@ -87,7 +78,7 @@ public class Mailer
         String email = bookingInfo.getEmail();
         send(email, html, pdfData, "customer");
         send(profil.getMonitorEmail(), html, pdfData, "monitor");
-        send(profil.getArugamBayEmail(), html, pdfData, "agent");
+        send(agentInfo.getEmail(), html, pdfData, "agent");
         if (contractorInfo != null)
         {
             send(contractorInfo.getEmail(), html, pdfData, "contractor");
@@ -110,7 +101,7 @@ public class Mailer
                 msg.setFrom(new InternetAddress(DISPATCHER, "taxisurfr"));
                 msg.addRecipient(Message.RecipientType.TO,
                         new InternetAddress(toEmail, toEmail));
-                msg.setSubject("Arugam Taxi");
+                msg.setSubject("taxisurfr.com");
                 // msg.setText(msgBody);
 
                 Multipart mp = new MimeMultipart();

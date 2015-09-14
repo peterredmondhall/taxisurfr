@@ -251,6 +251,16 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
         return routeServiceManager.getRoute(routeId);
     }
 
+    @Override public void resetRoutes() throws IllegalArgumentException
+    {
+        routeServiceManager.resetCache();
+    }
+
+    @Override public void initTestRoutes() throws IllegalArgumentException
+    {
+        bookingServiceManager.createAgentWithRoutes("test@example.com");
+    }
+
     @Override
     public List<FinanceInfo> getFinances(AgentInfo agentInfo)
     {

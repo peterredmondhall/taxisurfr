@@ -30,6 +30,7 @@ public class StatServlet extends HttpServlet
             .put("ES", Currency.EUR)
             .put("FR", Currency.EUR)
             .put("AT", Currency.EUR)
+            .put("DK", Currency.EUR)
             .build();
 
     StatManager statManager = new StatManager();
