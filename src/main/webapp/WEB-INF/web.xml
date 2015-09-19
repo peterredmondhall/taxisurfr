@@ -128,6 +128,24 @@
 		<url-pattern>/recommended</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>InitServlet</servlet-name>
+		<servlet-class>com.taxisurfr.servlet.InitServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InitServlet</servlet-name>
+		<url-pattern>/init</url-pattern>
+	</servlet-mapping>
+
+	<!--<servlet>-->
+	<!--<servlet-name>RouteServlet</servlet-name>-->
+	<!--<servlet-class>com.taxisurfr.servlet.RouteServlet</servlet-class>-->
+	<!--</servlet>-->
+	<!--<servlet-mapping>-->
+	<!--<servlet-name>RouteServlet</servlet-name>-->
+	<!--<url-pattern>/loadall</url-pattern>-->
+	<!--</servlet-mapping>-->
+
 
 	<filter>
 		<filter-name>ObjectifyFilter</filter-name>

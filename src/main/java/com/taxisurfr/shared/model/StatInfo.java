@@ -2,14 +2,28 @@ package com.taxisurfr.shared.model;
 
 import com.taxisurfr.shared.Currency;
 
+import java.util.Date;
+
 public class StatInfo extends Info
 {
+    private String referer;
+    private Date time;
     private Currency currency = Currency.USD;
     private Float currencyRate = 1F;
 
     public void setCurrency(Currency currency)
     {
         this.currency = currency;
+    }
+
+    public Date getTime()
+    {
+        return time;
+    }
+
+    public void setTime(Date time)
+    {
+        this.time = time;
     }
 
     public void setCurrencyRate(Float currencRate)
@@ -25,6 +39,16 @@ public class StatInfo extends Info
     public Float getCurrencyRate()
     {
         return currencyRate != null ? currencyRate : 1F;
+    }
+
+    public String getReferer()
+    {
+        return referer;
+    }
+
+    public void setReferer(String referrer)
+    {
+        this.referer = referer;
     }
 
     public enum Update

@@ -1,15 +1,13 @@
 package com.taxisurfr.server;
 
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
-import com.googlecode.objectify.util.Closeable;
 import com.taxisurfr.server.entity.Agent;
 import com.taxisurfr.shared.model.AgentInfo;
+
+import java.util.List;
+import java.util.logging.Logger;
 
 public class AgentManager extends Manager
 {
@@ -29,7 +27,7 @@ public class AgentManager extends Manager
         AgentInfo agentInfo = null;
             // To create new user for testing
 
-            Agent agent = createAgent(agentEmail,true);
+        Agent agent = createAgent(agentEmail, false);
 
             return  agent.getInfo();
 

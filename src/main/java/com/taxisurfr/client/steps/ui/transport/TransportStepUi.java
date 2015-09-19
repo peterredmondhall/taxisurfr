@@ -12,7 +12,6 @@ import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.*;
 import com.taxisurfr.client.Refresh;
@@ -179,7 +178,10 @@ public class TransportStepUi extends Composite
             public void onSelection(SelectionEvent<SuggestOracle.Suggestion> event)
             {
                 String displayString = event.getSelectedItem().getReplacementString();
+                logger.log(Level.INFO, "displayString:" + displayString);
+
                 RouteInfo routeInfo = mapRouteInfo.get(displayString);
+                logger.log(Level.INFO, "routeInfo:" + routeInfo.getKey(""));
 
                 Wizard.ROUTEINFO = routeInfo;
                 logger.log(Level.INFO, "start:" + Wizard.ROUTEINFO.getStart());
@@ -219,7 +221,6 @@ public class TransportStepUi extends Composite
                         {
                             for (String q : Splitter.on(' ').split(query))
                             {
-                                logger.log(Level.INFO, "routeInfo.getStart().contains(q) " + routeInfo.getStart() + "  " + q);
                                 q = q.toUpperCase();
                                 if (!routeInfo.isInactive() && (routeInfo.getStart().toUpperCase().contains(q) || routeInfo.getEnd().toUpperCase().contains(q)))
                                 {
@@ -235,7 +236,7 @@ public class TransportStepUi extends Composite
         });
     }
 
-    private void fetchRoutes(String query)
+    private void fetchRoutes(final String query)
     {
         service.getRoutes(query, new AsyncCallback<List<RouteInfo>>()
         {
@@ -249,8 +250,22 @@ public class TransportStepUi extends Composite
             @Override
             public void onFailure(Throwable caught)
             {
-                logger.log(Level.SEVERE, "fetching routes");
-                Refresh.refresh();
+                service.getRoutes(query, new AsyncCallback<List<RouteInfo>>()
+                {
+
+                    @Override
+                    public void onSuccess(final List<RouteInfo> routesFromQuery)
+                    {
+                        routes = routesFromQuery;
+                    }
+
+                    @Override
+                    public void onFailure(Throwable caught)
+                    {
+                        logger.log(Level.SEVERE, "fetching routes");
+                        Refresh.refresh();
+                    }
+                });
             }
         });
     }
@@ -332,32 +347,13 @@ public class TransportStepUi extends Composite
 
     public void displayRoute()
     {
-        waitForCurrencyResolved();
+        continueLoading();
 
-    }
-
-    private void waitForCurrencyResolved()
-    {
-        if (wizard.getCurrencyResolved())
-        {
-            continueLoading();
-        }
-        else
-        {
-            Timer t = new Timer()
-            {
-                @Override
-                public void run()
-                {
-                    waitForCurrencyResolved();
-                }
-            };
-            t.schedule(500);
-        }
     }
 
     private void continueLoading()
     {
+        logger.log(Level.INFO, "continueLoading:");
 
         BOOKINGINFO.setPaidPrice(CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, BOOKINGINFO.getCurrency(), BOOKINGINFO.getRate()));
 
@@ -376,8 +372,6 @@ public class TransportStepUi extends Composite
             {
                 Wizard.EXISTING_BOOKINGS_ON_ROUTE = list;
                 fillSharingPanel();
-                //createButtonTable();
-                // suggestBox.getElement().setAttribute("placeHolder", "Enter a start or destination eg. Colombo or Arugam Bay");
             }
 
             @Override
@@ -391,6 +385,7 @@ public class TransportStepUi extends Composite
             @Override
             public void onSuccess(List<RatingInfo> ratings)
             {
+                fp.clear();
                 if (ratings.size() > 0)
                 {
                     fp.add(new RatingList(ratings).createRatingForm());

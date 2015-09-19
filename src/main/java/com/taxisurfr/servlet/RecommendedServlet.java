@@ -1,16 +1,15 @@
 package com.taxisurfr.servlet;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URL;
+import com.google.common.base.Charsets;
+import com.google.common.io.Resources;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.common.base.Charsets;
-import com.google.common.io.Resources;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URL;
 
 public class RecommendedServlet extends HttpServlet
 {
@@ -25,7 +24,7 @@ public class RecommendedServlet extends HttpServlet
 
     private void load(HttpServletResponse response) throws IOException
     {
-        URL url = Resources.getResource("recommendation.html");
+        URL url = getServletContext().getResource("/recommendation.html");
         String text = Resources.toString(url, Charsets.UTF_8);
         text = text.substring(text.indexOf("<html"), text.length() - 1);
         PrintWriter writer = response.getWriter();

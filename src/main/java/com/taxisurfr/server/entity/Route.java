@@ -23,6 +23,8 @@ public class Route extends ArugamEntity<RouteInfo>
     private Long cents;
     private Long agentCents;
     private Long image;
+
+    @Index
     private boolean inactive;
     private Long associatedRoute = NO_ASSOCIATED;
 
@@ -153,9 +155,14 @@ public class Route extends ArugamEntity<RouteInfo>
         this.agentCents = agentCents;
     }
 
-    public void setInactive()
+    public void setInactive(boolean inactive)
     {
-        inactive = true;
+        this.inactive = inactive;
+    }
+
+    public boolean getInactive()
+    {
+        return inactive;
     }
 
     public Long getAssociatedRoute()

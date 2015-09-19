@@ -1,8 +1,5 @@
 package com.taxisurfr.client.dashboard.ui;
 
-import java.util.Comparator;
-import java.util.List;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.gwt.cell.client.CheckboxCell;
@@ -19,11 +16,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -34,6 +27,9 @@ import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
 import com.taxisurfr.shared.OrderStatus;
 import com.taxisurfr.shared.model.BookingInfo;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class BookingManagementVeiw extends Composite
 {
@@ -238,41 +234,44 @@ public class BookingManagementVeiw extends Composite
 
     private void setCancelBtn()
     {
-        cancelBtn = new Button();
-        cancelBtn.setStyleName("btn btn-primary");
-        cancelBtn.setText("Delete");
-        cancelBtn.addClickHandler(new ClickHandler()
+        if (DashboardVeiw.isAdmin())
         {
-
-            @Override
-            public void onClick(ClickEvent event)
+            cancelBtn = new Button();
+            cancelBtn.setStyleName("btn btn-primary");
+            cancelBtn.setText("Delete");
+            cancelBtn.addClickHandler(new ClickHandler()
             {
-                for (BookingInfo bookingInfo : BOOKINGS)
+
+                @Override
+                public void onClick(ClickEvent event)
                 {
-                    if (selectionModel.isSelected(bookingInfo))
+                    for (BookingInfo bookingInfo : BOOKINGS)
                     {
-                        service.cancelBooking(bookingInfo, DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<BookingInfo>>()
+                        if (selectionModel.isSelected(bookingInfo))
                         {
-
-                            @Override
-                            public void onFailure(Throwable caught)
+                            service.cancelBooking(bookingInfo, DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<BookingInfo>>()
                             {
-                                Refresh.refresh();
-                            }
 
-                            @Override
-                            public void onSuccess(List<BookingInfo> result)
-                            {
-                                fillTable(result);
-                                ;
-                            }
-                        });
+                                @Override
+                                public void onFailure(Throwable caught)
+                                {
+                                    Refresh.refresh();
+                                }
+
+                                @Override
+                                public void onSuccess(List<BookingInfo> result)
+                                {
+                                    fillTable(result);
+                                    ;
+                                }
+                            });
+                        }
                     }
                 }
-            }
-        });
-        cancelBtn.getElement().getStyle().setFloat(Float.RIGHT);
-        cancelBtn.getElement().getStyle().setMargin(3, Unit.PX);
-        btnContainer.add(cancelBtn);
+            });
+            cancelBtn.getElement().getStyle().setFloat(Float.RIGHT);
+            cancelBtn.getElement().getStyle().setMargin(3, Unit.PX);
+            btnContainer.add(cancelBtn);
+        }
     }
 }

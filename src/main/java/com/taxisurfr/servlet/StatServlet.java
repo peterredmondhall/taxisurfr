@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -25,12 +26,30 @@ public class StatServlet extends HttpServlet
             .put("GB", Currency.GBP)
             .put("CZ", Currency.EUR)
             .put("AU", Currency.AUD)
-            .put("DE", Currency.EUR)
-            .put("IT", Currency.EUR)
-            .put("ES", Currency.EUR)
-            .put("FR", Currency.EUR)
+
+            .put("AS", Currency.EUR)
+            .put("AD", Currency.EUR)
             .put("AT", Currency.EUR)
-            .put("DK", Currency.EUR)
+            .put("BE", Currency.EUR)
+            .put("FI", Currency.EUR)
+            .put("FR", Currency.EUR)
+            .put("GF", Currency.EUR)
+            .put("DE", Currency.EUR)
+            .put("GR", Currency.EUR)
+            .put("GP", Currency.EUR)
+            .put("IE", Currency.EUR)
+            .put("IT", Currency.EUR)
+            .put("LU", Currency.EUR)
+            .put("MQ", Currency.EUR)
+            .put("YT", Currency.EUR)
+            .put("MC", Currency.EUR)
+            .put("NL", Currency.EUR)
+            .put("PT", Currency.EUR)
+            .put("RE", Currency.EUR)
+            .put("WS", Currency.EUR)
+            .put("SM", Currency.EUR)
+            .put("SI", Currency.EUR)
+            .put("ES", Currency.EUR)
             .build();
 
     StatManager statManager = new StatManager();
@@ -55,7 +74,10 @@ public class StatServlet extends HttpServlet
         log.info("region:" + region);
         log.info("city:" + city);
         final String ip = req.getRemoteAddr();
+        final String referrer = req.getRequestURL().toString();
         StatInfo statInfo = new StatInfo();
+        statInfo.setReferer(referrer);
+        statInfo.setTime(new Date());
         statInfo.setDetail("country");
         statInfo.setSrc(src);
         statInfo.setCountry(country + ":" + city);

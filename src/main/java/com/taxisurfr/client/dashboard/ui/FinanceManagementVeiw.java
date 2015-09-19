@@ -1,9 +1,5 @@
 package com.taxisurfr.client.dashboard.ui;
 
-import java.util.Comparator;
-import java.util.Date;
-import java.util.List;
-
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
@@ -20,17 +16,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Grid;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.TextBox;
-import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
@@ -40,6 +26,10 @@ import com.taxisurfr.client.Refresh;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
 import com.taxisurfr.shared.model.FinanceInfo;
+
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 public class FinanceManagementVeiw extends Composite
 {
@@ -113,7 +103,7 @@ public class FinanceManagementVeiw extends Composite
             setTransferCellTable(financeList);
             setPaymentsCellTable(financeList);
         }
-        addTransferBtn.setVisible(DashboardEntryPoint.isAdmin());
+        addTransferBtn.setVisible(DashboardVeiw.isAdmin());
     }
 
     private CellTable<FinanceInfo> setPaymentsCellTable(List<FinanceInfo> financeList)

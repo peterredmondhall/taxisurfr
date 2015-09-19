@@ -6,6 +6,8 @@ import com.googlecode.objectify.annotation.Index;
 import com.taxisurfr.shared.Currency;
 import com.taxisurfr.shared.model.StatInfo;
 
+import java.util.Date;
+
 @Entity
 public class SessionStat extends ArugamEntity<StatInfo>
 {
@@ -27,6 +29,8 @@ public class SessionStat extends ArugamEntity<StatInfo>
     String route;
     Currency currency;
     Float currencyRate;
+    String referer;
+    Date time;
 
     @Index
     String ip;
@@ -58,6 +62,8 @@ public class SessionStat extends ArugamEntity<StatInfo>
     public static SessionStat getSessionStat(StatInfo statInfo)
     {
         SessionStat stat = new SessionStat();
+        stat.referer = statInfo.getReferer();
+        stat.time = statInfo.getTime();
         stat.setCountry(statInfo.getCountry());
         stat.setType(statInfo.getDetail());
         stat.src = statInfo.getSrc();
@@ -81,6 +87,8 @@ public class SessionStat extends ArugamEntity<StatInfo>
     public StatInfo getInfo()
     {
         StatInfo statInfo = new StatInfo();
+        statInfo.setReferer(referer);
+        statInfo.setTime(time);
         statInfo.setCountry(country);
         statInfo.setSrc(src);
         statInfo.setIp(ip);

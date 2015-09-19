@@ -1,18 +1,17 @@
 package com.taxisurfr.servlet;
 
-import java.io.IOException;
-import java.util.logging.Logger;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.taxisurfr.server.AgentManager;
 import com.taxisurfr.shared.model.AgentInfo;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.logging.Logger;
 
 /*
  * Login Google user and redirect to application main page
@@ -38,7 +37,7 @@ public class LoginServlet extends HttpServlet
             return;
         }
 
-        AgentInfo userInfo = userManager.createAgent(user.getEmail());
+        AgentInfo userInfo = userManager.getAgent(user.getEmail());
         if (userInfo != null)
         {
             req.getSession().setAttribute("user", user);

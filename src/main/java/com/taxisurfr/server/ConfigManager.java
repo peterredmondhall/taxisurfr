@@ -1,8 +1,6 @@
 package com.taxisurfr.server;
 
 import com.googlecode.objectify.ObjectifyService;
-import com.taxisurfr.server.entity.Agent;
-import com.taxisurfr.server.entity.Booking;
 import com.taxisurfr.server.entity.Config;
 import com.taxisurfr.server.entity.Profil;
 

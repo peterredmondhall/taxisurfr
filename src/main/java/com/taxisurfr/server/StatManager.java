@@ -6,6 +6,7 @@ import com.taxisurfr.server.util.Mailer;
 import com.taxisurfr.shared.model.StatInfo;
 
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StatManager extends Manager
@@ -21,16 +22,23 @@ public class StatManager extends Manager
     public void updateSessionStat(StatInfo statInfo)
     {
         SessionStat sessionStat = ObjectifyService.ofy().load().type(SessionStat.class).filter("ip", statInfo.getIp()).first().now();
-        switch (statInfo.getUpdate())
+        if (sessionStat != null)
         {
-            case TYPE:
-                sessionStat.setType(statInfo.getDetail());
-                break;
-            case ROUTE:
-                sessionStat.setRoute(statInfo.getDetail());
-                break;
-        }
+            switch (statInfo.getUpdate())
+            {
+                case TYPE:
+                    sessionStat.setType(statInfo.getDetail());
+                    break;
+                case ROUTE:
+                    sessionStat.setRoute(statInfo.getDetail());
+                    break;
+            }
             ObjectifyService.ofy().save().entity(sessionStat).now();
+        }
+        else
+        {
+            logger.log(Level.SEVERE, "not session found for ip " + statInfo.getIp());
+        }
      }
 
     public void report()

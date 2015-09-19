@@ -1,29 +1,18 @@
 package com.taxisurfr.servlet;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.List;
-import java.util.logging.Logger;
+import com.google.common.collect.ImmutableList;
+import com.taxisurfr.server.*;
+import com.taxisurfr.server.entity.*;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.google.common.collect.ImmutableList;
-import com.taxisurfr.server.AgentManager;
-import com.taxisurfr.server.BookingServiceManager;
-import com.taxisurfr.server.ContractorManager;
-import com.taxisurfr.server.ImageManager;
-import com.taxisurfr.server.RatingManager;
-import com.taxisurfr.server.RouteServiceManager;
-import com.taxisurfr.server.entity.Agent;
-import com.taxisurfr.server.entity.ArugamImage;
-import com.taxisurfr.server.entity.Booking;
-import com.taxisurfr.server.entity.Contractor;
-import com.taxisurfr.server.entity.Rating;
-import com.taxisurfr.server.entity.Route;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.List;
+import java.util.logging.Logger;
 
 public class DumpServlet extends HttpServlet
 {

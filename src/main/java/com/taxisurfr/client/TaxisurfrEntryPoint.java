@@ -117,7 +117,15 @@ public class TaxisurfrEntryPoint implements EntryPoint
     {
         String protocol = Window.Location.getProtocol();
         String url = protocol + "//" + Window.Location.getHost() + "/stat?src=" + src + "&curr=" + currency;
-        RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+        final RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+
+        Wizard.STATINFO = new StatInfo();
+        Wizard.STATINFO.setIp("" + Math.random());
+
+        Wizard.BOOKINGINFO = new BookingInfo();
+        Wizard.BOOKINGINFO.setCurrency(Wizard.STATINFO.getCurrency());
+        Wizard.BOOKINGINFO.setRate(Wizard.STATINFO.getCurrencyRate());
+        logger.log(Level.INFO, "assuming currency=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
 
         try
         {
@@ -126,6 +134,7 @@ public class TaxisurfrEntryPoint implements EntryPoint
                 @Override
                 public void onError(Request request, Throwable exception)
                 {
+                    logger.log(Level.SEVERE, "attempt 1");
                 }
 
                 @Override
@@ -139,11 +148,47 @@ public class TaxisurfrEntryPoint implements EntryPoint
                         Wizard.BOOKINGINFO.setCurrency(Wizard.STATINFO.getCurrency());
                         Wizard.BOOKINGINFO.setRate(Wizard.STATINFO.getCurrencyRate());
                         logger.log(Level.INFO, "after getCurrencyRate currency=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
-                        wizard.setCurrencyResolved(true);
                     }
                     catch (Exception ex)
                     {
                         logger.log(Level.SEVERE, "onResponseReceived", ex);
+                        logger.log(Level.SEVERE, "response Text :" + response.getText());
+
+                        try
+                        {
+                            Request response2 = builder.sendRequest(null, new RequestCallback()
+                            {
+                                @Override
+                                public void onError(Request request, Throwable exception)
+                                {
+                                }
+
+                                @Override
+                                public void onResponseReceived(Request request, Response response)
+                                {
+                                    try
+                                    {
+                                        StatInfoMapper mapper = GWT.create(StatInfoMapper.class);
+                                        Wizard.STATINFO = mapper.read(response.getText());
+                                        Wizard.BOOKINGINFO = new BookingInfo();
+                                        Wizard.BOOKINGINFO.setCurrency(Wizard.STATINFO.getCurrency());
+                                        Wizard.BOOKINGINFO.setRate(Wizard.STATINFO.getCurrencyRate());
+                                        logger.log(Level.INFO, "after getCurrencyRate currency (attempt 2)=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        logger.log(Level.SEVERE, "onResponseReceived", ex);
+                                        logger.log(Level.SEVERE, "response Text :" + response.getText());
+                                    }
+
+                                }
+                            });
+                        }
+                        catch (Exception ex2)
+                        {
+                            logger.log(Level.SEVERE, "attempt 2");
+
+                        }
                     }
 
                 }

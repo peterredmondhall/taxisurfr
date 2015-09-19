@@ -10,7 +10,7 @@
 
     <properties>
         <app.id>taxigangsurf</app.id>
-        <app.version>40</app.version>
+        <app.version>44</app.version>
         <!--<app.id>gobygang</app.id>-->
         <!--<app.version>1</app.version>-->
         <appengine.version>1.9.26</appengine.version>
@@ -248,7 +248,19 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-
+            <plugin>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.6.1</version>
+                <configuration>
+                    <filesets>
+                        <fileset>
+                            <directory>src/main/webapp/taxisurfr</directory>
+                            <directory>src/main/webapp/taxisurfr_dashboard</directory>
+                            <followSymlinks>false</followSymlinks>
+                        </fileset>
+                    </filesets>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
