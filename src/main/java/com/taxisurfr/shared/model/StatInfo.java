@@ -10,6 +10,7 @@ public class StatInfo extends Info
     private Date time;
     private Currency currency = Currency.USD;
     private Float currencyRate = 1F;
+    private String routeKey;
 
     public void setCurrency(Currency currency)
     {
@@ -49,6 +50,16 @@ public class StatInfo extends Info
     public void setReferer(String referrer)
     {
         this.referer = referer;
+    }
+
+    public String getRouteKey()
+    {
+        return routeKey;
+    }
+
+    public void setRouteKey(String routeKey)
+    {
+        this.routeKey = routeKey;
     }
 
     public enum Update

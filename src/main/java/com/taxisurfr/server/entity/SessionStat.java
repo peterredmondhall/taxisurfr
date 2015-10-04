@@ -30,6 +30,7 @@ public class SessionStat extends ArugamEntity<StatInfo>
     Currency currency;
     Float currencyRate;
     String referer;
+    String routeKey;
     Date time;
 
     @Index
@@ -63,6 +64,7 @@ public class SessionStat extends ArugamEntity<StatInfo>
     {
         SessionStat stat = new SessionStat();
         stat.referer = statInfo.getReferer();
+        stat.routeKey = statInfo.getRouteKey();
         stat.time = statInfo.getTime();
         stat.setCountry(statInfo.getCountry());
         stat.setType(statInfo.getDetail());
@@ -88,6 +90,7 @@ public class SessionStat extends ArugamEntity<StatInfo>
     {
         StatInfo statInfo = new StatInfo();
         statInfo.setReferer(referer);
+        statInfo.setRouteKey(routeKey);
         statInfo.setTime(time);
         statInfo.setCountry(country);
         statInfo.setSrc(src);

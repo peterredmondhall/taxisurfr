@@ -7,13 +7,13 @@ import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.CurrencyManager;
 import com.taxisurfr.server.StatManager;
 import com.taxisurfr.shared.Currency;
+import com.taxisurfr.shared.CurrencyRequest;
 import com.taxisurfr.shared.model.StatInfo;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -54,9 +54,10 @@ public class StatServlet extends HttpServlet
 
     StatManager statManager = new StatManager();
     CurrencyManager currencyManager = new CurrencyManager();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
+    public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException
     {
         ObjectifyService.begin();
@@ -64,7 +65,6 @@ public class StatServlet extends HttpServlet
         String cityLatLong = req.getHeader("X-AppEngine-CityLatLong");
         String region = req.getHeader("X-AppEngine-Region");
         String city = req.getHeader("X-AppEngine-City");
-        String src = req.getParameter("src");
         if (country == null || country.trim().length() == 0)
         {
             country = "XXX";
@@ -75,16 +75,21 @@ public class StatServlet extends HttpServlet
         log.info("city:" + city);
         final String ip = req.getRemoteAddr();
         final String referrer = req.getRequestURL().toString();
+
+        CurrencyRequest currencyRequest = mapper.readValue(req.getInputStream(), CurrencyRequest.class);
+
         StatInfo statInfo = new StatInfo();
         statInfo.setReferer(referrer);
         statInfo.setTime(new Date());
         statInfo.setDetail("country");
-        statInfo.setSrc(src);
+        statInfo.setSrc(currencyRequest.getSrc());
         statInfo.setCountry(country + ":" + city);
         statInfo.setIp(ip);
 
-        PrintWriter writer = resp.getWriter();
-        String currency = req.getParameter("curr");
+        // Deserialize the request
+
+        String currency = currencyRequest.getCurrency();
+
         if (Strings.isNullOrEmpty(currency) || currency.equals("null"))
         {
             currency = currencyMap.get(country) != null ? currencyMap.get(country).name() : "USD";
@@ -97,11 +102,8 @@ public class StatServlet extends HttpServlet
         log.info("currency:" + curr);
         statInfo = statManager.createSessionStat(statInfo);
 
-        ObjectMapper mapper = new ObjectMapper();
-        String serialStatInfo = mapper.writeValueAsString(statInfo);
-
-        writer.print(serialStatInfo);
-        writer.close();
+        // Serialize the response into the servlet output
+        mapper.writeValue(resp.getOutputStream(), statInfo);
 
     }
 

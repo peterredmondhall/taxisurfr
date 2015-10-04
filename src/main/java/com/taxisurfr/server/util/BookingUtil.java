@@ -1,5 +1,12 @@
 package com.taxisurfr.server.util;
 
+import com.taxisurfr.server.entity.Profil;
+import com.taxisurfr.shared.model.BookingInfo;
+import com.taxisurfr.shared.model.RouteInfo;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -7,17 +14,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.taxisurfr.server.entity.Profil;
-import com.taxisurfr.shared.model.RouteInfo;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
-
-import com.taxisurfr.shared.model.BookingInfo;
-
 public class BookingUtil
 {
-    // FIXME
+    private static final String ROUTE = "Route:";
     private static final String DATE = "Date:";
     private static final String FLIGHTNO = "Flight No:";
     private static final String HOTEL = "Hotel:";
@@ -42,6 +41,7 @@ public class BookingUtil
     {
         List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
 
+        list.add(Pair.of(ROUTE, bookingInfo.getRouteInfo().getKey("")));
         list.add(Pair.of(DATE, sdf.print(new DateTime(bookingInfo.getDate()))));
         RouteInfo.PickupType pickupType = bookingInfo.getRouteInfo().getPickupType();
         list.add(Pair.of(pickupType.getLocationType(), bookingInfo.getFlightNo()));

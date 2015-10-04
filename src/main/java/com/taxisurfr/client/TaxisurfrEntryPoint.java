@@ -1,6 +1,8 @@
 package com.taxisurfr.client;
 
 import com.github.nmorel.gwtjackson.client.ObjectMapper;
+import com.github.nmorel.gwtjackson.client.ObjectReader;
+import com.github.nmorel.gwtjackson.client.ObjectWriter;
 import com.google.common.collect.ImmutableList;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -15,6 +17,7 @@ import com.taxisurfr.client.resources.ClientMessages;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.client.service.BookingServiceAsync;
 import com.taxisurfr.client.steps.*;
+import com.taxisurfr.shared.CurrencyRequest;
 import com.taxisurfr.shared.model.*;
 
 import java.util.List;
@@ -69,7 +72,7 @@ public class TaxisurfrEntryPoint implements EntryPoint
 
         }
         continueLoad();
-        collectStats(Window.Location.getParameter("src"), Window.Location.getParameter("curr"));
+        collectStats(Window.Location.getParameter("src"), Window.Location.getParameter("curr"), Window.Location.getParameter("route"));
 
     }
 
@@ -108,94 +111,68 @@ public class TaxisurfrEntryPoint implements EntryPoint
         {
             List<WizardStep> l = ImmutableList.of(transportStep, shareStep, contactStep, summaryStep, creditCardStep, confirmationStep);
             completeSetup(transportStep, l);
-            displayRoute(transportStep, routeId);
         }
     }
-    public static interface StatInfoMapper extends ObjectMapper<StatInfo>
-    {}
-    private void collectStats(String src, String currency)
+
+    public static void sendStat(String s, StatInfo.Update type)
     {
-        String protocol = Window.Location.getProtocol();
-        String url = protocol + "//" + Window.Location.getHost() + "/stat?src=" + src + "&curr=" + currency;
-        final RequestBuilder builder = new RequestBuilder(RequestBuilder.GET, url);
+        //FIXME
+    }
 
-        Wizard.STATINFO = new StatInfo();
-        Wizard.STATINFO.setIp("" + Math.random());
+    public static interface StatInfoMapper extends ObjectMapper<StatInfo>
+    {
+    }
 
+    public static interface CurrencyRequestWriter extends ObjectWriter<CurrencyRequest>
+    {
+    }
+
+    public static interface CurrencyResponseReader extends ObjectReader<StatInfo>
+    {
+    }
+
+    private static final CurrencyRequestWriter GREETING_REQUEST_WRITER = GWT.create(CurrencyRequestWriter.class);
+
+    private static final CurrencyResponseReader GREETING_RESPONSE_READER = GWT.create(CurrencyResponseReader.class);
+
+    private void collectStats(String src, String currency, final String routeId)
+    {
         Wizard.BOOKINGINFO = new BookingInfo();
-        Wizard.BOOKINGINFO.setCurrency(Wizard.STATINFO.getCurrency());
-        Wizard.BOOKINGINFO.setRate(Wizard.STATINFO.getCurrencyRate());
+        Wizard.BOOKINGINFO.setCurrency(Wizard.getStatInfo().getCurrency());
+        Wizard.BOOKINGINFO.setRate(Wizard.getStatInfo().getCurrencyRate());
         logger.log(Level.INFO, "assuming currency=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
 
         try
-        {
-            Request response = builder.sendRequest(null, new RequestCallback()
-            {
-                @Override
-                public void onError(Request request, Throwable exception)
-                {
-                    logger.log(Level.SEVERE, "attempt 1");
-                }
 
+        {
+            String protocol = Window.Location.getProtocol();
+            String url = protocol + "//" + Window.Location.getHost() + "/stat";
+            CurrencyRequest currencyRequest = new CurrencyRequest(src, currency);
+            new RequestBuilder(RequestBuilder.POST, url).sendRequest(GREETING_REQUEST_WRITER
+                    .write(currencyRequest), new RequestCallback()
+            {
                 @Override
                 public void onResponseReceived(Request request, Response response)
                 {
-                    try
-                    {
-                        StatInfoMapper mapper = GWT.create(StatInfoMapper.class);
-                        Wizard.STATINFO = mapper.read(response.getText());
-                        Wizard.BOOKINGINFO = new BookingInfo();
-                        Wizard.BOOKINGINFO.setCurrency(Wizard.STATINFO.getCurrency());
-                        Wizard.BOOKINGINFO.setRate(Wizard.STATINFO.getCurrencyRate());
-                        logger.log(Level.INFO, "after getCurrencyRate currency=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.log(Level.SEVERE, "onResponseReceived", ex);
-                        logger.log(Level.SEVERE, "response Text :" + response.getText());
+                    Wizard.setStatInfo(GREETING_RESPONSE_READER.read(response.getText()));
+                    Wizard.BOOKINGINFO = new BookingInfo();
+                    Wizard.BOOKINGINFO.setCurrency(Wizard.getStatInfo().getCurrency());
+                    Wizard.BOOKINGINFO.setRate(Wizard.getStatInfo().getCurrencyRate());
+                    logger.log(Level.INFO, "after getCurrencyRate currency (attempt 1)=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
+                    displayRoute(transportStep, routeId);
+                }
 
-                        try
-                        {
-                            Request response2 = builder.sendRequest(null, new RequestCallback()
-                            {
-                                @Override
-                                public void onError(Request request, Throwable exception)
-                                {
-                                }
-
-                                @Override
-                                public void onResponseReceived(Request request, Response response)
-                                {
-                                    try
-                                    {
-                                        StatInfoMapper mapper = GWT.create(StatInfoMapper.class);
-                                        Wizard.STATINFO = mapper.read(response.getText());
-                                        Wizard.BOOKINGINFO = new BookingInfo();
-                                        Wizard.BOOKINGINFO.setCurrency(Wizard.STATINFO.getCurrency());
-                                        Wizard.BOOKINGINFO.setRate(Wizard.STATINFO.getCurrencyRate());
-                                        logger.log(Level.INFO, "after getCurrencyRate currency (attempt 2)=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        logger.log(Level.SEVERE, "onResponseReceived", ex);
-                                        logger.log(Level.SEVERE, "response Text :" + response.getText());
-                                    }
-
-                                }
-                            });
-                        }
-                        catch (Exception ex2)
-                        {
-                            logger.log(Level.SEVERE, "attempt 2");
-
-                        }
-                    }
-
+                @Override
+                public void onError(Request request, Throwable throwable)
+                {
+                    logger.log(Level.SEVERE, "attempt 1");
                 }
             });
         }
+
         catch (RequestException e)
         {
+            logger.log(Level.SEVERE, e.getMessage());
         }
 
     }
@@ -233,8 +210,8 @@ public class TaxisurfrEntryPoint implements EntryPoint
         {
             wizard.add(step);
         }
-//        wizard.setHeight(height);
-//        wizard.setWidth(width);
+        //        wizard.setHeight(height);
+        //        wizard.setWidth(width);
 
         wizard.init();
         RootPanel.get().add(wizard);
@@ -258,31 +235,13 @@ public class TaxisurfrEntryPoint implements EntryPoint
 
     // private List<BookingInfo> sharers;
     public static native String getUserAgent() /*-{
-		return navigator.userAgent.toLowerCase();
+        return navigator.userAgent.toLowerCase();
     }-*/;
 
-    public static void sendStat(String detail, StatInfo.Update update)
+    private void displayRoute(final TransportStep transportStep, final String routeId)
     {
-        Wizard.STATINFO.setUpdate(update);
-        SERVICE.sendStat(Wizard.STATINFO, new AsyncCallback<Void>()
-        {
-
-            @Override
-            public void onSuccess(Void profil)
-            {
-            }
-
-            @Override
-            public void onFailure(Throwable caught)
-            {
-            }
-        });
-
-    }
-
-    private void displayRoute(final TransportStep transportStep, String routeId)
-    {
-        if (routeId == null)
+        logger.info("displayRoute: no route:" + routeId);
+        if (routeId == null || "null".equals(routeId))
         {
             return;
         }
@@ -296,17 +255,20 @@ public class TaxisurfrEntryPoint implements EntryPoint
                 public void onSuccess(RouteInfo routeInfo)
                 {
                     Wizard.ROUTEINFO = routeInfo;
-                    transportStep.displayRoute();
+                    logger.info("display route:" + Wizard.ROUTEINFO.getKey(""));
+                    transportStep.displayRoute(routeInfo.getKey(""));
                 }
 
                 @Override
                 public void onFailure(Throwable caught)
                 {
+                    logger.log(Level.SEVERE, " couldnt get route with id" + routeId);
                 }
             });
         }
         catch (Exception ex)
         {
+            logger.log(Level.SEVERE, " couldnt get route with id" + routeId);
 
         }
     }

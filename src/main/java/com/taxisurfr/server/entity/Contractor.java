@@ -1,16 +1,13 @@
 package com.taxisurfr.server.entity;
 
-import static com.google.common.collect.Lists.newArrayList;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
+import com.taxisurfr.shared.model.ContractorInfo;
 
 import java.util.List;
 
-import com.google.appengine.api.datastore.Key;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-
-import com.google.appengine.api.datastore.Key;
-import com.googlecode.objectify.annotation.Index;
-import com.taxisurfr.shared.model.ContractorInfo;
+import static com.google.common.collect.Lists.newArrayList;
 
 @Entity
 public class Contractor extends ArugamEntity<ContractorInfo>
@@ -22,6 +19,7 @@ public class Contractor extends ArugamEntity<ContractorInfo>
 
     private String name;
     private String email;
+    private Long mobile;
 
     public String getEmail()
     {
@@ -55,6 +53,7 @@ public class Contractor extends ArugamEntity<ContractorInfo>
         contractor.setAgentId(contractorInfo.getAgentId());
         contractor.setAddress(contractorInfo.getAddress());
         contractor.setEmail(contractorInfo.getEmail());
+        contractor.setMobile(contractorInfo.getMobile());
         return contractor;
     }
 
@@ -86,6 +85,7 @@ public class Contractor extends ArugamEntity<ContractorInfo>
         contractorInfo.setName(name);
         contractorInfo.setAgentId(agentId);
         contractorInfo.setEmail(email);
+        contractorInfo.setMobile(mobile);
         List<String> addressList = newArrayList();
         contractorInfo.setAddress(addressList);
         if (address != null)
@@ -95,4 +95,8 @@ public class Contractor extends ArugamEntity<ContractorInfo>
         return contractorInfo;
     }
 
+    public void setMobile(Long mobile)
+    {
+        this.mobile = mobile;
+    }
 }

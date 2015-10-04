@@ -26,7 +26,6 @@ import com.taxisurfr.shared.OrderType;
 import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.RatingInfo;
 import com.taxisurfr.shared.model.RouteInfo;
-import com.taxisurfr.shared.model.StatInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -185,7 +184,7 @@ public class TransportStepUi extends Composite
 
                 Wizard.ROUTEINFO = routeInfo;
                 logger.log(Level.INFO, "start:" + Wizard.ROUTEINFO.getStart());
-                displayRoute(/* suggestBox, */);
+                displayRoute(routeInfo.getKey(""));
             }
 
         };
@@ -201,19 +200,13 @@ public class TransportStepUi extends Composite
                 {
                     case 0:
                         routes = Lists.<RouteInfo>newArrayList();
-                        loadRoutes();
+                        loadRoutes(routes);
+                        break;
                     case 1:
                     case 2:
+                        break;
                     case 3:
                         fetchRoutes(suggestBox.getText());
-                        //                        Timer t = new Timer()
-                        //                        {
-                        //                            public void run()
-                        //                            {
-                        //                                fetchRoutes(suggestBox.getText());
-                        //                            }
-                        //                        };
-                        //                        t.schedule(100);
                         break;
                     default:
                         List<RouteInfo> list = Lists.newArrayList();
@@ -268,11 +261,6 @@ public class TransportStepUi extends Composite
                 });
             }
         });
-    }
-
-    private void loadRoutes()
-    {
-        loadRoutes(routes);
     }
 
     private void loadRoutes(List<RouteInfo> list)
@@ -345,20 +333,21 @@ public class TransportStepUi extends Composite
 
     }
 
-    public void displayRoute()
+    public void displayRoute(String routeKey)
     {
-        continueLoading();
-
-    }
-
-    private void continueLoading()
-    {
-        logger.log(Level.INFO, "continueLoading:");
+        logger.log(Level.INFO, "displayRoute:" + routeKey);
+        Wizard.getStatInfo().setRouteKey(routeKey);
+        logger.log(Level.INFO, "displayRoute1:");
+        logger.log(Level.INFO, "displayRoute11:" + BOOKINGINFO.getCurrency());
+        logger.log(Level.INFO, "displayRoute12:" + BOOKINGINFO.getRate());
 
         BOOKINGINFO.setPaidPrice(CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, BOOKINGINFO.getCurrency(), BOOKINGINFO.getRate()));
+        logger.log(Level.INFO, "displayRoute2:");
 
         panelMotivation.setVisible(false);
         RouteInfo routeInfo = Wizard.ROUTEINFO;
+        logger.log(Level.INFO, "displayRoute:" + Wizard.BOOKINGINFO.getCurrency() + " " + Wizard.BOOKINGINFO.getRate());
+
         labelRouteName.setText(routeInfo.getKey(CurrencyHelper.getPrice(routeInfo, Wizard.BOOKINGINFO.getCurrency(), Wizard.BOOKINGINFO.getRate())));
         imageVehicle.setUrl("/imageservice?image=" + routeInfo.getImage());
         panelDescription.clear();
@@ -397,7 +386,6 @@ public class TransportStepUi extends Composite
             {
             }
         });
-        TaxisurfrEntryPoint.sendStat(routeInfo.getKey(""), StatInfo.Update.ROUTE);
     }
 
     private void setSuggestBoxWidth(SuggestBox suggestBox)

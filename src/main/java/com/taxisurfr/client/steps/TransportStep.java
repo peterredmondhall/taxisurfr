@@ -7,7 +7,6 @@ import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.client.core.WizardStep;
 import com.taxisurfr.client.steps.ui.transport.TransportStepMobileUi;
 import com.taxisurfr.client.steps.ui.transport.TransportStepUi;
-import com.taxisurfr.shared.model.StatInfo;
 
 public class TransportStep implements WizardStep
 {
@@ -46,7 +45,6 @@ public class TransportStep implements WizardStep
     @Override
     public Boolean onNext()
     {
-        TaxisurfrEntryPoint.sendStat("step:Transport", StatInfo.Update.TYPE);
         return true;
     }
 
@@ -68,8 +66,8 @@ public class TransportStep implements WizardStep
         ui.show(visible, prev);
     }
 
-    public void displayRoute()
+    public void displayRoute(String key)
     {
-        ui.displayRoute();
+        ui.displayRoute(key);
     }
 }

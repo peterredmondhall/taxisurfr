@@ -4,6 +4,16 @@ import java.util.List;
 
 public class ContractorInfo extends Info
 {
+    public Long getMobile()
+    {
+        return mobile;
+    }
+
+    public void setMobile(Long mobile)
+    {
+        this.mobile = mobile;
+    }
+
     public enum SaveMode
     {
         UPDATE,
@@ -12,6 +22,7 @@ public class ContractorInfo extends Info
 
     private String name;
     private String email;
+    private Long mobile;
 
     private List<String> address;
 

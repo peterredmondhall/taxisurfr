@@ -259,12 +259,6 @@ public class BookingServiceManager extends Manager
         ArchivedBooking achivedBooking = booking.getArchivedBooking();
         ofy().save().entity(achivedBooking).now();
         ofy().delete().entity(booking).now();
-        //        em.getTransaction().begin();
-        //        em.persist(achivedBooking);
-        //        em.getTransaction().commit();
-        //        em.getTransaction().begin();
-        //        em.remove(booking);
-        //        em.getTransaction().commit();
     }
 
     public void cancel(BookingInfo bookingInfo)
@@ -273,10 +267,6 @@ public class BookingServiceManager extends Manager
 
         booking.setStatus(OrderStatus.CANCELED);
         ofy().save().entity(booking).now();
-        //        em.getTransaction().begin();
-        //        em.persist(booking);
-        //        em.getTransaction().commit();
-        //        em.detach(booking);
     }
 
     public ContractorInfo getContractor(BookingInfo bookingInfo)
@@ -293,21 +283,6 @@ public class BookingServiceManager extends Manager
     public AgentInfo getAgent(ContractorInfo contractorInfo)
     {
         return ofy().load().type(Agent.class).id(contractorInfo.getAgentId()).now().getInfo();
-
-        //        try
-        //        {
-        //            EntityManager em = getEntityManager();
-        //            Agent agent = em.find(Agent.class, contractorInfo.getAgentId());
-        //            if (agent != null)
-        //            {
-        //                return agent.getInfo();
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            logger.severe(ex.getMessage());
-        //        }
-        //        return null;
     }
 
     public AgentInfo createAgentWithRoutes(String agentEmail)

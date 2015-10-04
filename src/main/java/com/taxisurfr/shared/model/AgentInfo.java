@@ -6,6 +6,7 @@ public class AgentInfo extends Info
     private static final long serialVersionUID = 1L;
 
     private String email;
+    private Long mobile;
     private boolean admin;
 
     public boolean isAdmin()
@@ -28,4 +29,13 @@ public class AgentInfo extends Info
         this.email = email;
     }
 
+    public Long getMobile()
+    {
+        return mobile;
+    }
+
+    public void setMobile(Long mobile)
+    {
+        this.mobile = mobile;
+    }
 }

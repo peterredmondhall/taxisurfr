@@ -19,6 +19,7 @@ public class ConfigManager extends Manager
         profil.setStripePublishable("pk_test_rcKuNpP9OpTri7twmZ77UOI5");
         profil.setStripeSecret("sk_test_TCIbuNPlBRe4VowPhqekTO1L");
         profil.setName("test");
+        profil.setMonitorMobile(491709025959L);
         Config config = new Config();
         config.setProfil("test");
         ofy().save().entity(profil).now();

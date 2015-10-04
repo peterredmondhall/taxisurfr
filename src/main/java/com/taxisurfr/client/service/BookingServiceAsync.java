@@ -24,7 +24,6 @@ public interface BookingServiceAsync
     // void sendShareAccepted(List<BookingInfo> bookingInfo, AsyncCallback<BookingInfo> callback);
 
     void resetRoutes(AsyncCallback<Void> callback);
-
     void initTestRoutes(AsyncCallback<Void> callback);
 
     void getRoutes(AgentInfo userInfo, AsyncCallback<List<RouteInfo>> callback);
@@ -73,5 +72,7 @@ public interface BookingServiceAsync
     void getFinances(AgentInfo agentInfo, AsyncCallback<List<FinanceInfo>> asyncCallback);
 
     void savePayment(FinanceInfo financeInfo, AsyncCallback<List<FinanceInfo>> asyncCallback);
+
+    void getMailingList(AsyncCallback<String> asyncCallback);
 
 }

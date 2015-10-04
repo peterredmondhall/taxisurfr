@@ -26,7 +26,6 @@ public class Wizard extends Composite
     }
 
     public static BookingInfo BOOKINGINFO;
-    public static StatInfo STATINFO;
     public static List<BookingInfo> EXISTING_BOOKINGS_ON_ROUTE;
     public static RouteInfo ROUTEINFO;
     public static ProfilInfo PROFILINFO;
@@ -39,7 +38,21 @@ public class Wizard extends Composite
     private final Map<WizardStep, HTML> headers = Maps.newHashMap();
     private int currentstep;
     private WizardStep initstep;
+    private static StatInfo statInfo;
 
+    public static StatInfo getStatInfo()
+    {
+        if (statInfo == null)
+        {
+            statInfo = new StatInfo();
+        }
+        return statInfo;
+    }
+
+    public static void setStatInfo(StatInfo s)
+    {
+        statInfo = s;
+    }
     @UiField
     HTMLPanel mainPanel;
     @UiField

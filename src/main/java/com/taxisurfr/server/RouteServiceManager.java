@@ -125,21 +125,21 @@ public class RouteServiceManager extends Manager
         logger.info("query routes" + query);
         query = query.toUpperCase();
         List<RouteInfo> routes = new ArrayList<>();
-        if (routeInfoCache == null)
-        {
-            routeInfoCache = ObjectifyService.ofy().load().type(Route.class).filter("inactive !=", true).list();
+        //        if (routeInfoCache == null)
+        //        {
+        routeInfoCache = ObjectifyService.ofy().load().type(Route.class).filter("inactive =", false).list();
             logger.info("get all routes returned no. of routes" + routeInfoCache.size());
-        }
-        else
-        {
-            logger.info("routes from cache no. of routes" + routeInfoCache.size());
-        }
+        //        }
+        //        else
+        //        {
+        //            logger.info("routes from cache no. of routes" + routeInfoCache.size());
+        //        }
         List<Route> resultList = routeInfoCache;
 
         for (Route route : resultList)
         {
             RouteInfo routeInfo = route.getInfo();
-            if (!routeInfo.isInactive() && routeInfo.getStart().toUpperCase().startsWith(query))
+            if (routeInfo.getStart().toUpperCase().startsWith(query))
             {
                 routes.add(routeInfo);
             }
@@ -161,40 +161,46 @@ public class RouteServiceManager extends Manager
 
     public void loadall()
     {
-        Long contractorid = null;
-        ContractorManager manager = new ContractorManager();
-        for (Object obj : manager.getAll(Contractor.class))
+        for (int i = 0; i < 10; i++)
         {
-            Contractor contractor = (Contractor) obj;
-            if ("dispatch@taxisurfr.com".equals(contractor.getEmail()))
-            {
-                contractorid = contractor.id;
-                break;
-            }
-        }
-        logger.info("contractor id" + contractorid);
-        if (contractorid == null)
-        {
-            throw new RuntimeException("");
-        }
+            List<Route> list = ObjectifyService.ofy().load().type(Route.class).list();
+            logger.info("loadall " + i + "  " + list.size());
 
-        List<Route> list = ObjectifyService.ofy().load().type(Route.class).list();
-        for (Route route : list)
-        {
-            if (route.getInactive())
-            {
-                route.setInactive(false);
-                route.setContractorId(contractorid);
-                ObjectifyService.ofy().save().entity(route).now();
-                logger.info("route activated" + route.getStart() + " " + route.getEnd());
-            }
-            else
-            {
-                route.setInactive(false);
-                ObjectifyService.ofy().save().entity(route).now();
-            }
         }
-        logger.info("active routes" + list.size());
+        //        Long contractorid = null;
+        //        ContractorManager manager = new ContractorManager();
+        //        for (Object obj : manager.getAll(Contractor.class))
+        //        {
+        //            Contractor contractor = (Contractor) obj;
+        //            if ("dispatch@taxisurfr.com".equals(contractor.getEmail()))
+        //            {
+        //                contractorid = contractor.id;
+        //                break;
+        //            }
+        //        }
+        //        logger.info("contractor id" + contractorid);
+        //        if (contractorid == null)
+        //        {
+        //            throw new RuntimeException("");
+        //        }
+        //
+        //        List<Route> list = ObjectifyService.ofy().load().type(Route.class).list();
+        //        for (Route route : list)
+        //        {
+        //            if (route.getInactive())
+        //            {
+        //                route.setInactive(false);
+        //                route.setContractorId(contractorid);
+        //                ObjectifyService.ofy().save().entity(route).now();
+        //                logger.info("route activated" + route.getStart() + " " + route.getEnd());
+        //            }
+        //            else
+        //            {
+        //                route.setInactive(false);
+        //                ObjectifyService.ofy().save().entity(route).now();
+        //            }
+        //        }
+        //        logger.info("active routes" + list.size());
 
     }
 }

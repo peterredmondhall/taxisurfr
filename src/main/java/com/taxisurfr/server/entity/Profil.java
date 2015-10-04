@@ -17,13 +17,11 @@ public class Profil implements Serializable
 
     @Index
     private String name;
-    private String paypalURL;
-    private String paypalAccount;
-    private String paypalAT;
     private String monitorEmail;
-    private String contractorEmail;
+    private Long monitorMobile = 491709025959L;
     private String stripeSecret = "sk_test_TCIbuNPlBRe4VowPhqekTO1L";
     private String stripePublishable = "pk_test_rcKuNpP9OpTri7twmZ77UOI5";
+    private String smspassword;
 
     public String getStripeSecret()
     {
@@ -43,16 +41,6 @@ public class Profil implements Serializable
     public void setStripePublishable(String stripePublishable)
     {
         this.stripePublishable = stripePublishable;
-    }
-
-    public String getContractorEmail()
-    {
-        return contractorEmail;
-    }
-
-    public void setContractorEmail(String contractorEmail)
-    {
-        this.contractorEmail = contractorEmail;
     }
 
     private String taxisurfUrl;
@@ -79,36 +67,6 @@ public class Profil implements Serializable
         this.test = test;
     }
 
-    public String getPaypalURL()
-    {
-        return paypalURL;
-    }
-
-    public void setPaypalURL(String paypalURL)
-    {
-        this.paypalURL = paypalURL;
-    }
-
-    public String getPaypalAccount()
-    {
-        return paypalAccount;
-    }
-
-    public void setPaypalAccount(String paypalAccount)
-    {
-        this.paypalAccount = paypalAccount;
-    }
-
-    public String getPaypalAT()
-    {
-        return paypalAT;
-    }
-
-    public void setPaypalAT(String paypalAT)
-    {
-        this.paypalAT = paypalAT;
-    }
-
     public String getMonitorEmail()
     {
         return monitorEmail;
@@ -122,8 +80,6 @@ public class Profil implements Serializable
     public ProfilInfo getInfo()
     {
         ProfilInfo info = new ProfilInfo();
-        info.setPaypalAccount(paypalAccount);
-        info.setPaypalUrl(paypalURL);
         info.setStripePublishable(stripePublishable);
         info.setName(name);
         return info;
@@ -144,4 +100,23 @@ public class Profil implements Serializable
         this.taxisurfUrl = taxisurfUrl;
     }
 
+    public String getSmspassword()
+    {
+        return smspassword;
+    }
+
+    public void setSmspassword(String smspassword)
+    {
+        this.smspassword = smspassword;
+    }
+
+    public Long getMonitorMobile()
+    {
+        return monitorMobile;
+    }
+
+    public void setMonitorMobile(long monitorMobile)
+    {
+        this.monitorMobile = monitorMobile;
+    }
 }

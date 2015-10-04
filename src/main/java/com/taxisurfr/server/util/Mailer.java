@@ -68,22 +68,26 @@ public class Mailer
 
     public static void sendConfirmation(BookingInfo bookingInfo, Profil profil, AgentInfo agentInfo, ContractorInfo contractorInfo)
     {
+        SMSUtil smsUtil = new SMSUtil();
 
         String html = "error";
         html = BookingUtil.toConfirmationEmailHtml(bookingInfo, getFile(CONFIRMATION), profil);
-        html = html.replace("INSERT_ORDERFORM", profil.getTaxisurfUrl() + "/orderform?order=" + bookingInfo.getId());
         html = html.replace("__CONFIMATION__", "Booking Confirmation");
 
         byte[] pdfData = new PdfUtil().generateTaxiOrder("template/order.pdf", bookingInfo, agentInfo, contractorInfo);
         String email = bookingInfo.getEmail();
         send(email, html, pdfData, "customer");
         send(profil.getMonitorEmail(), html, pdfData, "monitor");
+        smsUtil.add(profil.getMonitorMobile());
         send(agentInfo.getEmail(), html, pdfData, "agent");
+        smsUtil.add(agentInfo.getMobile());
         if (contractorInfo != null)
         {
             send(contractorInfo.getEmail(), html, pdfData, "contractor");
+            smsUtil.add(contractorInfo.getMobile());
         }
-        emailit(pdfData, bookingInfo.getOrderRef());
+        smsUtil.send(bookingInfo, profil);
+        //emailit(pdfData, bookingInfo.getOrderRef());
     }
 
     private static void send(String toEmail, String htmlBody, byte[] pdfData, String role)
@@ -114,6 +118,15 @@ public class Mailer
                 }
 
                 // pdf
+                if (pdfData != null)
+                {
+                    DataSource dataSource = new ByteArrayDataSource(pdfData, "application/pdf");
+                    MimeBodyPart mbp = new MimeBodyPart();
+                    mbp.setFileName("ticket.pdf");
+                    mbp.setDataHandler(new DataHandler(dataSource));
+                    mp.addBodyPart(mbp);
+
+                }
                 msg.setContent(mp);
 
                 Transport.send(msg);

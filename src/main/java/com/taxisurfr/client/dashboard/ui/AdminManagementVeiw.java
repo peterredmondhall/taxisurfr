@@ -33,7 +33,8 @@ public class AdminManagementVeiw extends Composite
     {
     }
 
-    final ListBox agentListBox = new ListBox();;
+    final ListBox agentListBox = new ListBox();
+    ;
     private List<AgentInfo> listAgents;
 
     @UiField
@@ -44,6 +45,7 @@ public class AdminManagementVeiw extends Composite
     VerticalPanel layout;
     private Button uploadBtn;
     private Button routeResetBtn;
+    private Button getMailingListBtn;
 
     public AdminManagementVeiw()
     {
@@ -109,6 +111,7 @@ public class AdminManagementVeiw extends Composite
     {
         setUploadBtn();
         setRouteResetBtn();
+        setMailingListBtn();
     }
 
     private void setUploadBtn()
@@ -124,7 +127,6 @@ public class AdminManagementVeiw extends Composite
     private void setRouteResetBtn()
     {
         routeResetBtn = new Button();
-        routeResetBtn.setStyleName("btn btn-primary");
         routeResetBtn.setText("Reset Routes");
         routeResetBtn.getElement().getStyle().setFloat(Float.RIGHT);
         routeResetBtn.getElement().getStyle().setMargin(3, Unit.PX);
@@ -143,6 +145,36 @@ public class AdminManagementVeiw extends Composite
                     @Override public void onSuccess(Void aVoid)
                     {
 
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void setMailingListBtn()
+    {
+        getMailingListBtn = new Button();
+        getMailingListBtn.setText("Get Mailing List");
+        getMailingListBtn.getElement().getStyle().setFloat(Float.RIGHT);
+        getMailingListBtn.getElement().getStyle().setMargin(3, Unit.PX);
+        btnContainer.add(getMailingListBtn);
+        final TextBox textBox = new TextBox();
+        btnContainer.add(textBox);
+        getMailingListBtn.addClickHandler(new ClickHandler()
+        {
+            @Override public void onClick(ClickEvent clickEvent)
+            {
+                service.getMailingList(new AsyncCallback<String>()
+                {
+                    @Override public void onFailure(Throwable throwable)
+                    {
+
+                    }
+
+                    @Override public void onSuccess(String mailingList)
+                    {
+                        textBox.setText(mailingList);
                     }
                 });
             }

@@ -29,6 +29,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     private static final Logger logger = Logger.getLogger(BookingServiceImpl.class.getName());
 
     private final BookingServiceManager bookingServiceManager = new BookingServiceManager();
+    private final ArchivedBookingManager archivedBookingManager = new ArchivedBookingManager();
     private final RouteServiceManager routeServiceManager = new RouteServiceManager();
     private final AgentManager agentManager = new AgentManager();
     private final ContractorManager contractorManager = new ContractorManager();
@@ -296,5 +297,10 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     public List<FinanceInfo> savePayment(FinanceInfo financeInfo)
     {
         return financeManager.addTransfer(financeInfo);
+    }
+
+    @Override public String getMailingList()
+    {
+        return archivedBookingManager.getMailingList();
     }
 }

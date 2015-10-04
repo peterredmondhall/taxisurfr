@@ -1,5 +1,8 @@
 package com.taxisurfr.server;
 
+import com.taxisurfr.server.entity.Profil;
+import com.taxisurfr.shared.OrderStatus;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -11,9 +14,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
-
-import com.taxisurfr.server.entity.Profil;
-import com.taxisurfr.shared.OrderStatus;
 
 public class PaypalPaymentChecker
 {
@@ -32,7 +32,7 @@ public class PaypalPaymentChecker
         map = new HashMap<String, String>();
         map.put("cmd", CMD);
         map.put("tx", tx); // "6LH559390U430214T"
-        map.put("at", profil.getPaypalAT());
+        //map.put("at", profil.getPaypalAT());
     }
 
     public OrderStatus hasClientPaid()
@@ -44,7 +44,7 @@ public class PaypalPaymentChecker
         try
         {
             // create the HttpURLConnection
-            url = new URL(profil.getPaypalURL());
+            //url = new URL(profil.getPaypalURL());
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
             connection.setDoOutput(true);

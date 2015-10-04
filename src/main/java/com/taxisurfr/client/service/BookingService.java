@@ -70,4 +70,6 @@ public interface BookingService extends RemoteService
 
     List<FinanceInfo> savePayment(FinanceInfo financeInfo);
 
+    String getMailingList();
+
 }
