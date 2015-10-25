@@ -2,12 +2,14 @@ package com.taxisurfr.server;
 
 import com.google.common.base.Function;
 import com.google.common.base.Joiner;
+import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
 import com.google.common.collect.ImmutableList;
 import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.ArchivedBooking;
 
 import javax.annotation.Nullable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -35,10 +37,21 @@ public class ArchivedBookingManager extends Manager
         {
             @Nullable @Override public String apply(ArchivedBooking archivedBooking)
             {
-                return archivedBooking.getEmail() + "," + archivedBooking.getName();
+                String name = archivedBooking.getName();
+                Iterator<String> iterator = Splitter.on(" ").split(name).iterator();
+                String firstName = toUpper(iterator.next().toLowerCase());
+                String secondName = toUpper(iterator.next().toLowerCase());
+
+                return archivedBooking.getEmail() + "," + firstName + "," + secondName;
             }
         }).toList();
         return Joiner.on("\r\n").join(strings);
+    }
+
+    private String toUpper(String s)
+    {
+        char first = Character.toUpperCase(s.charAt(0));
+        return first + s.substring(1);
     }
 
 }

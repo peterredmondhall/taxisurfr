@@ -1,7 +1,5 @@
 package com.taxisurfr.client.steps;
 
-import java.util.logging.Logger;
-
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
@@ -14,6 +12,8 @@ import com.taxisurfr.client.steps.ui.contact.ContactStepUi;
 import com.taxisurfr.client.steps.ui.contact.ContactStepUi.ErrorMsg;
 import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.StatInfo;
+
+import java.util.logging.Logger;
 
 public class ContactStep implements WizardStep
 {
@@ -120,27 +120,27 @@ public class ContactStep implements WizardStep
             return false;
         }
 
-        Wizard.BOOKINGINFO.setDate(ui.getDate());
-        Wizard.BOOKINGINFO.setDateText(sdf.format(Wizard.BOOKINGINFO.getDate()));
+        Wizard.getBookingInfo().setDate(ui.getDate());
+        Wizard.getBookingInfo().setDateText(sdf.format(Wizard.getBookingInfo().getDate()));
 
-        Wizard.BOOKINGINFO.setLandingTime(ui.getArrivalTime());
-        Wizard.BOOKINGINFO.setName(ui.getFirstName() + "  " + ui.getLastName());
-        Wizard.BOOKINGINFO.setEmail(ui.getEmail());
+        Wizard.getBookingInfo().setLandingTime(ui.getArrivalTime());
+        Wizard.getBookingInfo().setName(ui.getFirstName() + "  " + ui.getLastName());
+        Wizard.getBookingInfo().setEmail(ui.getEmail());
 
-        Wizard.BOOKINGINFO.setFlightNo(ui.getFlightNo());
-        Wizard.BOOKINGINFO.setPax(Integer.parseInt(ui.getPax()));
-        Wizard.BOOKINGINFO.setSurfboards(Integer.parseInt(ui.getSurfboards()));
-        Wizard.BOOKINGINFO.setShareWanted(ui.getWantToShare());
-        Wizard.BOOKINGINFO.setRequirements(ui.getRequirements());
+        Wizard.getBookingInfo().setFlightNo(ui.getFlightNo());
+        Wizard.getBookingInfo().setPax(Integer.parseInt(ui.getPax()));
+        Wizard.getBookingInfo().setSurfboards(Integer.parseInt(ui.getSurfboards()));
+        Wizard.getBookingInfo().setShareWanted(ui.getWantToShare());
+        Wizard.getBookingInfo().setRequirements(ui.getRequirements());
 
-        Wizard.BOOKINGINFO.setRouteInfo(Wizard.ROUTEINFO);
-        Wizard.BOOKINGINFO.setRouteId(Wizard.ROUTEINFO.getId());
-        TaxisurfrEntryPoint.SERVICE.addBooking(Wizard.BOOKINGINFO, new AsyncCallback<BookingInfo>()
+        Wizard.getBookingInfo().setRouteInfo(Wizard.ROUTEINFO);
+        Wizard.getBookingInfo().setRouteId(Wizard.ROUTEINFO.getId());
+        TaxisurfrEntryPoint.SERVICE.addBooking(Wizard.getBookingInfo(), new AsyncCallback<BookingInfo>()
         {
             @Override
             public void onSuccess(BookingInfo result)
             {
-                Wizard.BOOKINGINFO.setId(result.getId());
+                Wizard.getBookingInfo().setId(result.getId());
             }
 
             @Override

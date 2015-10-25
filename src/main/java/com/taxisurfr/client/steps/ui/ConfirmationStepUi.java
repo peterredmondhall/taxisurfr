@@ -1,18 +1,11 @@
 package com.taxisurfr.client.steps.ui;
 
-import static com.taxisurfr.client.core.Wizard.BOOKINGINFO;
-
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Display;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Panel;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
+import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.shared.OrderStatus;
 import com.taxisurfr.shared.model.BookingInfo;
 
@@ -47,7 +40,7 @@ public class ConfirmationStepUi extends Composite
         mainPanel.setVisible(visible);
         mainPanel.getElement().getStyle().setDisplay(visible ? Display.BLOCK : Display.NONE);
         prev.setVisible(false);
-        setBookingInfo(BOOKINGINFO);
+        setBookingInfo(Wizard.getBookingInfo());
     }
 
     @Override

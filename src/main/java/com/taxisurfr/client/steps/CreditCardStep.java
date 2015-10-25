@@ -132,7 +132,7 @@ public class CreditCardStep implements WizardStep
             {
                 if (creditCardResponse.getId() != null)
                 {
-                    service.payWithStripe(creditCardResponse.getId(), Wizard.BOOKINGINFO, new AsyncCallback<BookingInfo>()
+                    service.payWithStripe(creditCardResponse.getId(), Wizard.getBookingInfo(), new AsyncCallback<BookingInfo>()
                     {
 
                         @Override
@@ -146,7 +146,7 @@ public class CreditCardStep implements WizardStep
                         {
                             if (bi.getStatus().equals(OrderStatus.PAID))
                             {
-                                Wizard.BOOKINGINFO.setStatus(bi.getStatus());
+                                Wizard.getBookingInfo().setStatus(bi.getStatus());
                                 wizard.onNextClick(null);
                             }
                             else

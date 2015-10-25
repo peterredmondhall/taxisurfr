@@ -58,8 +58,10 @@
 			<g:HorizontalPanel ui:field="dp">
 			</g:HorizontalPanel>
 			<g:HorizontalPanel>
+				<g:Image ui:field="imageSpinner" url="images/spinner.gif"
+						 width="24px" height="24px" visible="false"/>
 				<g:Image ui:field="imageSearch" url="images/search-512.png"
-					width="24px" height="24px" />
+						 width="24px" height="24px" visible="true"/>
 				<g:FlowPanel ui:field="routeSuggestionPanel" styleName="{style.selectContainerStyle}">
 				</g:FlowPanel>
 			</g:HorizontalPanel>

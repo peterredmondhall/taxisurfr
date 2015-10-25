@@ -48,9 +48,9 @@ public class SummaryStep implements WizardStep
     @Override
     public Boolean onNext()
     {
-        if (Wizard.BOOKINGINFO.getOrderType() == OrderType.SHARE)
+        if (Wizard.getBookingInfo().getOrderType() == OrderType.SHARE)
         {
-            service.sendShareRequest(Wizard.BOOKINGINFO, new AsyncCallback<BookingInfo>()
+            service.sendShareRequest(Wizard.getBookingInfo(), new AsyncCallback<BookingInfo>()
             {
 
                 @Override
@@ -62,7 +62,7 @@ public class SummaryStep implements WizardStep
                 @Override
                 public void onSuccess(BookingInfo bi)
                 {
-                    Wizard.BOOKINGINFO = bi;
+                    Wizard.setBookingInfo(bi);
                 }
             });
         }

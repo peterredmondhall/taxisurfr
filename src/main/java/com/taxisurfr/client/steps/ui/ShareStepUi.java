@@ -107,11 +107,11 @@ public class ShareStepUi extends Composite
                 {
                     BookingInfo bookingToShare = shareMap.get(selected.getId());
 
-                    Wizard.BOOKINGINFO.setDate(bookingToShare.getDate());
-                    Wizard.BOOKINGINFO.setFlightNo(bookingToShare.getFlightNo());
-                    Wizard.BOOKINGINFO.setLandingTime(bookingToShare.getLandingTime());
-                    Wizard.BOOKINGINFO.setOrderType(OrderType.SHARE);
-                    Wizard.BOOKINGINFO.setParentId(bookingToShare.getId());
+                    Wizard.getBookingInfo().setDate(bookingToShare.getDate());
+                    Wizard.getBookingInfo().setFlightNo(bookingToShare.getFlightNo());
+                    Wizard.getBookingInfo().setLandingTime(bookingToShare.getLandingTime());
+                    Wizard.getBookingInfo().setOrderType(OrderType.SHARE);
+                    Wizard.getBookingInfo().setParentId(bookingToShare.getId());
 
                     scrollPanel.remove(cellTable);
                     wizard.onNextClick(null);
@@ -134,7 +134,7 @@ public class ShareStepUi extends Composite
 
         prev.setEnabled(true);
         prev.setVisible(true);
-        Wizard.BOOKINGINFO.setOrderType(OrderType.BOOKING);
+        Wizard.getBookingInfo().setOrderType(OrderType.BOOKING);
 
         showShareNoShare();
     }

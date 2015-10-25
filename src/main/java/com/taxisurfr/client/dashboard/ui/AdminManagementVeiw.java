@@ -159,7 +159,7 @@ public class AdminManagementVeiw extends Composite
         getMailingListBtn.getElement().getStyle().setFloat(Float.RIGHT);
         getMailingListBtn.getElement().getStyle().setMargin(3, Unit.PX);
         btnContainer.add(getMailingListBtn);
-        final TextBox textBox = new TextBox();
+        final TextArea textBox = new TextArea();
         btnContainer.add(textBox);
         getMailingListBtn.addClickHandler(new ClickHandler()
         {

@@ -1,90 +1,93 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
+             xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:d="urn:import:com.google.gwt.user.datepicker.client">
 
-	<ui:with field='messages' type='com.taxisurfr.client.resources.ClientMessages' />
-	<ui:style>
-		.labelDiv {
-			display: inline;
-			float: left;
-			font-size: 14px;
-			margin-top: 2px;
-			text-align: right;
-			margin-right: 15px;
-			width: 300px;
-	}
-		.title { font-weight:bold; color: #62ba37; margin-bottom:
-			10px; font-size:
-			30px;}
+    <ui:with field='messages' type='com.taxisurfr.client.resources.ClientMessages'/>
+    <ui:style>
+        .labelDiv {
+            display: inline;
+            float: left;
+            font-size: 14px;
+            margin-top: 2px;
+            text-align: right;
+            margin-right: 15px;
+            width: 300px;
+        }
 
-	</ui:style>
+        .title {
+            font-weight: bold;
+            color: #62ba37;
+            margin-bottom: 10px;
+            font-size: 30px;
+        }
 
-	<g:HTMLPanel ui:field="mainPanel">
-	    <g:Label styleName="{style.title}"  ui:field="paymentExplination1"/>
-	    <g:Label ui:field="paymentExplination2"/>
-	    		<g:Grid>
-			<g:row>
-				<g:customCell styleName="{style.labelDiv}">
-					<g:Label>No. on credit card</g:Label>
-				</g:customCell>
-				<g:customCell>
-					<g:TextBox ui:field="ccNumber" />
-				</g:customCell>
-				<g:customCell styleName="optionalBarCellStyle">
-					<g:Label styleName="errMsg" ui:field="numberErrorMsg"></g:Label>
-				</g:customCell>
-			</g:row>
-			<g:row>
-				<g:customCell styleName="{style.labelDiv}">
-					<g:Label>Name on credit card</g:Label>
-				</g:customCell>
-				<g:customCell>
-					<g:TextBox ui:field="ccName" />
-				</g:customCell>
-				<g:customCell styleName="optionalBarCellStyle">
-					<g:Label styleName="errMsg" ui:field="nameErrorMsg"></g:Label>
-				</g:customCell>
-			</g:row>
-						<g:row>
-				<g:customCell styleName="{style.labelDiv}">
-					<g:Label>cvc</g:Label>
-				</g:customCell>
-				<g:customCell>
-					<g:TextBox ui:field="ccCvc" />
-				</g:customCell>
-				<g:customCell styleName="optionalBarCellStyle">
-					<g:Label styleName="errMsg" ui:field="cvcErrorMsg"></g:Label>
-				</g:customCell>
-			</g:row>
-			<g:row>
-				<g:customCell styleName="{style.labelDiv}">
-					<g:Label>Expiry</g:Label>
-				</g:customCell>
-				<g:customCell>
-					<g:HorizontalPanel>
-						<g:ListBox styleName="expiry" ui:field="ccExpiryMonth" />
-						<g:ListBox styleName="expiry" ui:field="ccExpiryYear" />
-					</g:HorizontalPanel>
-				</g:customCell>
-			</g:row>
-			<g:row>
-				<g:customCell styleName="{style.labelDiv}">
-					<g:Label></g:Label>
-				</g:customCell>
-				<g:customCell>
-					<g:Button ui:field="payWithCC" text="Pay now" styleName="btn btn-primary" />
-				</g:customCell>
-			</g:row>
-			<g:row>
-				<g:customCell styleName="{style.labelDiv}">
-					<g:Label></g:Label>
-				</g:customCell>
-				<g:customCell>
-					<g:FlowPanel ui:field="progressBarPanel"></g:FlowPanel>
-				</g:customCell>
-			</g:row>
-		</g:Grid>
-		<span id="siteseal"><script type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=tCKKSZGdkpZrvS45zG1s44renabnSnngwdbfHUTUiPN8lHwXEq1g3xWKgYsr"></script></span>
-	</g:HTMLPanel>
+    </ui:style>
+
+    <g:HTMLPanel ui:field="mainPanel">
+        <g:Label styleName="{style.title}" ui:field="paymentExplination1"/>
+        <g:Label ui:field="paymentExplination2"/>
+        <g:Grid>
+            <g:row>
+                <g:customCell styleName="{style.labelDiv}">
+                    <g:Label>No. on credit card</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:TextBox ui:field="ccNumber"/>
+                </g:customCell>
+                <g:customCell styleName="optionalBarCellStyle">
+                    <g:Label styleName="errMsg" ui:field="numberErrorMsg"></g:Label>
+                </g:customCell>
+            </g:row>
+            <g:row>
+                <g:customCell styleName="{style.labelDiv}">
+                    <g:Label>Name on credit card</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:TextBox ui:field="ccName"/>
+                </g:customCell>
+                <g:customCell styleName="optionalBarCellStyle">
+                    <g:Label styleName="errMsg" ui:field="nameErrorMsg"></g:Label>
+                </g:customCell>
+            </g:row>
+            <g:row>
+                <g:customCell styleName="{style.labelDiv}">
+                    <g:Label>cvc</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:TextBox ui:field="ccCvc"/>
+                </g:customCell>
+                <g:customCell styleName="optionalBarCellStyle">
+                    <g:Label styleName="errMsg" ui:field="cvcErrorMsg"></g:Label>
+                </g:customCell>
+            </g:row>
+            <g:row>
+                <g:customCell styleName="{style.labelDiv}">
+                    <g:Label>Expiry</g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:HorizontalPanel>
+                        <g:ListBox styleName="expiry" ui:field="ccExpiryMonth"/>
+                        <g:ListBox styleName="expiry" ui:field="ccExpiryYear"/>
+                    </g:HorizontalPanel>
+                </g:customCell>
+            </g:row>
+            <g:row>
+                <g:customCell styleName="{style.labelDiv}">
+                    <g:Label></g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:Button ui:field="payWithCC" text="Pay now" styleName="btn btn-primary"/>
+                </g:customCell>
+            </g:row>
+            <g:row>
+                <g:customCell styleName="{style.labelDiv}">
+                    <g:Label></g:Label>
+                </g:customCell>
+                <g:customCell>
+                    <g:FlowPanel ui:field="progressBarPanel"></g:FlowPanel>
+                </g:customCell>
+            </g:row>
+        </g:Grid>
+    </g:HTMLPanel>
 
 </ui:UiBinder> 

@@ -70,4 +70,9 @@ public class TransportStep implements WizardStep
     {
         ui.displayRoute(key);
     }
+
+    public void setLoaded()
+    {
+        ui.setLoaded(true);
+    }
 }

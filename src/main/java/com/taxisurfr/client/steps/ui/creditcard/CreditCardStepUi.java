@@ -185,7 +185,7 @@ public class CreditCardStepUi extends Composite
 
         previousButton.setEnabled(true);
 
-        payWithCC.setText("Pay " + CurrencyHelper.getPrice(Wizard.ROUTEINFO, Wizard.BOOKINGINFO.getCurrency(), Wizard.BOOKINGINFO.getRate()));
+        payWithCC.setText("Pay " + CurrencyHelper.getPrice(Wizard.ROUTEINFO, Wizard.getBookingInfo().getCurrency(), Wizard.getBookingInfo().getRate()));
     }
 
     @Override

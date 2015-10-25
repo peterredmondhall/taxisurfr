@@ -7,16 +7,9 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.Widget;
+import com.google.gwt.user.client.ui.*;
 import com.taxisurfr.client.core.Wizard;
 import com.taxisurfr.shared.CurrencyHelper;
-import com.taxisurfr.shared.OrderType;
-
-import static com.taxisurfr.shared.OrderType.BOOKING;
 
 public class SummaryStepUi extends Composite
 {
@@ -76,20 +69,20 @@ public class SummaryStepUi extends Composite
         mainPanel.setVisible(visible);
         mainPanel.getElement().getStyle().setDisplay(visible ? Display.BLOCK : Display.NONE);
 
-        labelDate.setText(sdf.format(Wizard.BOOKINGINFO.getDate()));
-        labelFlightNo.setText(Wizard.BOOKINGINFO.getFlightNo());
-        labelLandingTime.setText(Wizard.BOOKINGINFO.getLandingTime());
+        labelDate.setText(sdf.format(Wizard.getBookingInfo().getDate()));
+        labelFlightNo.setText(Wizard.getBookingInfo().getFlightNo());
+        labelLandingTime.setText(Wizard.getBookingInfo().getLandingTime());
 
         labelPickupDetail.setText(Wizard.ROUTEINFO.getPickupType().getLocationType());
         labelPickupTimeDetail.setText(Wizard.ROUTEINFO.getPickupType().getTimeType());
 
-        labelPax.setText(Integer.toString(Wizard.BOOKINGINFO.getPax()));
-        labelSurfboards.setText(Integer.toString(Wizard.BOOKINGINFO.getSurfboards()));
-        labelEmail.setText(Wizard.BOOKINGINFO.getEmail());
-        labelName.setText(Wizard.BOOKINGINFO.getName());
-        labelRequirements.setText(Wizard.BOOKINGINFO.getRequirements());
-        labelPrice.setText(CurrencyHelper.getPrice(Wizard.BOOKINGINFO.getRouteInfo(), Wizard.BOOKINGINFO.getCurrency(), Wizard.BOOKINGINFO.getRate()));
-        labelInterestedSharing.setText(Wizard.BOOKINGINFO.getShareWanted() ? "yes please" : "no, thanks");
+        labelPax.setText(Integer.toString(Wizard.getBookingInfo().getPax()));
+        labelSurfboards.setText(Integer.toString(Wizard.getBookingInfo().getSurfboards()));
+        labelEmail.setText(Wizard.getBookingInfo().getEmail());
+        labelName.setText(Wizard.getBookingInfo().getName());
+        labelRequirements.setText(Wizard.getBookingInfo().getRequirements());
+        labelPrice.setText(CurrencyHelper.getPrice(Wizard.getBookingInfo().getRouteInfo(), Wizard.getBookingInfo().getCurrency(), Wizard.getBookingInfo().getRate()));
+        labelInterestedSharing.setText(Wizard.getBookingInfo().getShareWanted() ? "yes please" : "no, thanks");
         prev.setEnabled(true);
 
         labelInterestedSharing.setVisible(true);
@@ -100,7 +93,7 @@ public class SummaryStepUi extends Composite
 
         labelRPT.setVisible(true);
         labelSurfboards.setVisible(true);
-        switch (Wizard.BOOKINGINFO.getOrderType())
+        switch (Wizard.getBookingInfo().getOrderType())
         {
             case BOOKING:
                 summaryTitle.setText("Summary of your order.");

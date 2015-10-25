@@ -32,8 +32,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.taxisurfr.client.core.Wizard.BOOKINGINFO;
-
 public class TransportStepUi extends Composite
 {
     // public static final String WIDTH = "120px";
@@ -41,6 +39,12 @@ public class TransportStepUi extends Composite
 
     private static RouteStepUiUiBinder uiBinder = GWT.create(RouteStepUiUiBinder.class);
     private final BookingServiceAsync service = GWT.create(BookingService.class);
+
+    public void setLoaded(boolean loaded)
+    {
+        imageSearch.setVisible(loaded);
+        imageSpinner.setVisible(!loaded);
+    }
 
     interface RouteStepUiUiBinder extends UiBinder<Widget, TransportStepUi>
     {
@@ -50,7 +54,7 @@ public class TransportStepUi extends Composite
     Panel mainPanel, ratingsPanel, dp, panelMotivation;
 
     @UiField
-    Image imageVehicle, imageSearch;
+    Image imageVehicle, imageSearch, imageSpinner;
 
     @UiField
     Panel routeSuggestionPanel, panelRoute;
@@ -113,6 +117,11 @@ public class TransportStepUi extends Composite
             }
         });
         initSharingPanel();
+    }
+
+    private void loading(boolean loaded)
+    {
+
     }
 
     private void initSharingPanel()
@@ -303,7 +312,7 @@ public class TransportStepUi extends Composite
             @Override
             public void onClick(ClickEvent event)
             {
-                Wizard.BOOKINGINFO.setOrderType(OrderType.SHARE_ANNOUNCEMENT);
+                Wizard.getBookingInfo().setOrderType(OrderType.SHARE_ANNOUNCEMENT);
                 wizard.onNextClick(null);
 
             }
@@ -338,17 +347,17 @@ public class TransportStepUi extends Composite
         logger.log(Level.INFO, "displayRoute:" + routeKey);
         Wizard.getStatInfo().setRouteKey(routeKey);
         logger.log(Level.INFO, "displayRoute1:");
-        logger.log(Level.INFO, "displayRoute11:" + BOOKINGINFO.getCurrency());
-        logger.log(Level.INFO, "displayRoute12:" + BOOKINGINFO.getRate());
+        logger.log(Level.INFO, "displayRoute11:" + Wizard.getBookingInfo().getCurrency());
+        logger.log(Level.INFO, "displayRoute12:" + Wizard.getBookingInfo().getRate());
 
-        BOOKINGINFO.setPaidPrice(CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, BOOKINGINFO.getCurrency(), BOOKINGINFO.getRate()));
+        Wizard.getBookingInfo().setPaidPrice(CurrencyHelper.getPriceInDollars(Wizard.ROUTEINFO, Wizard.getBookingInfo().getCurrency(), Wizard.getBookingInfo().getRate()));
         logger.log(Level.INFO, "displayRoute2:");
 
         panelMotivation.setVisible(false);
         RouteInfo routeInfo = Wizard.ROUTEINFO;
-        logger.log(Level.INFO, "displayRoute:" + Wizard.BOOKINGINFO.getCurrency() + " " + Wizard.BOOKINGINFO.getRate());
+        logger.log(Level.INFO, "displayRoute:" + Wizard.getBookingInfo().getCurrency() + " " + Wizard.getBookingInfo().getRate());
 
-        labelRouteName.setText(routeInfo.getKey(CurrencyHelper.getPrice(routeInfo, Wizard.BOOKINGINFO.getCurrency(), Wizard.BOOKINGINFO.getRate())));
+        labelRouteName.setText(routeInfo.getKey(CurrencyHelper.getPrice(routeInfo, Wizard.getBookingInfo().getCurrency(), Wizard.getBookingInfo().getRate())));
         imageVehicle.setUrl("/imageservice?image=" + routeInfo.getImage());
         panelDescription.clear();
         panelDescription.add(getDisclosure(routeInfo.getDescription()));

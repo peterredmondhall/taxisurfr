@@ -51,7 +51,7 @@ public class ShareStep implements WizardStep
 
     public void onNextShare()
     {
-        Wizard.BOOKINGINFO.setOrderType(OrderType.SHARE);
+        Wizard.getBookingInfo().setOrderType(OrderType.SHARE);
         ui.removeTable();
     }
 

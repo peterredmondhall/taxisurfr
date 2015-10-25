@@ -274,7 +274,7 @@ public class ContactStepUi extends Composite
         surfboards.setVisible(true);
         labelRequirementsField.setVisible(true);
         requirementsBox.setVisible(true);
-        switch (Wizard.BOOKINGINFO.getOrderType())
+        switch (Wizard.getBookingInfo().getOrderType())
         {
             case BOOKING:
                 checkboxWanttoShare.setVisible(true);
@@ -297,7 +297,7 @@ public class ContactStepUi extends Composite
                 labelRequirementsField.setText("Message to taxi booker eg. Facebook profile etc.");
                 labelSharing1.setText("You are creating a share request.");
                 labelSharing2.setText("Enter your details. You will be contacted when the fellow passenger has agreed to the share.");
-                dateBox.setValue(Wizard.BOOKINGINFO.getDate());
+                dateBox.setValue(Wizard.getBookingInfo().getDate());
                 break;
             case SHARE_ANNOUNCEMENT:
                 checkboxWanttoShare.setVisible(false);
@@ -319,17 +319,17 @@ public class ContactStepUi extends Composite
                 break;
 
         }
-        boolean sharing = Wizard.BOOKINGINFO.getOrderType() == OrderType.SHARE;
+        boolean sharing = Wizard.getBookingInfo().getOrderType() == OrderType.SHARE;
         if (sharing)
         {
             labelRequirementsField.setText("Message to taxi booker eg. Facebook profile etc.");
-            dateBox.setValue(Wizard.BOOKINGINFO.getDate());
+            dateBox.setValue(Wizard.getBookingInfo().getDate());
         }
 
         labelFlightNo.setText(Wizard.ROUTEINFO.getPickupType().getLocationType());
         labelFlightLandingTime.setText(Wizard.ROUTEINFO.getPickupType().getTimeType());
 
-        labelBooking.setText(Wizard.ROUTEINFO.getKey(CurrencyHelper.getPrice(Wizard.ROUTEINFO, Wizard.BOOKINGINFO.getCurrency(), Wizard.BOOKINGINFO.getRate())));
+        labelBooking.setText(Wizard.ROUTEINFO.getKey(CurrencyHelper.getPrice(Wizard.ROUTEINFO, Wizard.getBookingInfo().getCurrency(), Wizard.getBookingInfo().getRate())));
 
     }
 

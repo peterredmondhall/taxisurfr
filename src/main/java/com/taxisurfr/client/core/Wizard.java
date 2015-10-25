@@ -21,11 +21,27 @@ public class Wizard extends Composite
 
     private static WizardUiBinder uiBinder = GWT.create(WizardUiBinder.class);
 
+    public static void setBookingInfo(BookingInfo bookingInfo)
+    {
+        BOOKINGINFO = bookingInfo;
+    }
+
     interface WizardUiBinder extends UiBinder<Widget, Wizard>
     {
     }
 
-    public static BookingInfo BOOKINGINFO;
+    private static BookingInfo BOOKINGINFO;
+
+    public static BookingInfo getBookingInfo()
+    {
+        if (BOOKINGINFO == null)
+        {
+            BOOKINGINFO = new BookingInfo();
+        }
+        return BOOKINGINFO;
+    }
+
+    ;
     public static List<BookingInfo> EXISTING_BOOKINGS_ON_ROUTE;
     public static RouteInfo ROUTEINFO;
     public static ProfilInfo PROFILINFO;

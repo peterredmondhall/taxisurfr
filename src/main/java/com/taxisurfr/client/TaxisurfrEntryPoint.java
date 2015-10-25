@@ -20,13 +20,11 @@ import com.taxisurfr.client.steps.*;
 import com.taxisurfr.shared.CurrencyRequest;
 import com.taxisurfr.shared.model.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Entry point classes define <code>onModuleLoad()</code>.
- */
 public class TaxisurfrEntryPoint implements EntryPoint
 {
     public static final Logger logger = Logger.getLogger(TaxisurfrEntryPoint.class.getName());
@@ -50,6 +48,10 @@ public class TaxisurfrEntryPoint implements EntryPoint
     public static final int CONFIRMATION = 6;
     private static String sessionID = Double.toString(Double.doubleToLongBits(Math.random()));
     private Wizard wizard;
+    private String routeId;
+    private String review;
+    private String nick;
+    private String shareId;
 
     /**
      * This is the entry point method.
@@ -61,6 +63,12 @@ public class TaxisurfrEntryPoint implements EntryPoint
         Wizard.SCREEN_WIDTH = Window.getClientWidth();
         Wizard.SCREEN_HEIGHT = Window.getClientHeight();
         Wizard.MOBILE = Wizard.SCREEN_WIDTH < 500;
+
+        shareId = Window.Location.getParameter("share");
+        review = Window.Location.getParameter("review");
+        nick = Window.Location.getParameter("nick");
+        routeId = Window.Location.getParameter("route");
+        logger.info("requested route:" + routeId);
 
         if (Wizard.MOBILE)
         {
@@ -78,7 +86,7 @@ public class TaxisurfrEntryPoint implements EntryPoint
 
     private void continueLoad()
     {
-
+        logger.info("continueLoad");
         transportStep = new TransportStep(wizard);
         shareStep = new ShareStep(wizard);
         contactStep = new ContactStep(wizard);
@@ -88,11 +96,6 @@ public class TaxisurfrEntryPoint implements EntryPoint
         shareConfirmationStep = new ShareConfirmationStep();
         ratingStep = new RatingStep();
 
-        String shareId = Window.Location.getParameter("share");
-        String review = Window.Location.getParameter("review");
-        String nick = Window.Location.getParameter("nick");
-        String routeId = Window.Location.getParameter("route");
-
         if (review != null)
         {
             Wizard.RATINGINFO = new RatingInfo();
@@ -100,7 +103,7 @@ public class TaxisurfrEntryPoint implements EntryPoint
             Wizard.RATINGINFO.setAuthor(nick);
 
             List<WizardStep> l = ImmutableList.of((WizardStep) ratingStep);
-            completeSetup(ratingStep, l);
+            addSteps(ratingStep, l);
             return;
         }
         if (shareId != null)
@@ -110,7 +113,7 @@ public class TaxisurfrEntryPoint implements EntryPoint
         else
         {
             List<WizardStep> l = ImmutableList.of(transportStep, shareStep, contactStep, summaryStep, creditCardStep, confirmationStep);
-            completeSetup(transportStep, l);
+            addSteps(transportStep, l);
         }
     }
 
@@ -137,11 +140,10 @@ public class TaxisurfrEntryPoint implements EntryPoint
 
     private void collectStats(String src, String currency, final String routeId)
     {
-        Wizard.BOOKINGINFO = new BookingInfo();
-        Wizard.BOOKINGINFO.setCurrency(Wizard.getStatInfo().getCurrency());
-        Wizard.BOOKINGINFO.setRate(Wizard.getStatInfo().getCurrencyRate());
-        logger.log(Level.INFO, "assuming currency=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
-
+        Wizard.getBookingInfo().setCurrency(Wizard.getStatInfo().getCurrency());
+        Wizard.getBookingInfo().setRate(Wizard.getStatInfo().getCurrencyRate());
+        logger.log(Level.INFO, "assuming currency=" + Wizard.getBookingInfo().getCurrency() + " rate=" + Wizard.getBookingInfo().getRate());
+        final long now = new Date().getTime();
         try
 
         {
@@ -155,11 +157,12 @@ public class TaxisurfrEntryPoint implements EntryPoint
                 public void onResponseReceived(Request request, Response response)
                 {
                     Wizard.setStatInfo(GREETING_RESPONSE_READER.read(response.getText()));
-                    Wizard.BOOKINGINFO = new BookingInfo();
-                    Wizard.BOOKINGINFO.setCurrency(Wizard.getStatInfo().getCurrency());
-                    Wizard.BOOKINGINFO.setRate(Wizard.getStatInfo().getCurrencyRate());
-                    logger.log(Level.INFO, "after getCurrencyRate currency (attempt 1)=" + Wizard.BOOKINGINFO.getCurrency() + " rate=" + Wizard.BOOKINGINFO.getRate());
-                    displayRoute(transportStep, routeId);
+                    Wizard.getBookingInfo().setCurrency(Wizard.getStatInfo().getCurrency());
+                    Wizard.getBookingInfo().setRate(Wizard.getStatInfo().getCurrencyRate());
+                    logger.log(Level.INFO, "after getCurrencyRate currency (attempt 1)=" + Wizard.getBookingInfo().getCurrency() + " rate=" + Wizard.getBookingInfo().getRate());
+                    transportStep.setLoaded();
+                    displayRoute(transportStep);
+                    logger.log(Level.INFO, "time to get currency=" + (new Date().getTime() - now));
                 }
 
                 @Override
@@ -192,9 +195,9 @@ public class TaxisurfrEntryPoint implements EntryPoint
             public void onSuccess(List<BookingInfo> sharedBookingList)
             {
                 // sharers = sharedBookingList;
-                Wizard.BOOKINGINFO = sharedBookingList.get(0);
+                Wizard.setBookingInfo(sharedBookingList.get(0));
                 shareConfirmationStep.setBookingInfo(sharedBookingList);
-                completeSetup(shareConfirmationStep, ImmutableList.of((WizardStep) shareConfirmationStep));
+                addSteps(shareConfirmationStep, ImmutableList.of((WizardStep) shareConfirmationStep));
                 wizard.activateShareConfirmationStep(shareConfirmationStep);
 
             }
@@ -202,8 +205,9 @@ public class TaxisurfrEntryPoint implements EntryPoint
 
     }
 
-    private void completeSetup(WizardStep initstep, List<WizardStep> steps)
+    private void addSteps(WizardStep initstep, List<WizardStep> steps)
     {
+        logger.info("addSteps");
 
         wizard.setInitialStep(initstep);
         for (WizardStep step : steps)
@@ -222,6 +226,7 @@ public class TaxisurfrEntryPoint implements EntryPoint
             @Override
             public void onSuccess(ProfilInfo profil)
             {
+
                 Wizard.PROFILINFO = profil;
             }
 
@@ -238,16 +243,17 @@ public class TaxisurfrEntryPoint implements EntryPoint
         return navigator.userAgent.toLowerCase();
     }-*/;
 
-    private void displayRoute(final TransportStep transportStep, final String routeId)
+    private void displayRoute(final TransportStep transportStep)
     {
-        logger.info("displayRoute: no route:" + routeId);
         if (routeId == null || "null".equals(routeId))
         {
+            logger.info("displayRoute: no route displayed:" + routeId);
             return;
         }
         try
         {
             Long id = Long.parseLong(routeId);
+            logger.info("displayRoute: route to be displayed:" + id);
             SERVICE.getRoute(id, new AsyncCallback<RouteInfo>()
             {
 
