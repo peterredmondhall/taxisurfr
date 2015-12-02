@@ -6,7 +6,9 @@ import com.google.appengine.repackaged.com.google.api.client.util.Lists;
 import com.google.appengine.repackaged.com.google.common.collect.FluentIterable;
 import com.google.common.base.Joiner;
 import com.google.common.primitives.Longs;
+import com.taxisurfr.server.entity.Booking;
 import com.taxisurfr.server.entity.Profil;
+import com.taxisurfr.server.entity.Route;
 import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.RouteInfo;
 
@@ -32,17 +34,17 @@ public class SMSUtil
         }
     }
 
-    public void send(BookingInfo bookingInfo, Profil profil)
+    public void send(Booking booking, Route route, Profil profil)
     {
         try
         {
             DefaultSmsClient smsClient = new DefaultSmsClient("dispatch@taxisurfr.com", profil.getSmspassword(),
                     "https://api.websms.com");
             String messageContent = Joiner.on("\r\n").join("**taxisurfr**",
-                    bookingInfo.getRouteInfo().getKey(""),
-                    sdf.format(bookingInfo.getDate()),
-                    bookingInfo.getFlightNo(),
-                    bookingInfo.getLandingTime()
+                    route.getStart()+" to "+route.getEnd(),
+                    sdf.format(booking.getDate()),
+                    booking.getFlightNo(),
+                    booking.getLandingTime()
             );
             long[] recips = Longs.toArray(Arrays.asList(FluentIterable.from(recipients).toArray(Long.class)));
             logger.info("send: to recepients" + Arrays.toString(recips));
@@ -65,12 +67,12 @@ public class SMSUtil
     {
         SMSUtil smsUtil = new SMSUtil();
         smsUtil.add(491709025959L);
-        BookingInfo bookingInfo = new BookingInfo();
-        bookingInfo.setRouteInfo(new RouteInfo());
-        bookingInfo.setDate(new Date());
-        bookingInfo.setFlightNo("flightno");
-        bookingInfo.setLandingTime("landingtime");
-        smsUtil.send(bookingInfo, new Profil());
+        Booking booking = new Booking();
+        Route route = new Route();
+        booking.setDate(new Date());
+        booking.setFlightNo("flightno");
+        booking.setLandingTime("landingtime");
+        smsUtil.send(booking, route, new Profil());
     }
 
 }

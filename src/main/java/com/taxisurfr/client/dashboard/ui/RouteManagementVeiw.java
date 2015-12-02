@@ -168,7 +168,7 @@ public class RouteManagementVeiw extends Composite
     private void fetchRoutes()
     {
 
-        service.getRoutes(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<RouteInfo>>()
+        service.getRoutesByAgent(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<RouteInfo>>()
         {
 
             @Override

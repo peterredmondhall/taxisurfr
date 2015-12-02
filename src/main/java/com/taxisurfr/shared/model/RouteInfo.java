@@ -36,6 +36,7 @@ public class RouteInfo extends Info
     private Long cents;
     private Long agentCents;
     private Long associatedRoute;
+    private String startEnd;
 
     private boolean inactive;
 
@@ -101,6 +102,7 @@ public class RouteInfo extends Info
     public void setStart(String start)
     {
         this.start = start;
+        this.startEnd = this.start + "to" +this.end;
     }
 
     public String getEnd()
@@ -111,6 +113,7 @@ public class RouteInfo extends Info
     public void setEnd(String end)
     {
         this.end = end;
+        this.startEnd = this.start + "to" +this.end;
     }
 
     public PickupType getPickupType()
@@ -156,5 +159,10 @@ public class RouteInfo extends Info
     public void setInactive(boolean inactive)
     {
         this.inactive = inactive;
+    }
+
+    public String getStartEnd(){return startEnd;}
+    public  void setStartEnd(String dummy){
+
     }
 }

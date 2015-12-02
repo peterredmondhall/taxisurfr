@@ -100,7 +100,7 @@ public class StatServlet extends HttpServlet
         statInfo.setCurrency(curr);
         statInfo.setCurrencyRate(rate);
         log.info("currency:" + curr);
-        statInfo = statManager.createSessionStat(statInfo);
+        statInfo = statManager.createSessionStatFromInfo(statInfo);
 
         // Serialize the response into the servlet output
         mapper.writeValue(resp.getOutputStream(), statInfo);

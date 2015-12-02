@@ -12,18 +12,19 @@ public class Agent extends ArugamEntity<AgentInfo>
     @Id public Long id;
 
     @Index
-    private String userEmail;
+    private String email;
+
     private Long mobile;
     private boolean admin;
     private Long orderCount;
-    public String getUserEmail()
+    public String getEmail()
     {
-        return userEmail;
+        return email;
     }
 
-    public void setUserEmail(String userEmail)
+    public void setEmail(String email)
     {
-        this.userEmail = userEmail;
+        this.email = email;
     }
 
     @Override
@@ -31,7 +32,7 @@ public class Agent extends ArugamEntity<AgentInfo>
     {
         AgentInfo agentInfo = new AgentInfo();
         agentInfo.setId(id);
-        agentInfo.setEmail(userEmail);
+        agentInfo.setEmail(email);
         agentInfo.setMobile(mobile);
         agentInfo.setAdmin(admin);
         return agentInfo;
@@ -50,7 +51,7 @@ public class Agent extends ArugamEntity<AgentInfo>
     public static Agent getAgent(AgentInfo agentInfo)
     {
         Agent agent = new Agent();
-        agent.setUserEmail(agentInfo.getEmail());
+        agent.setEmail(agentInfo.getEmail());
         agent.setMobile(agentInfo.getMobile());
         return agent;
 
@@ -65,4 +66,8 @@ public class Agent extends ArugamEntity<AgentInfo>
     {
         this.mobile = mobile;
     }
+    public Long getMobile() {
+        return mobile;
+    }
+
 }

@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static com.googlecode.objectify.ObjectifyService.*;
+
 public class RouteServiceManager extends Manager
 {
     private static final Logger logger = Logger.getLogger(RouteServiceManager.class.getName());
@@ -20,13 +22,13 @@ public class RouteServiceManager extends Manager
     public RouteServiceManager()
     {
 
-        ObjectifyService.register(Route.class);
+        register(Route.class);
     }
     public List<RouteInfo> deleteRoute(AgentInfo userInfo, RouteInfo routeInfo) throws IllegalArgumentException
     {
-        Route route = ObjectifyService.ofy().load().type(Route.class).id(routeInfo.getId()).now();
+        Route route = ofy().load().type(Route.class).id(routeInfo.getId()).now();
         route.setInactive(true);
-        ObjectifyService.ofy().save().entity(route);
+        ofy().save().entity(route);
         final List<Route> all = getAll(Route.class);
         return getRoutes(userInfo);
     }
@@ -59,7 +61,7 @@ public class RouteServiceManager extends Manager
                 break;
 
             case UPDATE:
-                route = ObjectifyService.ofy().load().type(Route.class).first().now();
+                route = ofy().load().type(Route.class).first().now();
                 persist(route, routeInfo);
                 break;
         }
@@ -80,7 +82,7 @@ public class RouteServiceManager extends Manager
         route.setContractorId(routeInfo.getContractorId());
         route.setAssociatedRoute(routeInfo.getAssociatedRoute());
 
-        ObjectifyService.ofy().save().entity(route).now();
+        ofy().save().entity(route).now();
     }
 
     @SuppressWarnings("unchecked")
@@ -90,7 +92,7 @@ public class RouteServiceManager extends Manager
         logger.info("getting routes for agent email " + agentInfo.getEmail() + " id " + agentInfo.getId());
 
         // find a list of providers being managed by this user
-        List<Contractor> contractorList = ObjectifyService.ofy().load().type(Contractor.class).filter("agentId =", agentInfo.getId()).list();
+        List<Contractor> contractorList = ofy().load().type(Contractor.class).filter("agentId =", agentInfo.getId()).list();
 
         List<Long> contractorIdList = Lists.newArrayList();
         for (Contractor contractor : contractorList)
@@ -99,7 +101,7 @@ public class RouteServiceManager extends Manager
             logger.info("contractorId:" + contractor.getInfo().getId());
         }
 
-        List<Route> resultList = ObjectifyService.ofy().load().type(Route.class).list();
+        List<Route> resultList = ofy().load().type(Route.class).list();
         logger.info("get route count " + resultList.size());
         for (Route route : resultList)
         {
@@ -127,7 +129,7 @@ public class RouteServiceManager extends Manager
         List<RouteInfo> routes = new ArrayList<>();
         //        if (routeInfoCache == null)
         //        {
-        routeInfoCache = ObjectifyService.ofy().load().type(Route.class).filter("inactive =", false).list();
+        routeInfoCache = ofy().load().type(Route.class).filter("inactive =", false).list();
             logger.info("get all routes returned no. of routes" + routeInfoCache.size());
         //        }
         //        else
@@ -149,9 +151,15 @@ public class RouteServiceManager extends Manager
 
     }
 
-    public RouteInfo getRoute(Long routeId)
+    @Deprecated
+    public RouteInfo getRouteAsInfo(Long routeId)
     {
-        return ObjectifyService.ofy().load().type(Route.class).id(routeId).now().getInfo();
+        return ofy().load().type(Route.class).id(routeId).now().getInfo();
+    }
+
+    public Route getRoute(Long routeId)
+    {
+        return ofy().load().type(Route.class).id(routeId).now();
     }
 
     public static void resetCache()
@@ -163,44 +171,13 @@ public class RouteServiceManager extends Manager
     {
         for (int i = 0; i < 10; i++)
         {
-            List<Route> list = ObjectifyService.ofy().load().type(Route.class).list();
+            List<Route> list = ofy().load().type(Route.class).list();
             logger.info("loadall " + i + "  " + list.size());
 
         }
-        //        Long contractorid = null;
-        //        ContractorManager manager = new ContractorManager();
-        //        for (Object obj : manager.getAll(Contractor.class))
-        //        {
-        //            Contractor contractor = (Contractor) obj;
-        //            if ("dispatch@taxisurfr.com".equals(contractor.getEmail()))
-        //            {
-        //                contractorid = contractor.id;
-        //                break;
-        //            }
-        //        }
-        //        logger.info("contractor id" + contractorid);
-        //        if (contractorid == null)
-        //        {
-        //            throw new RuntimeException("");
-        //        }
-        //
-        //        List<Route> list = ObjectifyService.ofy().load().type(Route.class).list();
-        //        for (Route route : list)
-        //        {
-        //            if (route.getInactive())
-        //            {
-        //                route.setInactive(false);
-        //                route.setContractorId(contractorid);
-        //                ObjectifyService.ofy().save().entity(route).now();
-        //                logger.info("route activated" + route.getStart() + " " + route.getEnd());
-        //            }
-        //            else
-        //            {
-        //                route.setInactive(false);
-        //                ObjectifyService.ofy().save().entity(route).now();
-        //            }
-        //        }
-        //        logger.info("active routes" + list.size());
+    }
 
+    public List<Route> getRoutesAsEntities(String query) {
+        return ofy().load().type(Route.class).list();
     }
 }

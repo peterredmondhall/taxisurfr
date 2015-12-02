@@ -4,10 +4,14 @@ import com.google.common.collect.Lists;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.Agent;
+import com.taxisurfr.server.entity.Contractor;
+import com.taxisurfr.server.entity.Route;
 import com.taxisurfr.shared.model.AgentInfo;
 
 import java.util.List;
 import java.util.logging.Logger;
+
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 public class AgentManager extends Manager
 {
@@ -17,6 +21,11 @@ public class AgentManager extends Manager
     {
 
         ObjectifyService.register(Agent.class);
+    }
+
+    public Agent getAgent(Contractor contractor)
+    {
+        return  ofy().load().type(Agent.class).id(contractor.getAgentId()).now();
     }
 
     public AgentInfo createAgent(String agentEmail)
@@ -40,7 +49,7 @@ public class AgentManager extends Manager
         if (agent == null)
         {
             agent = new Agent();
-            agent.setUserEmail(email);
+            agent.setEmail(email);
             agent.setAdmin(admin);
             ObjectifyService.ofy().save().entity(agent).now();
         }

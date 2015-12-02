@@ -77,7 +77,7 @@ public class BookingManagementVeiw extends Composite
     private void fetchBookings()
     {
 
-        service.getBookings(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<BookingInfo>>()
+        service.getBookingsForAgent(DashboardEntryPoint.getAgentInfo(), new AsyncCallback<List<BookingInfo>>()
         {
 
             @Override

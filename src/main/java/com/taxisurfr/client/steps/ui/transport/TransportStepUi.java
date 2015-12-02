@@ -240,7 +240,7 @@ public class TransportStepUi extends Composite
 
     private void fetchRoutes(final String query)
     {
-        service.getRoutes(query, new AsyncCallback<List<RouteInfo>>()
+        service.getRoutesByQuery(query, new AsyncCallback<List<RouteInfo>>()
         {
 
             @Override
@@ -252,7 +252,7 @@ public class TransportStepUi extends Composite
             @Override
             public void onFailure(Throwable caught)
             {
-                service.getRoutes(query, new AsyncCallback<List<RouteInfo>>()
+                service.getRoutesByQuery(query, new AsyncCallback<List<RouteInfo>>()
                 {
 
                     @Override

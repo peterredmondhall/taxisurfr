@@ -63,12 +63,18 @@ public class BookingServiceManager extends Manager
         }
     };
 
-    public List<BookingInfo> getBookings()
+    public List<Booking> getBookings()
+    {
+        return ofy().load().type(Booking.class).list();
+    }
+
+    @Deprecated
+    public List<BookingInfo> getBookingsAsInfo()
     {
         return FluentIterable.from(ofy().load().type(Booking.class).list()).transform(BOOKING_TO_INFO).toList();
     }
 
-    public List<BookingInfo> getBookings(Long agentId) throws IllegalArgumentException
+    public List<BookingInfo> getBookingsAsInfo(Long agentId) throws IllegalArgumentException
     {
         List<Booking> resultList = ofy().load().type(Booking.class).list();
         List<BookingInfo> bookings = newArrayList();
@@ -103,7 +109,7 @@ public class BookingServiceManager extends Manager
         return bookings;
     }
 
-
+@Deprecated
     public BookingInfo setPayed(Profil profil, BookingInfo bi, OrderStatus orderStatus, String orderRef) throws IllegalArgumentException
     {
         Booking booking = ofy().load().type(Booking.class).id(bi.getId()).now();
@@ -114,6 +120,13 @@ public class BookingServiceManager extends Manager
         return booking.getBookingInfo(routeInfo);
     }
 
+    public Booking setPayed(Profil profil, Booking bi) throws IllegalArgumentException
+    {
+        Booking booking = ofy().load().type(Booking.class).id(bi.getId()).now();
+        booking.setStatus(OrderStatus.PAID);
+        long id = ofy().save().entity(booking).now().getId();
+        return ofy().load().type(Booking.class).id(id).now();
+    }
 
     public boolean getMaintenceAllowed()
     {
@@ -138,6 +151,11 @@ public class BookingServiceManager extends Manager
     {
         Config config = new ConfigManager().getConfig();
         return ofy().load().type(Profil.class).filter("name", config.getProfil()).first().now();
+    }
+
+    public Booking createBooking(Booking booking) {
+        long id = ofy().save().entity(booking).now().getId();
+        return ofy().load().type(Booking.class).id(id).now();
     }
 
     public class BookingInfoComparator implements Comparator<BookingInfo>
@@ -206,14 +224,21 @@ public class BookingServiceManager extends Manager
         return booking.getInfo();
     }
 
-    public BookingInfo getBooking(Long id)
+    @Deprecated
+    public BookingInfo getBookingAsInfo(Long id)
     {
         BookingInfo bookingInfo = ofy().load().type(Booking.class).id(id).now().getInfo();
         RouteInfo routeInfo = ofy().load().type(Route.class).id(bookingInfo.getRouteId()).now().getInfo();
         bookingInfo.setRouteInfo(routeInfo);
         return bookingInfo;
-
     }
+    public Booking getBooking(Long id)
+    {
+        return ofy().load().type(Booking.class).id(id).now();
+    }
+
+
+
 
     public List<BookingInfo> getListFeedbackRequest()
     {
@@ -280,6 +305,17 @@ public class BookingServiceManager extends Manager
         return null;
     }
 
+    public Contractor getContractor(Booking booking)
+    {
+        Route route = ofy().load().type(Route.class).id(booking.getRoute()).now();
+        if (route != null)
+        {
+            Contractor contractor = ofy().load().type(Contractor.class).id(route.getContractorId()).now();
+            return contractor;
+        }
+        return null;
+    }
+
     public AgentInfo getAgent(ContractorInfo contractorInfo)
     {
         return ofy().load().type(Agent.class).id(contractorInfo.getAgentId()).now().getInfo();
@@ -296,19 +332,19 @@ public class BookingServiceManager extends Manager
 
         //agent
         Agent testAgentEntity = new Agent();
-        testAgentEntity.setUserEmail(agentEmail);
+        testAgentEntity.setEmail(agentEmail);
         ObjectifyService.ofy().save().entity(testAgentEntity).now();
 
         //contractor 1
         Contractor contractor1 = new Contractor();
         contractor1.setAgentId(testAgentEntity.id);
-        contractor1.setName(testAgentEntity.getUserEmail() + ":contractor1");
+        contractor1.setName(testAgentEntity.getEmail() + ":contractor1");
         ObjectifyService.ofy().save().entity(contractor1).now();
 
         //contractor 2
         Contractor contractor2 = new Contractor();
         contractor2.setAgentId(testAgentEntity.id);
-        contractor2.setName(testAgentEntity.getUserEmail() + ":contractor2");
+        contractor2.setName(testAgentEntity.getEmail() + ":contractor2");
         ObjectifyService.ofy().save().entity(contractor2).now();
 
         //route 1 contractor 1

@@ -1,5 +1,6 @@
 package com.taxisurfr.server.entity;
 
+import com.google.api.server.spi.config.ApiTransformer;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -10,6 +11,7 @@ public class Route extends ArugamEntity<RouteInfo>
 {
     private static final long serialVersionUID = 1L;
     public static final long NO_ASSOCIATED = 0L;
+
 
 
     @Id Long id;
@@ -27,6 +29,14 @@ public class Route extends ArugamEntity<RouteInfo>
     @Index
     private boolean inactive;
     private Long associatedRoute = NO_ASSOCIATED;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public Long getContractorId()
     {

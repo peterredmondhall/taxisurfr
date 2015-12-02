@@ -8,13 +8,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import com.googlecode.objectify.ObjectifyService;
-import com.taxisurfr.server.entity.Agent;
-import com.taxisurfr.server.entity.Route;
+import com.taxisurfr.server.entity.*;
 import org.joda.time.DateTime;
 
 import com.google.common.collect.Lists;
-import com.taxisurfr.server.entity.Contractor;
-import com.taxisurfr.server.entity.Finance;
 import com.taxisurfr.shared.model.AgentInfo;
 import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.FinanceInfo;
@@ -73,6 +70,7 @@ public class FinanceManager extends Manager
         return getFinance(agentInfo);
     }
 
+    @Deprecated
     public void addPayment(BookingInfo bookingInfo, Date date)
     {
         Route route = ObjectifyService.ofy().load().type(Route.class).id(bookingInfo.getRouteId()).now();
@@ -93,6 +91,30 @@ public class FinanceManager extends Manager
         finance.setOrderRef(bookingInfo.getOrderRef());
         finance.setAgentId(agentInfo.getId());
         finance.setDeliveryDate(bookingInfo.getDate());
+        ObjectifyService.ofy().save().entity(finance).now();
+
+    }
+
+    public void addPayment(Booking booking, Date date)
+    {
+        Route route = ObjectifyService.ofy().load().type(Route.class).id(booking.getRoute()).now();
+        Contractor contractor = ObjectifyService.ofy().load().type(Contractor.class).id(route.getContractorId()).now();
+        Agent agent = ObjectifyService.ofy().load().type(Agent.class).id(contractor.getAgentId()).now();
+
+        AgentInfo agentInfo = agent.getInfo();
+        Long amount = route.getAgentCents() != null ? route.getAgentCents() : (long) (route.getCents() * 0.90);
+        logger.info("addpayment:" + amount);
+
+        Finance finance = new Finance();
+        finance.setAgentId(agentInfo.getId());
+        finance.setType(FinanceInfo.Type.PAYMENT);
+        finance.setDate(date);
+        finance.setName(booking.getName());
+        finance.setAmount(amount);
+        finance.setBookingId(booking.getId());
+        finance.setOrderRef(booking.getRef());
+        finance.setAgentId(agentInfo.getId());
+        finance.setDeliveryDate(booking.getDate());
         ObjectifyService.ofy().save().entity(finance).now();
 
     }

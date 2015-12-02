@@ -32,7 +32,7 @@ public class PDFRendererServlet extends HttpServlet
             byte[] bytes = null;
             try
             {
-                BookingInfo bookingInfo = bookingService.getBooking(Long.parseLong(bookingId));
+                BookingInfo bookingInfo = bookingService.getBookingAsInfo(Long.parseLong(bookingId));
                 ContractorInfo contractorInfo = bookingService.getContractor(bookingInfo);
                 AgentInfo agentInfo = bookingService.getAgent(contractorInfo);
                 if (bookingInfo != null)

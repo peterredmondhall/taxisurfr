@@ -32,13 +32,11 @@ public interface BookingService extends RemoteService
 
     void initTestRoutes() throws IllegalArgumentException;
 
-    List<RouteInfo> getRoutes(AgentInfo userInfo) throws IllegalArgumentException;
+    List<RouteInfo> getRoutesByAgent(AgentInfo userInfo) throws IllegalArgumentException;
 
     List<ContractorInfo> getContractors(AgentInfo userInfo) throws IllegalArgumentException;
 
-    List<RouteInfo> getRoutes() throws IllegalArgumentException;
-
-    List<RouteInfo> getRoutes(String query) throws IllegalArgumentException;
+    List<RouteInfo> getRoutesByQuery(String query) throws IllegalArgumentException;
 
     List<RouteInfo> deleteRoute(AgentInfo userInfo, RouteInfo placeInfo) throws IllegalArgumentException;
 
@@ -48,7 +46,7 @@ public interface BookingService extends RemoteService
 
     List<ContractorInfo> saveContractor(AgentInfo userInfo, ContractorInfo placeInfo, ContractorInfo.SaveMode mode) throws IllegalArgumentException;
 
-    List<BookingInfo> getBookings(AgentInfo userInfo) throws IllegalArgumentException;
+    List<BookingInfo> getBookingsForAgent(AgentInfo userInfo) throws IllegalArgumentException;
 
     List<BookingInfo> getBookingsForRoute(RouteInfo routeInfo) throws IllegalArgumentException;
 

@@ -1,5 +1,6 @@
 package com.taxisurfr.server;
 
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.SessionStat;
 import com.taxisurfr.server.util.Mailer;
@@ -9,6 +10,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.googlecode.objectify.ObjectifyService.*;
+
 public class StatManager extends Manager
 {
     private static final Logger logger = Logger.getLogger(StatManager.class.getName());
@@ -16,12 +19,12 @@ public class StatManager extends Manager
 
     public StatManager()
     {
-        ObjectifyService.register(SessionStat.class);
+        register(SessionStat.class);
 
     }
     public void updateSessionStat(StatInfo statInfo)
     {
-        SessionStat sessionStat = ObjectifyService.ofy().load().type(SessionStat.class).filter("ip", statInfo.getIp()).first().now();
+        SessionStat sessionStat = ofy().load().type(SessionStat.class).filter("ip", statInfo.getIp()).first().now();
         if (sessionStat != null)
         {
             switch (statInfo.getUpdate())
@@ -33,7 +36,7 @@ public class StatManager extends Manager
                     sessionStat.setRoute(statInfo.getDetail());
                     break;
             }
-            ObjectifyService.ofy().save().entity(sessionStat).now();
+            ofy().save().entity(sessionStat).now();
         }
         else
         {
@@ -56,14 +59,20 @@ public class StatManager extends Manager
 
     }
 
-    public StatInfo createSessionStat(StatInfo statInfo)
+    @Deprecated
+    public StatInfo createSessionStatFromInfo(StatInfo statInfo)
     {
-        SessionStat sessionStat = ObjectifyService.ofy().load().type(SessionStat.class).filter("ip =", statInfo.getIp()).first().now();
+        SessionStat sessionStat = ofy().load().type(SessionStat.class).filter("ip =", statInfo.getIp()).first().now();
         if (sessionStat == null)
         {
             sessionStat = SessionStat.getSessionStat(statInfo);
-            ObjectifyService.ofy().save().entity(sessionStat).now();
+            ofy().save().entity(sessionStat).now();
         }
         return sessionStat.getInfo();
+    }
+
+    public SessionStat createSessionStat(SessionStat sessionStat) {
+        Long id = ofy().save().entity(sessionStat).now().getId();
+        return ofy().load().type(SessionStat.class).id(id).now();
     }
 }

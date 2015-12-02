@@ -70,6 +70,8 @@ public class TaxisurfrEntryPoint implements EntryPoint
         routeId = Window.Location.getParameter("route");
         logger.info("requested route:" + routeId);
 
+        logger.info("load():");
+
         if (Wizard.MOBILE)
         {
             wizard = new WizardMobile();

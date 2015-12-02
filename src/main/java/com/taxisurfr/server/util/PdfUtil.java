@@ -4,6 +4,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.taxisurfr.server.entity.Agent;
+import com.taxisurfr.server.entity.Booking;
+import com.taxisurfr.server.entity.Contractor;
+import com.taxisurfr.server.entity.Route;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.joda.time.DateTime;
@@ -56,6 +60,7 @@ public class PdfUtil
 
     static final String CUSTOMER_FEEDBACK = "BTW. You will receive a link for feedback shortly after your trip. Taking a few minutes to answer this will help us greatly. Thank you in advance.";
 
+    @Deprecated
     public byte[] generateTaxiOrder(String path, BookingInfo bookingInfo, AgentInfo agentInfo, ContractorInfo contractorInfo)
     {
         PdfReader reader;
@@ -119,6 +124,71 @@ public class PdfUtil
         return null;
     }
 
+    public byte[] generateTaxiOrder(String path, Booking booking, Route route, Agent agent, Contractor contractor)
+    {
+        PdfReader reader;
+        final FileInputStream fis;
+        try
+        {
+            fis = new FileInputStream(path);
+            reader = new PdfReader(IOUtils.toByteArray(fis));
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            PdfStamper stamper = new PdfStamper(reader, out);
+            PdfContentByte canvas = stamper.getOverContent(1);
+
+            PdfPTable table = createBookingTable(booking,route);
+            table.writeSelectedRows(0, 2, 0, 11, INSET, TABLE_Y, canvas);
+
+            Font helvetica20 = new Font(FontFamily.HELVETICA, 20);
+            Font helvetica14 = new Font(FontFamily.HELVETICA, 14);
+            BaseFont bf_helv = helvetica20.getCalculatedBaseFont(false);
+
+            // route
+            int addressY = 430;
+            Chunk chunk = new Chunk(route.getStart()+" to "+route.getEnd(), helvetica20);
+            ColumnText.showTextAligned(canvas,
+                    Element.ALIGN_LEFT, new Phrase(chunk), INSET, addressY, 0);
+
+            addressY = 564;
+
+            // agent
+            if (agent.getEmail() != null) {
+                chunk = new Chunk(agent.getEmail(), helvetica14);
+                ColumnText.showTextAligned(canvas,
+                        Element.ALIGN_LEFT, new Phrase(chunk), INSET + 120, addressY, 0);
+            }
+
+            if (contractor.getAddress() != null) {
+                String address = "";
+                for (String contractorAddress : contractor.getAddress()) {
+                    address += contractorAddress + "  ";
+                }
+
+                addressY -= 42;
+                chunk = new Chunk(address, helvetica14);
+
+                ColumnText.showTextAligned(canvas,
+                        Element.ALIGN_LEFT, new Phrase(chunk), INSET, addressY, 0);
+            }
+            stamper.close();
+            reader.close();
+            fis.close();
+
+            return out.toByteArray();
+        }
+        catch (IOException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        catch (DocumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public static byte[] get()
     {
         File f = new File("template/test.pdf");
@@ -136,11 +206,7 @@ public class PdfUtil
         return null;
     }
 
-    /**
-     * Creates our first table
-     * 
-     * @return our first table
-     */
+    @Deprecated
     public PdfPTable createBookingTable(BookingInfo bookingInfo)
     {
         PdfPTable table = new PdfPTable(2);
@@ -178,6 +244,47 @@ public class PdfUtil
 
         table.addCell("Other requirements");
         table.addCell(bookingInfo.getRequirements());
+
+        return table;
+    }
+
+    public PdfPTable createBookingTable(Booking booking, Route route)
+    {
+        PdfPTable table = new PdfPTable(2);
+        table.setTotalWidth(TABLE_WIDTH);
+        table.setWidthPercentage(TABLE_WIDTH / 3f);
+        try
+        {
+            table.setWidths(new int[] { 1, 2 });
+        }
+        catch (DocumentException e)
+        {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        // the cell object
+        PdfPCell cell;
+        table.addCell(ORDERNO);
+        table.addCell(booking.getRef());
+        table.addCell(NAME);
+        table.addCell(booking.getName());
+        table.addCell(EMAIL);
+        table.addCell(booking.getEmail());
+        table.addCell(PAX);
+        table.addCell("" + booking.getPax());
+        table.addCell(SURFBOARDS);
+        table.addCell("" + booking.getSurfboards());
+        table.addCell(DATE);
+        table.addCell(fmt.print(new DateTime((booking.getDate()))));
+        table.addCell(route.getPickupType().getLocationType());
+        table.addCell(booking.getFlightNo());
+        table.addCell(route.getPickupType().getTimeType());
+        table.addCell(booking.getLandingTime());
+        table.addCell(PAID);
+        table.addCell(booking.getCurrency().symbol + " " + booking.getPaidPrice());
+
+        table.addCell("Other requirements");
+        table.addCell(booking.getRequirements());
 
         return table;
     }

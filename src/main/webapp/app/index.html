@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/darkly/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+
+  <!-- JS -->
+  <!-- load angular, nganimate, and ui-router -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-cookies.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-route.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular-animate.js"></script>
+
+  <script src="bower_components/bootstrap/ui-bootstrap-custom-tpls-0.14.3.js"></script>
+
+  <!--<script type="text/javascript" src="https://js.stripe.com/v2/"></script>-->
+  <!--<script type="text/javascript" src="bower_components/stripe-angular/stripe-angular.js"></script>-->
+
+  <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+  <!--<script type="text/javascript">-->
+    <!--Stripe.setPublishableKey('pk_test_p0QQDCeJQA7W9X9y0VP7QOz5');-->
+  <!--</script>-->
+  <script src="bower_components/angular-payments/lib/angular-payments.js"></script>
+  <!--<script src="payment/pay.js"></script>-->
+
+  <script src="../gapi/vendors/angular-ui-router.min.js"></script>
+  <script src="../gapi/vendors/angular-google-gapi.min.js"></script>
+  <script src="app.js"></script>
+
+</head>
+<body ng-app="formApp">
+
+<!-- views will be injected here -->
+<div class="container">
+  <div ui-view></div>
+</div>
+
+</body>
+</html>

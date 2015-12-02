@@ -30,6 +30,8 @@ public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntit
 
     private static final long serialVersionUID = 1L;
 
+
+
     @Id Long id;
 
     private Date date;
@@ -62,8 +64,18 @@ public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntit
     private Long parentId;
     private Long route;
     private Boolean rated;
-    private Currency currency;
+    private String stripeRefusal;
+
+    private Currency currency = Currency.USD;
     private int paidPrice;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public int getPaidPrice()
     {
@@ -364,5 +376,15 @@ public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntit
     private void setCurrency(Currency currency)
     {
         this.currency = currency;
+    }
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setStripeRefusal(String stripeRefusal) {
+        this.stripeRefusal = stripeRefusal;
+    }
+    public String getStripeRefusal(){
+        return stripeRefusal;
     }
 }

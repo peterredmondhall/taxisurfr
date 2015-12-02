@@ -23,6 +23,11 @@ public class ContractorManager extends Manager
 
     }
 
+    public Contractor getContractor(Route route)
+    {
+        return  ofy().load().type(Contractor.class).id(route.getContractorId()).now();
+    }
+
     public ContractorInfo createContractor(ContractorInfo contractorInfo)
     {
 
@@ -30,30 +35,6 @@ public class ContractorManager extends Manager
         ObjectifyService.ofy().save().entity(contractor).now();
         return contractor.getInfo();
     }
-
-//    public ContractorInfo getContractor(Long contractorId) throws IllegalArgumentException
-//    {
-//        ObjectifyService.ofy().load().
-//
-//        //        EntityManager em = getEntityManager();
-//        //        ContractorInfo contractorInfo = null;
-//        //        {
-//        //            try
-//        //            {
-//        //                contractorInfo = em.find(Contractor.class, contractorId).getInfo();
-//        //            }
-//        //            catch (Exception e)
-//        //            {
-//        //                logger.log(Level.SEVERE, e.getMessage(), e);
-//        //            }
-//        //            finally
-//        //            {
-//        //                em.close();
-//        //            }
-//        //        }
-//        //        return contractorInfo;
-//
-//    }
 
     @SuppressWarnings("unchecked")
     public List<ContractorInfo> getContractors(AgentInfo agentInfo)
@@ -74,38 +55,6 @@ public class ContractorManager extends Manager
             list.add(contractor.getInfo());
         }
         return list;
-        //        logger.info("getting contractors for agent email " + agentInfo.getEmail() + " id " + agentInfo.getId());
-        //
-        //        // check local user
-        //        EntityManager em = getEntityManager();
-        //        List<ContractorInfo> list = Lists.newArrayList();
-        //        try
-        //        {
-        //            @SuppressWarnings("unchecked")
-        //            List<Contractor> contractorList;
-        //            if (agentInfo != null)
-        //            {
-        //                contractorList = em.createQuery("select t from Contractor t where agentId=" + agentInfo.getId()).getResultList();
-        //            }
-        //            else
-        //            {
-        //                contractorList = em.createQuery("select t from Contractor t ").getResultList();
-        //            }
-        //            logger.info("query returned " + contractorList.size());
-        //            for (Contractor contractor : contractorList)
-        //            {
-        //                list.add(contractor.getInfo());
-        //            }
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            logger.log(Level.SEVERE, e.getMessage(), e);
-        //        }
-        //        finally
-        //        {
-        //            em.close();
-        //        }
-        //        return list;
 
     }
 
@@ -113,22 +62,6 @@ public class ContractorManager extends Manager
     {
         throw new RuntimeException();
 
-        //        EntityManager em = getEntityManager();
-        //        try
-        //        {
-        //            em.getTransaction().begin();
-        //            Contractor contractor = em.find(Contractor.class, contractorInfo.getId());
-        //            em.remove(contractor);
-        //            em.getTransaction().commit();
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            logger.log(Level.SEVERE, e.getMessage(), e);
-        //        }
-        //        finally
-        //        {
-        //            em.close();
-        //        }
     }
 
     public List<ContractorInfo> deleteContractor(AgentInfo agentInfo, ContractorInfo contractorInfo)
@@ -138,25 +71,6 @@ public class ContractorManager extends Manager
         ofy().delete().entity(contractor).now();
         return getContractors(agentInfo);
 
-        //        List<ContractorInfo> contractors = null;
-        //        EntityManager em = getEntityManager();
-        //        try
-        //        {
-        //            Contractor contractor = em.find(Contractor.class, contractorInfo.getId());
-        //            em.getTransaction().begin();
-        //            em.remove(contractor);
-        //            em.getTransaction().commit();
-        //            contractor = em.find(Contractor.class, contractorInfo.getId());
-        //        }
-        //        catch (Exception e)
-        //        {
-        //            logger.severe("deleting route");
-        //        }
-        //        finally
-        //        {
-        //            em.close();
-        //        }
-        //        return contractors;
     }
 
     public List<ContractorInfo> saveContractor(AgentInfo agentInfo, ContractorInfo contractorInfo, ContractorInfo.SaveMode mode) throws IllegalArgumentException

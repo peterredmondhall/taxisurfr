@@ -26,15 +26,13 @@ public interface BookingServiceAsync
     void resetRoutes(AsyncCallback<Void> callback);
     void initTestRoutes(AsyncCallback<Void> callback);
 
-    void getRoutes(AgentInfo userInfo, AsyncCallback<List<RouteInfo>> callback);
+    void getRoutesByAgent(AgentInfo userInfo, AsyncCallback<List<RouteInfo>> callback);
 
     void getContractors(AgentInfo userInfo, AsyncCallback<List<ContractorInfo>> callback);
 
     void getRoute(Long routeId, AsyncCallback<RouteInfo> callback);
 
-    void getRoutes(AsyncCallback<List<RouteInfo>> callback);
-
-    void getRoutes(String query, AsyncCallback<List<RouteInfo>> callback);
+    void getRoutesByQuery(String query, AsyncCallback<List<RouteInfo>> callback);
 
     void deleteRoute(AgentInfo userInfo, RouteInfo placeInfo, AsyncCallback<List<RouteInfo>> callback)
             throws IllegalArgumentException;
@@ -48,7 +46,7 @@ public interface BookingServiceAsync
     void saveContractor(AgentInfo userInfo, ContractorInfo placeInfo, ContractorInfo.SaveMode mode, AsyncCallback<List<ContractorInfo>> callback)
             throws IllegalArgumentException;
 
-    void getBookings(AgentInfo userInfo, AsyncCallback<List<BookingInfo>> callback);
+    void getBookingsForAgent(AgentInfo userInfo, AsyncCallback<List<BookingInfo>> callback);
 
     void getBookingsForRoute(RouteInfo id, AsyncCallback<List<BookingInfo>> callback);
 

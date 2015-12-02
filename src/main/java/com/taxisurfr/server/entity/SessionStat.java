@@ -33,6 +33,25 @@ public class SessionStat extends ArugamEntity<StatInfo>
     String routeKey;
     Date time;
 
+    public String getCardToken() {
+        return cardToken;
+    }
+
+    public void setCardToken(String cardToken) {
+        this.cardToken = cardToken;
+    }
+
+    public Long getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(Long bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    String cardToken;
+    Long bookingId;
+
     @Index
     String ip;
 

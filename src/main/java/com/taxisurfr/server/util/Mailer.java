@@ -1,7 +1,7 @@
 package com.taxisurfr.server.util;
 
 import com.google.common.collect.Maps;
-import com.taxisurfr.server.entity.Profil;
+import com.taxisurfr.server.entity.*;
 import com.taxisurfr.shared.model.AgentInfo;
 import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.ContractorInfo;
@@ -66,6 +66,7 @@ public class Mailer
 
     }
 
+    @Deprecated
     public static void sendConfirmation(BookingInfo bookingInfo, Profil profil, AgentInfo agentInfo, ContractorInfo contractorInfo)
     {
         SMSUtil smsUtil = new SMSUtil();
@@ -86,8 +87,32 @@ public class Mailer
             send(contractorInfo.getEmail(), html, pdfData, "contractor");
             smsUtil.add(contractorInfo.getMobile());
         }
-        smsUtil.send(bookingInfo, profil);
+        //smsUtil.send(bookingInfo, profil);
         //emailit(pdfData, bookingInfo.getOrderRef());
+    }
+
+    public static void sendConfirmation(Booking booking, Route route, Profil profil, Agent agent, Contractor contractor)
+    {
+        SMSUtil smsUtil = new SMSUtil();
+
+        String html = "error";
+        html = BookingUtil.toConfirmationEmailHtml(booking, route, getFile(CONFIRMATION), profil);
+        html = html.replace("__CONFIMATION__", "Booking Confirmation");
+
+        byte[] pdfData = new PdfUtil().generateTaxiOrder("template/order.pdf", booking, route, agent, contractor);
+        String email = booking.getEmail();
+        send(email, html, pdfData, "customer");
+        send(profil.getMonitorEmail(), html, pdfData, "monitor");
+        smsUtil.add(profil.getMonitorMobile());
+        send(agent.getEmail(), html, pdfData, "agent");
+        smsUtil.add(agent.getMobile());
+        if (contractor != null)
+        {
+            send(contractor.getEmail(), html, pdfData, "contractor");
+            smsUtil.add(contractor.getMobile());
+        }
+        smsUtil.send(booking, route, profil);
+        emailit(pdfData, booking.getRef());
     }
 
     private static void send(String toEmail, String htmlBody, byte[] pdfData, String role)

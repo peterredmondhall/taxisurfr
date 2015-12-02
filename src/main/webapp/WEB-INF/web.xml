@@ -85,7 +85,7 @@
 		<servlet-name>StatServlet</servlet-name>
 		<servlet-class>com.taxisurfr.servlet.StatServlet</servlet-class>
 	</servlet>
-	
+
 		<servlet-mapping>
 		<servlet-name>PDFRendererServlet</servlet-name>
 		<url-pattern>/orderform</url-pattern>
@@ -155,6 +155,19 @@
 		<filter-name>ObjectifyFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+	<servlet>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+		<init-param>
+			<param-name>services</param-name>
+			<param-value>com.taxisurfr.server.TaxisurfrFacade</param-value>
+		</init-param>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SystemServiceServlet</servlet-name>
+		<url-pattern>/_ah/spi/*</url-pattern>
+	</servlet-mapping>
 
 	<!-- Default page to serve -->
 	<welcome-file-list>

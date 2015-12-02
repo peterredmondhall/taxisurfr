@@ -1,6 +1,8 @@
 package com.taxisurfr.server.util;
 
+import com.taxisurfr.server.entity.Booking;
 import com.taxisurfr.server.entity.Profil;
+import com.taxisurfr.server.entity.Route;
 import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.RouteInfo;
 import org.joda.time.DateTime;
@@ -37,6 +39,7 @@ public class BookingUtil
     }
 
     @SuppressWarnings({ "rawtypes", "unchecked" })
+    @Deprecated
     public static List<Pair<String, String>> toPairList(BookingInfo bookingInfo)
     {
         List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
@@ -51,6 +54,25 @@ public class BookingUtil
         list.add(Pair.of(NUM_SURFBOARDS, Integer.toString(bookingInfo.getSurfboards())));
         list.add(Pair.of(NUM_PAX, Integer.toString(bookingInfo.getPax())));
         list.add(Pair.of(REQS, bookingInfo.getRequirements()));
+
+        return list;
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static List<Pair<String, String>> toPairList(Booking booking, Route route)
+    {
+        List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
+
+        list.add(Pair.of(ROUTE, route.getStart()+" to "+route.getEnd()));
+        list.add(Pair.of(DATE, sdf.print(new DateTime(booking.getDate()))));
+        RouteInfo.PickupType pickupType = route.getPickupType();
+        list.add(Pair.of(pickupType.getLocationType(), booking.getFlightNo()));
+        list.add(Pair.of(pickupType.getTimeType(), booking.getLandingTime()));
+        list.add(Pair.of(NAME, booking.getName()));
+        list.add(Pair.of(EMAIL, booking.getEmail()));
+        list.add(Pair.of(NUM_SURFBOARDS, Integer.toString(booking.getSurfboards())));
+        list.add(Pair.of(NUM_PAX, Integer.toString(booking.getPax())));
+        list.add(Pair.of(REQS, booking.getRequirements()));
 
         return list;
     }
@@ -75,15 +97,23 @@ public class BookingUtil
         return html;
     }
 
+    @Deprecated
     public static String toConfirmationEmailHtml(BookingInfo bookingInfo, File file, Profil profil)
     {
         String html = getTemplate(file);
         return toConfirmationEmailHtml(bookingInfo, html, profil);
     }
 
+    public static String toConfirmationEmailHtml(Booking booking, Route route, File file, Profil profil)
+    {
+        String html = getTemplate(file);
+        return toConfirmationEmailHtml(booking,route, html, profil);
+    }
+
     private static String FACEBOOK_APP = "https://apps.facebook.com/1651399821757463";
     private static String FACEBOOK_PAGE = "https://www.facebook.com/taxisurfr";
 
+    @Deprecated
     public static String toConfirmationEmailHtml(BookingInfo bookingInfo, String html, Profil profil)
     {
         String insertion = "";
@@ -98,6 +128,33 @@ public class BookingUtil
 
         html = html.replace("__TAXISURFR_ROUTE_LINK__", taxisurfrRouteLink);
         if (bookingInfo.getShareWanted())
+        {
+            html = html.replace("___SHARE_MESSAGE__", "Spread the word about your shared taxi using this share link.");
+
+        }
+        else
+        {
+            html = html.replace("___SHARE_MESSAGE__", "");
+        }
+
+        return html;
+
+    }
+
+    public static String toConfirmationEmailHtml(Booking booking, Route route, String html, Profil profil)
+    {
+        String insertion = "";
+        for (Pair<String, String> pair : toPairList(booking,route))
+        {
+            insertion += pair.first + " " + pair.second + "<br>";
+        }
+        html = html.replace("____INSERT___DETAILS___", insertion);
+
+        String taxisurfrRouteLink = profil.getTaxisurfUrl() + "?route=" + booking.getRoute();
+        taxisurfrRouteLink = FACEBOOK_PAGE;
+
+        html = html.replace("__TAXISURFR_ROUTE_LINK__", taxisurfrRouteLink);
+        if (booking.getShareWanted())
         {
             html = html.replace("___SHARE_MESSAGE__", "Spread the word about your shared taxi using this share link.");
 

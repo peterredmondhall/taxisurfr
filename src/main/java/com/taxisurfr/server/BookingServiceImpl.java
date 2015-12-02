@@ -1,5 +1,8 @@
 package com.taxisurfr.server;
 
+import com.google.api.server.spi.config.Api;
+import com.google.api.server.spi.config.ApiMethod;
+
 import com.google.appengine.api.users.User;
 import com.google.common.collect.Lists;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -12,12 +15,21 @@ import com.taxisurfr.shared.Currency;
 import com.taxisurfr.shared.OrderStatus;
 import com.taxisurfr.shared.model.*;
 
+import javax.inject.Named;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
 import static com.taxisurfr.shared.OrderStatus.SHARE_ACCEPTED;
+
+@Api(
+        name = "taxisurfr",
+        version = "v1",
+        scopes = {Constants.EMAIL_SCOPE},
+        clientIds = {Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID, Constants.IOS_CLIENT_ID},
+        audiences = {Constants.ANDROID_AUDIENCE}
+)
 
 /**
  * The server-side implementation of the RPC service.
@@ -40,50 +52,48 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     private final StripePayment stripePayment = new StripePayment();
 
     @Override
+    //@ApiMethod(name = "bookings.add", httpMethod = "post")
     public BookingInfo addBooking(BookingInfo bookingInfo) throws IllegalArgumentException
     {
         return bookingServiceManager.addBookingWithClient(bookingInfo, getClient());
     }
 
     @Override
+    //@ApiMethod(name = "route.delete", httpMethod = "post")
     public List<RouteInfo> deleteRoute(AgentInfo userInfo, RouteInfo placeInfo) throws IllegalArgumentException
     {
         return routeServiceManager.deleteRoute(userInfo, placeInfo);
     }
 
     @Override
-    public List<RouteInfo> saveRoute(AgentInfo userInfo, RouteInfo placeInfo, RouteInfo.SaveMode mode) throws IllegalArgumentException
+    public List<RouteInfo> saveRoute(AgentInfo userInfo, RouteInfo placeInfo, @Named("mode")RouteInfo.SaveMode mode) throws IllegalArgumentException
     {
         return routeServiceManager.saveRoute(userInfo, placeInfo, mode);
     }
 
     @Override
-    public List<RouteInfo> getRoutes(AgentInfo userInfo) throws IllegalArgumentException
+    public List<RouteInfo> getRoutesByAgent(AgentInfo userInfo) throws IllegalArgumentException
     {
         return routeServiceManager.getRoutes(userInfo);
     }
 
     @Override
-    public List<RouteInfo> getRoutes() throws IllegalArgumentException
-    {
-        //TODO remover
-        return null;
-    }
-
-    @Override
-    public List<RouteInfo> getRoutes(String query) throws IllegalArgumentException
+    @ApiMethod(name = "routes.get.query", httpMethod = "post")
+    public List<RouteInfo> getRoutesByQuery(@Named("query")String query) throws IllegalArgumentException
     {
         return routeServiceManager.getRoutes(query);
     }
 
     @Override
-    public List<BookingInfo> getBookings(AgentInfo agentInfo) throws IllegalArgumentException
+    @ApiMethod(name = "bookings.agent", path = "bookingsagent",httpMethod = "post")
+    public List<BookingInfo> getBookingsForAgent(AgentInfo agentInfo) throws IllegalArgumentException
     {
-        return bookingServiceManager.getBookings(agentInfo.getId());
+        return bookingServiceManager.getBookingsAsInfo(agentInfo.getId());
     }
 
 
     @Override
+    //@ApiMethod(name = "profil.get", httpMethod = "post")
     public ProfilInfo getPaypalProfil() throws IllegalArgumentException
     {
         ProfilInfo profilInfo = bookingServiceManager.getProfil().getInfo();
@@ -98,6 +108,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
+    @ApiMethod(name = "bookings.route", path = "bookingsroute",httpMethod = "post")
     public List<BookingInfo> getBookingsForRoute(RouteInfo routeInfo) throws IllegalArgumentException
     {
         logger.info("route inquiry:" + routeInfo.getStart() + " -> " + routeInfo.getEnd());
@@ -105,10 +116,11 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public List<BookingInfo> handleShareAccepted(Long sharerId) throws IllegalArgumentException
+    @ApiMethod(name = "bookings.share.accepted", httpMethod = "post")
+    public List<BookingInfo> handleShareAccepted(@Named("id")Long sharerId) throws IllegalArgumentException
     {
-        BookingInfo sharer = bookingServiceManager.getBooking(sharerId);
-        BookingInfo parentBookingInfo = bookingServiceManager.getBooking(sharer.getParentId());
+        BookingInfo sharer = bookingServiceManager.getBookingAsInfo(sharerId);
+        BookingInfo parentBookingInfo = bookingServiceManager.getBookingAsInfo(sharer.getParentId());
 
         BookingInfo sharerBookingInfo = bookingServiceManager.setShareAccepted(sharer);
         List<BookingInfo> list = null;
@@ -125,16 +137,17 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
+    //@ApiMethod(name = "share.request.send", httpMethod = "post")
     public BookingInfo sendShareRequest(BookingInfo bookingInfo)
     {
         Profil profil = bookingServiceManager.getProfil();
-        BookingInfo parentBooking = bookingServiceManager.getBooking(bookingInfo.getParentId());
+        BookingInfo parentBooking = bookingServiceManager.getBookingAsInfo(bookingInfo.getParentId());
         Mailer.sendShareRequest(parentBooking, bookingInfo, profil);
         return bookingInfo;
     }
 
     @Override
-    public BookingInfo payWithStripe(String token, BookingInfo bookingInfo)
+    public BookingInfo payWithStripe(@Named("token")String token, BookingInfo bookingInfo)
     {
         logger.info("payWithStripe" + bookingInfo.getPaidPrice());
         Profil profil = bookingServiceManager.getProfil();
@@ -164,7 +177,9 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
         return bookingInfo;
     }
 
+
     @Override
+    //@ApiMethod(name = "stat.send", httpMethod = "post")
     public void sendStat(StatInfo statInfo)
     {
         logger.info(statInfo.getDetail());
@@ -172,6 +187,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
+    //@ApiMethod(name = "agent.get", httpMethod = "post")
     public AgentInfo getUser() throws IllegalArgumentException
     {
         AgentInfo userInfo = null;
@@ -194,36 +210,42 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
+    //@ApiMethod(name = "ratings.get", httpMethod = "post")
     public List<RatingInfo> getRatings(RouteInfo routeInfo) throws IllegalArgumentException
     {
         return ratingManager.getRatings(routeInfo);
     }
 
     @Override
+    //@ApiMethod(name = "ratings.add", httpMethod = "post")
     public void addRating(RatingInfo ratingInfo) throws IllegalArgumentException
     {
         ratingManager.add(ratingInfo);
     }
 
     @Override
+    //@ApiMethod(name = "contractors.get", httpMethod = "post")
     public List<ContractorInfo> getContractors(AgentInfo agentInfo) throws IllegalArgumentException
     {
         return contractorManager.getContractors(agentInfo);
     }
 
     @Override
+    //@ApiMethod(name = "contractor.delete", httpMethod = "post")
     public List<ContractorInfo> deleteContractor(AgentInfo agentInfo, ContractorInfo contractorInfo) throws IllegalArgumentException
     {
         return contractorManager.deleteContractor(agentInfo, contractorInfo);
     }
 
     @Override
-    public List<ContractorInfo> saveContractor(AgentInfo agentInfo, ContractorInfo contractorInfo, ContractorInfo.SaveMode mode) throws IllegalArgumentException
+    //@ApiMethod(name = "contractor.save", httpMethod = "post")
+    public List<ContractorInfo> saveContractor(AgentInfo agentInfo, ContractorInfo contractorInfo, @Named("mode")ContractorInfo.SaveMode mode) throws IllegalArgumentException
     {
         return contractorManager.saveContractor(agentInfo, contractorInfo, mode);
     }
 
     @Override
+    //@ApiMethod(name = "agents.get", httpMethod = "post")
     public List<AgentInfo> getAgents() throws IllegalArgumentException
     {
         return agentManager.getAgents();
@@ -247,16 +269,18 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public RouteInfo getRoute(Long routeId) throws IllegalArgumentException
+    public RouteInfo getRoute(@Named("id")Long routeId) throws IllegalArgumentException
     {
-        return routeServiceManager.getRoute(routeId);
+        return routeServiceManager.getRoute(routeId).getInfo();
     }
 
+    //@ApiMethod(name = "routes.reset", httpMethod = "post")
     @Override public void resetRoutes() throws IllegalArgumentException
     {
         routeServiceManager.resetCache();
     }
 
+    //@ApiMethod(name = "routes.test.init", httpMethod = "post")
     @Override public void initTestRoutes() throws IllegalArgumentException
     {
         bookingServiceManager.createAgentWithRoutes("test@example.com");
@@ -289,15 +313,17 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
         bookingServiceManager.cancel(bookingInfo);
         financeManager.cancel(bookingInfo.getId());
 
-        return getBookings(agentInfo);
+        return getBookingsForAgent(agentInfo);
 
     }
 
     @Override
+    //@ApiMethod(name = "payment.save", httpMethod = "post")
     public List<FinanceInfo> savePayment(FinanceInfo financeInfo)
     {
         return financeManager.addTransfer(financeInfo);
     }
+
 
     @Override public String getMailingList()
     {
