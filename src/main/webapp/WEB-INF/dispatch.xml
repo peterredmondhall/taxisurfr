@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dispatch-entries>
+    <!--<dispatch>-->
+        <!--<url>*.appspot.com/*</url>-->
+        <!--<module>app/index.html1</module>-->
+    <!--</dispatch>-->
+    <!--<dispatch>-->
+        <!--<url>/*</url>-->
+        <!--<module>app/index.html2</module>-->
+    <!--</dispatch>-->
+    <!--<dispatch>-->
+        <!--<url>taxigangsurf.appspot.com/index.html</url>-->
+        <!--<module>app/index.html3</module>-->
+    <!--</dispatch>-->
+    <!--<dispatch>-->
+        <!--<url>*/index.html</url>-->
+        <!--<module>app/index.html4</module>-->
+    <!--</dispatch>-->
+    <!--<dispatch>-->
+        <!--<url>/*</url>-->
+        <!--<module>app/index.html5</module>-->
+    <!--</dispatch>-->
+</dispatch-entries>

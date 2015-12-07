@@ -12,7 +12,7 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
         // route to show our basic form (/form)
             .state('form', {
                 url: '/form',
-                templateUrl: 'form.html',
+                templateUrl: 'app/form.html',
                 controller: 'formController'
             })
 
@@ -21,31 +21,31 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
             // url will be nested (/form/profile)
             .state('form.transport', {
                 url: '/transport',
-                templateUrl: 'form-transport.html'
+                templateUrl: 'app/form-transport.html'
             })
 
             // url will be /form/interests
             .state('form.details', {
                 url: '/details',
-                templateUrl: 'form-details.html'
+                templateUrl: 'app/form-details.html'
             })
 
             // url will be /form/interests
             .state('form.summary', {
                 url: '/summary',
-                templateUrl: 'form-summary.html'
+                templateUrl: 'app/form-summary.html'
             })
 
             // url will be /form/payment
             .state('form.payment', {
                 url: '/payment',
-                templateUrl: 'form-payment.html'
+                templateUrl: 'app/form-payment.html'
             })
 
             // url will be /form/confirmation
             .state('form.confirmation', {
                 url: '/confirmation',
-                templateUrl: 'form-confirmation.html'
+                templateUrl: 'app/form-confirmation.html'
             })
 
         ;
@@ -55,9 +55,13 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
         $urlRouterProvider.otherwise('/form/transport');
     })
 
-    .config(function () {
-        Stripe.setPublishableKey('pk_test_rcKuNpP9OpTri7twmZ77UOI5');
-    })
+    //.config(function (GApi) {
+    //    // Simple GET request example:
+    //    return GApi.execute('taxisurfr', 'session.get')
+    //        .then(function (response) {
+    //            Stripe.setPublishableKey(response.stripePublishable);
+    //        });
+    //})
 
     .run(['GAuth', 'GApi', 'GData', '$state', '$rootScope', '$window',
         function (GAuth, GApi, GData, $state, $rootScope, $window) {
@@ -77,6 +81,10 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
             GAuth.setClient(CLIENT);
             GAuth.setScope('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly');
 
+            GApi.execute('taxisurfr', 'session.get')
+                .then(function (response) {
+                    Stripe.setPublishableKey(response.stripePublishable);
+                });
         }
     ])
 
@@ -130,7 +138,8 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
                 if (response.error) {
                     // there was an error. Fix it.
                     $scope.paymentError = response.error.message;
-                    console.log('error:' + response.error);
+                    $scope.processing = false;
+                    throw new Error($scope.paymentError);
                 } else {
                     // got stripe token, now charge it or smt
                     $scope.session = {cardToken: response.id, bookingId: $scope.booking.id};
@@ -143,7 +152,6 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
                                 $state.go('form.confirmation');
                             } else {
                                 $scope.paymentError = $scope.booking.stripeRefusal;
-                                console.log($scope.booking.stripeRefusal);
                             }
                         });
                 }
@@ -180,11 +188,6 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
                 $scope.dt = null;
             };
 
-            // Disable weekend selection
-            $scope.disabled = function(date, mode) {
-                return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-            };
-
             $scope.toggleMin = function() {
                 $scope.minDate = $scope.minDate ? null : new Date();
             };
@@ -203,9 +206,6 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
                 formatYear: 'yy',
                 startingDay: 1
             };
-
-            $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
-            $scope.format = $scope.formats[0];
 
             $scope.status = {
                 opened: false

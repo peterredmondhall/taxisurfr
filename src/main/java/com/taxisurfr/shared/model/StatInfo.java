@@ -12,6 +12,8 @@ public class StatInfo extends Info
     private Float currencyRate = 1F;
     private String routeKey;
 
+
+    private String stripePublishable;
     public void setCurrency(Currency currency)
     {
         this.currency = currency;
@@ -61,6 +63,7 @@ public class StatInfo extends Info
     {
         this.routeKey = routeKey;
     }
+
 
     public enum Update
     {
@@ -128,6 +131,14 @@ public class StatInfo extends Info
     public void setCountry(String country)
     {
         this.country = country;
+    }
+
+    public void setStripePublishable(String stripePublishable) {
+        this.stripePublishable = stripePublishable;
+    }
+
+    public String getStripePublishable() {
+        return stripePublishable;
     }
 
 }

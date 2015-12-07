@@ -5,7 +5,10 @@
         <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
 
         <div class="col-xs-12">
-        <table>
+            <pre class="bg-success"><em>{{route.start + ' to '+route.end}}</em></pre>
+            <pre class="bg-success"><em>{{' Price $US'+ route.cents/100}}</em></pre>
+
+            <table>
             <tr>
                 <td>Date of arrival</td>
                 <td>{{booking.date | date: 'dd-MM-yyyy'}}</td>

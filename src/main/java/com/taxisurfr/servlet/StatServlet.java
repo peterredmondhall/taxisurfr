@@ -4,8 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.appengine.repackaged.com.google.api.client.util.Strings;
 import com.google.common.collect.ImmutableMap;
 import com.googlecode.objectify.ObjectifyService;
+import com.taxisurfr.client.service.BookingService;
+import com.taxisurfr.server.BookingServiceManager;
 import com.taxisurfr.server.CurrencyManager;
 import com.taxisurfr.server.StatManager;
+import com.taxisurfr.server.entity.Profil;
 import com.taxisurfr.shared.Currency;
 import com.taxisurfr.shared.CurrencyRequest;
 import com.taxisurfr.shared.model.StatInfo;
@@ -22,6 +25,7 @@ public class StatServlet extends HttpServlet
 {
     private static final long serialVersionUID = 1L;
     public static final Logger log = Logger.getLogger(StatServlet.class.getName());
+    BookingServiceManager bookingServiceManager = new BookingServiceManager();
     private static final Map<String, Currency> currencyMap = new ImmutableMap.Builder()
             .put("GB", Currency.GBP)
             .put("CZ", Currency.EUR)
@@ -85,6 +89,7 @@ public class StatServlet extends HttpServlet
         statInfo.setSrc(currencyRequest.getSrc());
         statInfo.setCountry(country + ":" + city);
         statInfo.setIp(ip);
+        statInfo.setStripePublishable(bookingServiceManager.getProfil().getStripePublishable());
 
         // Deserialize the request
 

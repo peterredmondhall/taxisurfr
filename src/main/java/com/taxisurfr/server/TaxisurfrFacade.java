@@ -4,6 +4,7 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.taxisurfr.server.entity.*;
 import com.taxisurfr.server.util.Mailer;
+import com.taxisurfr.shared.model.StatInfo;
 
 import javax.inject.Named;
 import java.util.Date;
@@ -36,19 +37,19 @@ public class TaxisurfrFacade {
     private final AgentManager agentManager = new AgentManager();
 
 
-    @ApiMethod(name = "log.info", httpMethod = "post")
-    public void logInfo(@Named("message") String message) throws IllegalArgumentException {
-        logger.info(message);
-    }
-    @ApiMethod(name = "log.error", httpMethod = "post")
-    public void logError(@Named("message") String message) throws IllegalArgumentException {
-        logger.severe(message);
-    }
+
 
     @ApiMethod(name = "routes.query", httpMethod = "post")
     public List<Route> getRoutesByQuery(@Named("query") String query) throws IllegalArgumentException {
         System.out.println("query:" + query);
         return routeServiceManager.getRoutesAsEntities(query);
+    }
+
+    @ApiMethod(name = "session.get", httpMethod = "post")
+    public StatInfo getStat(Route route) throws IllegalArgumentException {
+        StatInfo statInfo = new StatInfo();
+        statInfo.setStripePublishable(bookingManager.getProfil().getStripePublishable());
+        return statInfo;
     }
 
     @ApiMethod(name = "session.new", httpMethod = "post")
