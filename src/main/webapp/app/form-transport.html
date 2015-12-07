@@ -49,55 +49,60 @@
         </ul>
     </div>
 </script>
+
 <div class='container-fluid typeahead-route'>
 
-    <input type="text" ng-model="asyncSelected" placeholder="e.g. Colombo Airport Arugam Bay"
-           uib-typeahead="route as (route.start + ' to ' +route.end) for route in getLocation($viewValue)"
-           typeahead-loading="loadingRoutes"
-           typeahead-no-results="noResults"
-           typeahead-on-select="onSelect($item, $model, $label)"
-           class="form-control">
-    <i ng-show="loadingRoutes" class="glyphicon glyphicon-refresh"></i>
+    <form name="transportForm" novalidate>
 
-    <div ng-show="noResults">
-        <i class="glyphicon glyphicon-remove"></i> No Results Found
-    </div>
+        <input type="text" ng-model="asyncSelected" placeholder="e.g. Colombo Airport Arugam Bay"
+               uib-typeahead="route as (route.start + ' to ' +route.end) for route in getLocation($viewValue)"
+               typeahead-loading="loadingRoutes"
+               typeahead-no-results="noResults"
+               typeahead-on-select="onSelect($item, $model, $label)"
+               class="form-control">
+        <!--<i ng-show="loadingRoutes" class="glyphicon glyphicon-refresh"></i>-->
 
-    <div class='col-xs-offset-2' ng-hide="route" class="ng-hide">
-        <div class="form-group row">
-            <div class="row">Enter your route in the search box.</div>
-            <div class="row"><img src="../images/big-tick.jpg" height="30px" width="30px"><span>Full refund up to 24 hrs. beforehand</span>
-            </div>
-            <div class="row"><img src="../images/big-tick.jpg" height="30px" width="30px"><span>Trusted driver and a safe vehicle</span>
-            </div>
-            <div class="row"><img src="../images/big-tick.jpg" height="30px" width="30px"><span>Sharing function if required</span>
-            </div>
-        </div>
-    </div>
+        <!--<div ng-show="noResults">-->
+        <!--<i class="glyphicon glyphicon-remove"></i> No Results Found-->
+        <!--</div>-->
+        <div class='col-xs-offset-1' ng-hide="route" class="ng-hide">
+            <div class="form-group row">
+                <h3>Enter your route in the search box.</h3>
+                <br>
 
-    <div class='col-xs-offset-2' ng-show="route">
-        <div class="row bg-success col-sm-9">{{route.start + ' to '+route.end}}</div>
-        <div class="form-group row">
-            <div class="row">
-                 <div class="col-sm-9">
-                    <h4>Description</h4>
-                    <h6>{{route.description}}</h6>
+                <div class="row"><img src="../images/check_mark.png" height="30px" width="30px"><span> Full refund up to 24 hrs. beforehand</span>
                 </div>
-                <div class="col-sm-3">
-                    <img src="/imageservice?image=" + route.image/>
+                <div class="row"><img src="../images/check_mark.png" height="30px" width="30px"><span> Trusted driver and a safe vehicle</span>
+                </div>
+                <div class="row"><img src="../images/check_mark.png" height="30px" width="30px"><span> Sharing function if required</span>
                 </div>
             </div>
         </div>
-    </div>
 
+        <div class="col-xs-offset-1" ng-show="route">
+            <!--<h4 class="row bg-success  col-sm-9">{{route.start + ' to '+route.end}}</h4>-->
+            <br/><br/>
+            <div class="form-group row">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h4>Description</h4>
+                        <h6>{{route.description}}</h6>
+                    </div>
+                    <div class="col-sm-3">
+                        <img ng-src="{{imgSrc}}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="form-group row">
+            <div class="col-xs-6">
+                <button ng-show="route" ui-sref="form.details" class="btn btn-block btn-info" ng-click="addSession()">
+                    Booking. <span class="glyphicon glyphicon-circle-arrow-right"></span>
+                </button>
+            </div>
+        </div>
+    </form>
 </div>
 
 
-<div class="form-group row">
-    <div class="col-xs-6">
-        <button ui-sref="form.details" class="btn btn-block btn-info" ng-click="addSession()">
-            Order now. <span class="glyphicon glyphicon-circle-arrow-right"></span>
-        </button>
-    </div>
-</div>

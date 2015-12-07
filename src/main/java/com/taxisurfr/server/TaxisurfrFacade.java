@@ -24,8 +24,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  * The server-side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class TaxisurfrFacade
-{
+public class TaxisurfrFacade {
     private static final Logger logger = Logger.getLogger(TaxisurfrFacade.class.getName());
 
     private final RouteServiceManager routeServiceManager = new RouteServiceManager();
@@ -37,54 +36,55 @@ public class TaxisurfrFacade
     private final AgentManager agentManager = new AgentManager();
 
 
+    @ApiMethod(name = "log.info", httpMethod = "post")
+    public void logInfo(@Named("message") String message) throws IllegalArgumentException {
+        logger.info(message);
+    }
+    @ApiMethod(name = "log.error", httpMethod = "post")
+    public void logError(@Named("message") String message) throws IllegalArgumentException {
+        logger.severe(message);
+    }
+
     @ApiMethod(name = "routes.query", httpMethod = "post")
-    public List<Route> getRoutesByQuery(@Named("query")String query) throws IllegalArgumentException
-    {
-        System.out.println("query:"+query);
+    public List<Route> getRoutesByQuery(@Named("query") String query) throws IllegalArgumentException {
+        System.out.println("query:" + query);
         return routeServiceManager.getRoutesAsEntities(query);
     }
 
     @ApiMethod(name = "session.new", httpMethod = "post")
-    public SessionStat addSession(Route route) throws IllegalArgumentException
-    {
+    public SessionStat addSession(Route route) throws IllegalArgumentException {
         System.out.println("addSession");
         SessionStat sessionStat = new SessionStat();
-        sessionStat.setRoute(route.getStart()+" to "+route.getEnd());
+        sessionStat.setRoute(route.getStart() + " to " + route.getEnd());
         return statManager.createSessionStat(sessionStat);
     }
 
     @ApiMethod(name = "booking.new", httpMethod = "post")
-    public Booking addBooking(Booking booking) throws IllegalArgumentException
-    {
+    public Booking addBooking(Booking booking) throws IllegalArgumentException {
         System.out.println("addBooking");
         return bookingManager.createBooking(booking);
     }
 
     @ApiMethod(name = "booking.pay", httpMethod = "post")
-    public Booking payBooking(SessionStat sessionStat)
-    {
+    public Booking payBooking(SessionStat sessionStat) {
         Booking booking = bookingManager.getBooking(sessionStat.getBookingId());
         Profil profil = bookingManager.getProfil();
         Route route = ofy().load().type(Route.class).id(booking.getRoute()).now();
-        booking.setPaidPrice(Math.toIntExact(route.getCents()));
+        booking.setPaidPrice(route.getCents().intValue() / 100);
         Contractor contractor = contractorManager.getContractor(route);
         Agent agent = agentManager.getAgent(contractor);
         Long orderCount = agent.getOrderCount();
-        booking.setRef(orderCount+"_"+booking.getName());
+        booking.setRef(orderCount + "_" + booking.getName());
 
         String refusal = stripePayment.charge(sessionStat.getCardToken(), booking, profil.getStripeSecret());
-        if (refusal == null)
-        {
+        if (refusal == null) {
             booking = bookingManager.setPayed(profil, booking);
-            if (booking != null)
-            {
+            if (booking != null) {
                 Mailer.sendConfirmation(booking, route, profil, agent, contractor);
                 financeManager.addPayment(booking, new Date());
                 ofy().save().entity(agent).now();
             }
-        }
-        else
-        {
+        } else {
             booking.setStripeRefusal(refusal);
         }
         return booking;

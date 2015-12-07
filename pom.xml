@@ -11,9 +11,9 @@
     <properties>
         <app.id>taxigangsurf</app.id>
         <app.version>52</app.version>
-        <!--<app.id>gobygang</app.id>-->
+        <!--CHANGE BASE<app.id>gobygang</app.id>-->
         <!--<app.version>1</app.version>-->
-        <appengine.version>1.9.28</appengine.version>
+        <appengine.version>1.9.30</appengine.version>
         <gwt.version>2.7.0</gwt.version>
         <gcloud.plugin.version>1.9.17a</gcloud.plugin.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>

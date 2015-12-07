@@ -154,7 +154,7 @@ public class BookingUtil
         taxisurfrRouteLink = FACEBOOK_PAGE;
 
         html = html.replace("__TAXISURFR_ROUTE_LINK__", taxisurfrRouteLink);
-        if (booking.getShareWanted())
+        if (booking.getShareWanted()!=null && booking.getShareWanted())
         {
             html = html.replace("___SHARE_MESSAGE__", "Spread the word about your shared taxi using this share link.");
 

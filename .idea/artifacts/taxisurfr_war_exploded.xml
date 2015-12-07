@@ -7,7 +7,7 @@
           <element id="module-output" name="taxisurfr" />
         </element>
         <element id="directory" name="lib">
-          <element id="library" level="project" name="Maven: com.google.appengine:appengine-api-1.0-sdk:1.9.28" />
+          <element id="library" level="project" name="Maven: com.google.appengine:appengine-api-1.0-sdk:1.9.30" />
           <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
           <element id="library" level="project" name="Maven: com.google.gwt:gwt-user:2.7.0" />
           <element id="library" level="project" name="Maven: javax.validation:validation-api:1.0.0.GA" />
@@ -49,7 +49,7 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.6.1" />
           <element id="library" level="project" name="Maven: commons-codec:commons-codec:1.9" />
           <element id="library" level="project" name="Maven: taxisurfr:business-client:1.0.1" />
-          <element id="library" level="project" name="Maven: com.google.appengine:appengine-endpoints:1.9.28" />
+          <element id="library" level="project" name="Maven: com.google.appengine:appengine-endpoints:1.9.30" />
           <element id="library" level="project" name="Maven: javax.inject:javax.inject:1" />
         </element>
       </element>

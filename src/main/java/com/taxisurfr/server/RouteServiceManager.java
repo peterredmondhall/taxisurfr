@@ -1,5 +1,7 @@
 package com.taxisurfr.server;
 
+import com.google.common.base.Predicate;
+import com.google.common.collect.FluentIterable;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.Contractor;
@@ -7,6 +9,7 @@ import com.taxisurfr.server.entity.Route;
 import com.taxisurfr.shared.model.AgentInfo;
 import com.taxisurfr.shared.model.RouteInfo;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -177,7 +180,14 @@ public class RouteServiceManager extends Manager
         }
     }
 
-    public List<Route> getRoutesAsEntities(String query) {
-        return ofy().load().type(Route.class).list();
+    public List<Route> getRoutesAsEntities(final String query) {
+
+        final String queryUpper = query.toUpperCase();
+        return FluentIterable.from(ofy().load().type(Route.class).list()).filter(new Predicate<Route>() {
+            @Override
+            public boolean apply(@Nullable Route route) {
+                return route.getStart().toUpperCase().startsWith(queryUpper);
+            }
+        }).toList();
     }
 }

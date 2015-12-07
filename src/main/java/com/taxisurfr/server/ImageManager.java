@@ -42,51 +42,17 @@ public class ImageManager extends Manager
             ArugamImage arugamImage = ArugamImage.getArugamImage(info);
             ObjectifyService.ofy().save().entity(arugamImage).now();
         return  arugamImage.id;
-//        }
-//        catch (Exception e)
-//        {
-//            logger.severe(e.getMessage());
-//        }
-//        finally
-//        {
-//            em.close();
-//        }
-//        return id;
     }
 
     public byte[] getImage(Long imageId)
     {
+        logger.info("getImage "+imageId);
         ArugamImage arugamImage = ObjectifyService.ofy().load().type(ArugamImage.class).id(imageId).now();
-        return arugamImage.getImage().getBytes();
-
+        if (arugamImage != null) {
+            logger.info("image found");
+            return arugamImage.getImage().getBytes();
+        }
+        return null;
     }
 
-//    public String dump()
-//    {
-//        EntityManager em = getEntityManager();
-//        List<ArugamImage> imageList = Lists.newArrayList();
-//        try
-//        {
-//            @SuppressWarnings("unchecked")
-//            List<Route> routes = em.createQuery("select t from Route t ").getResultList();
-//            for (Route route : routes)
-//            {
-//                if (route.getImage() != null)
-//                {
-//                    ArugamImage image = em.find(ArugamImage.class, route.getImage());
-//                    imageList.add(image);
-//                }
-//            }
-//        }
-//        catch (Exception e)
-//        {
-//            logger.log(Level.SEVERE, e.getMessage(), e);
-//        }
-//        finally
-//        {
-//            em.close();
-//        }
-//
-//        return new XStream().toXML(imageList);
-//    }
 }

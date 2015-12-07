@@ -1,60 +1,86 @@
+
 <div class='container-fluid'>
 
-    <div class="form-group">
-        <label for="arrivalDate">Date of arrival</label>
-        <input type="date" class="form-control" id="arrivalDate" placeholder="Date of arrival" ng-model="booking.date">
-    </div>
-    <div class="form-group">
-        <label for="flightNo">Flight no.</label>
-        <input type="text" class="form-control" id="flightNo" placeholder="Flight no." ng-model="booking.flightNo"  ng-required="required">
-    </div>
 
-    <div class="form-group">
-        <label for="landingTime">Landing time</label>
-        <input type="text" class="form-control" id="landingTime" placeholder="Landing time"
-               ng-model="booking.pickupTime"  ng-required="required">
-    </div>
+    <!-- pass in the variable if our form is valid or invalid -->
+    <form name="detailsForm" novalidate>
+        <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
 
-    <!--<div class="form-group">-->
-        <!--<label for="numPassengers">Number of Passengers</label>-->
-        <!--<input type="number" class="form-control" id="numPassengers" placeholder="1"-->
-               <!--ng-model="booking.numPassengers"  ng-required="required">-->
-    <!--</div>-->
+        <div class="form-group  col-xs-12 row ">
+            <div class="col-xs-6">
+            <label>Date of arrival</label>
+                <pre><em>{{booking.date | date:'fullDate' }}</em></pre>
+            <!--<input type="date" class="form-control" id="arrivalDate" placeholder="dd-MM-yyyy"-->
+                   <!--ng-model="booking.date" value="{{ booking.date | date: 'dd-MM-yyyy' }}"-->
+                   <!--required>-->
+            </div>
+            <div class="col-xs-6">
+                <uib-datepicker ng-model="booking.date" min-date="minDate" show-weeks="true" class="well well-sm" custom-class="getDayClass(date, mode)"></uib-datepicker>
+            </div>
+        </div>
 
-    <div class="form-group">
-        <label for="name">Your name</label>
-        <input type="text" class="form-control" id="name" placeholder="Your Name" ng-model="booking.name"   ng-required="required">
-    </div>
+        <!--flightNo-->
+        <div class="form-group col-xs-12">
+            <label for="flightNoId">Flight no.</label>
+            <input type="text" class="form-control" name="flightNo" id="flightNoId" placeholder="Flight no."
+                   ng-model="booking.flightNo"
+                   required/>
 
-    <div class="form-group">
-        <label for="wantToShare">Interested in sharing</label>
-        <input type="checkbox" class="form-control" id="wantToShare" placeholder="Landing time"
-               ng-model="booking.wantToShare">
-    </div>
+            <p ng-show="detailsForm.flightNo.$invalid && !detailsForm.flightNo.$pristine" class="help-block">Your
+                flightNo is required.</p>
+        </div>
 
-    <!--<div class="form-group">-->
-        <!--<label for="email">Your email</label>-->
-        <!--<input type="email" class="form-control" id="email" placeholder="xxx@yyy.com" ng-model="booking.email" ng-required="email required">-->
-    <!--</div>-->
+        <div class="form-group col-xs-12">
+            <label for="flightNoId">Landing Time.</label>
+            <input type="text" class="form-control" name="landingTime" placeholder="Landing time"
+                   ng-model="booking.landingTime"
+                   required/>
 
-    <div class="form-group">
-        <label for="numSurfboards">Number of Passengers</label>
-        <input type="number" class="form-control" id="numSurfboards" placeholder="0"
-               ng-model="booking.numSurfboards">
-    </div>
+            <p ng-show="detailsForm.landingTime.$invalid && !detailsForm.landingTime.$pristine" class="help-block">Your
+                landing time is required.</p>
+        </div>
+        <!-- NAME -->
+        <div class="form-group col-xs-12">
+            <label>Your Name</label>
+            <input type="text" class="form-control" name="name" ng-model="booking.name" required>
 
-    <div class="form-group">
-        <label for="requirements">Other requirements</label>
-        <input type="text" class="form-control" id="requirements" placeholder="Landing time"
-               ng-model="booking.requirements">
-    </div>
+            <p ng-show="detailsForm.name.$invalid && !detailsForm.name.$pristine" class="help-block">Your name is
+                required.</p>
+        </div>
+
+        <!-- EMAIL -->
+        <div class="form-group col-xs-12">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" ng-model="booking.email" required>
+
+            <p ng-show="detailsForm.email.$invalid && !detailsForm.email.$pristine" class="help-block">A valid email is
+                required.</p>
+        </div>
+
+        <div class="form-group col-xs-6">
+            <label>Number of Passengers</label>
+            <input type="number" class="form-control" id="numPassengers" placeholder="1"
+                   ng-model="booking.pax">
+        </div>
+
+        <div class="form-group col-xs-6">
+            <label>Number of Surfboards</label>
+            <input type="number" class="form-control" id="numSurfboards" placeholder="0"
+                   ng-model="booking.surfboards">
+        </div>
 
 
-    <div class="form-group row">
-        <div class="col-xs-6 col-xs-offset-3">
-            <button ui-sref="form.payment" class="btn btn-block btn-info" ng-click="addBooking()">
-                Next Section <span class="glyphicon glyphicon-circle-arrow-right"></span>
+        <div class="form-group col-xs-12">
+            <label for="requirements">Other requirements</label>
+            <input type="text" class="form-control" id="requirements" placeholder=""
+                   ng-model="booking.requirements">
+        </div>
+        <div class="col-xs-6">
+            <button ui-sref="form.summary" ng-disabled="detailsForm.$invalid" class="btn btn-block btn-info "
+                    ng-click="addBooking()">
+                Continue to summary <span class="glyphicon glyphicon-circle-arrow-right"></span>
             </button>
         </div>
-    </div>
+    </form>
+
 </div>

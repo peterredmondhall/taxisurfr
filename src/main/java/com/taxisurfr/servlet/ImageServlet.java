@@ -3,6 +3,7 @@ package com.taxisurfr.servlet;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.logging.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,24 +14,25 @@ import com.taxisurfr.server.ImageManager;
 
 public class ImageServlet extends HttpServlet
 {
-    /**
-     * 
-     */
     private static final long serialVersionUID = 1L;
+    public static final Logger log = Logger.getLogger(ImageServlet.class.getName());
+
     ImageManager manager = new ImageManager();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        String imageStr = req.getParameter("image");
+        log.info("doGet:"+imageStr);
         Long imageId = null;
         try
         {
-            imageId = Long.parseLong(req.getParameter("image"));
+            imageId = Long.parseLong(imageStr);
 
         }
         catch (Exception ex)
         {
-
+            log.severe("could parse image");
         }
         if (imageId != null)
         {
@@ -58,7 +60,7 @@ public class ImageServlet extends HttpServlet
             }
             catch (Exception e1)
             {
-                e1.printStackTrace();
+                log.severe("doGet:image "+e1.getMessage());
             }
         }
     }

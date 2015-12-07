@@ -137,6 +137,16 @@
 		<url-pattern>/init</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>JQueryLoggingServlet</servlet-name>
+		<servlet-class>com.taxisurfr.servlet.JQueryLoggingServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>JQueryLoggingServlet</servlet-name>
+		<url-pattern>/taxisurfr/logging</url-pattern>
+	</servlet-mapping>
+
+
 	<!--<servlet>-->
 	<!--<servlet-name>RouteServlet</servlet-name>-->
 	<!--<servlet-class>com.taxisurfr.servlet.RouteServlet</servlet-class>-->

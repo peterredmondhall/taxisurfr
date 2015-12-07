@@ -1,0 +1,114 @@
+<div class='container-fluid'>
+
+    <!-- pass in the variable if our form is valid or invalid -->
+    <form name="detailsForm" novalidate>
+        <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
+
+        <div class="col-xs-12">
+        <table>
+            <tr>
+                <td>Date of arrival</td>
+                <td>{{booking.date | date: 'dd-MM-yyyy'}}</td>
+            </tr>
+            <tr>
+                <td>Flight no.</td>
+                <td>{{booking.flightNo}}</td>
+            </tr>
+            <tr>
+                <td>Landing Time.</td>
+                <td>{{booking.landingTime}}</td>
+            </tr>
+            <tr>
+                <td>Your Name</td>
+                <td>{{booking.name}}</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>{{booking.email}}</td>
+            </tr>
+            <tr>
+                <td>Passengers</td>
+                <td>{{booking.pax}}</td>
+            </tr>
+            <tr>
+                <td>Surfboards</td>
+                <td>{{booking.surfboards}}</td>
+            </tr>
+            <tr>
+                <td>Other requirements</td>
+                <td>{{booking.requirements}}</td>
+            </tr>
+        </table>
+        </div>
+
+        <div class="col-xs-6">
+            <button ui-sref="form.payment" ng-disabled="detailsForm.$invalid" class="btn btn-block btn-info "
+            >
+                Payment <span class="glyphicon glyphicon-circle-arrow-right"></span>
+            </button>
+        </div>
+    </form>
+
+</div><!-- /container -->
+
+
+<!--<div class='container-fluid'>-->
+
+<!--<form name="test-form" ng-submit="submitForm(test-form.$valid)" novalidate >-->
+<!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<label for="arrivalDate">Date of arrival</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="date" class="form-control" id="arrivalDate" placeholder="Date of arrival"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-model="booking.date"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-required>&ndash;&gt;-->
+
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<label>Flight no.</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="text" class="form-control" name="flightNo" placeholder="Flight no." ng-model="booking.flightNo"&ndash;&gt;-->
+<!--&lt;!&ndash;required/>&ndash;&gt;-->
+<!--&lt;!&ndash;<p ng-show="test-form.flightNo.$invalid && !test-form.flightNo.$pristine" class="help-block">Your flightNo is required.</p>&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<label for="landingTime">Landing time</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="text" class="form-control" id="landingTime" placeholder="Landing time"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-model="booking.pickupTime" ng-required="required">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+<!--&lt;!&ndash;<label for="numPassengers">Number of Passengers</label>&ndash;&gt;-->
+<!--&lt;!&ndash;<input type="number" class="form-control" id="numPassengers" placeholder="1"&ndash;&gt;-->
+<!--&lt;!&ndash;ng-model="booking.numPassengers"  ng-required="required">&ndash;&gt;-->
+<!--&lt;!&ndash;</div>&ndash;&gt;-->
+
+<!--<div class="form-group">-->
+<!--<label for="name">Your name</label>-->
+<!--<input type="text" class="form-control" id="name" placeholder="Your Name" ng-model="booking.name"-->
+<!--ng-required>-->
+<!--</div>-->
+
+<!--<div class="form-group">-->
+<!--<label for="wantToShare">Interested in sharing</label>-->
+<!--<input type="checkbox" class="form-control" id="wantToShare" placeholder="Landing time"-->
+<!--ng-model="booking.wantToShare">-->
+<!--</div>-->
+
+<!--<div class="form-group">-->
+<!--<label for="email">Your email</label>-->
+<!--<input type="email" class="form-control" id="email" placeholder="xxx@yyy.com" ng-model="booking.email"-->
+<!--required/>-->
+<!--</div>-->
+
+
+<!--<div class="form-group row">-->
+<!--<div class="col-xs-6 ">-->
+<!--&lt;!&ndash;<button ui-sref="form.payment" class="btn btn-block btn-info" ng-click="addBooking()">&ndash;&gt;-->
+<!--<button ng-disabled="test-form.$invalid" class="btn btn-block btn-info" ng-click="addBooking()">-->
+<!--Payment <span class="glyphicon glyphicon-circle-arrow-right"></span>-->
+<!--</button>-->
+<!--</div>-->
+<!--</div>-->
+
+
+<!--</form>-->
+<!--</div>-->
