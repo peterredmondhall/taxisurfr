@@ -29,6 +29,9 @@ public class Route extends ArugamEntity<RouteInfo>
     @Index
     private boolean inactive;
     private Long associatedRoute = NO_ASSOCIATED;
+    @Index
+    private String link;
+
 
     public Long getId() {
         return id;
@@ -178,6 +181,13 @@ public class Route extends ArugamEntity<RouteInfo>
     public Long getAssociatedRoute()
     {
         return associatedRoute;
+    }
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 
 }

@@ -146,6 +146,15 @@
 		<url-pattern>/taxisurfr/logging</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>LinkServlet</servlet-name>
+		<servlet-class>com.taxisurfr.servlet.LinkServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LinkServlet</servlet-name>
+		<url-pattern>/sf/*</url-pattern>
+	</servlet-mapping>
+
 
 	<!--<servlet>-->
 	<!--<servlet-name>RouteServlet</servlet-name>-->

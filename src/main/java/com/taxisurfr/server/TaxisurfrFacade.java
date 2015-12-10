@@ -45,6 +45,11 @@ public class TaxisurfrFacade {
         return routeServiceManager.getRoutesAsEntities(query);
     }
 
+    @ApiMethod(name = "route.link", httpMethod = "post")
+    public Route getRouteById(@Named("routeId")String routeId) throws IllegalArgumentException {
+        return routeServiceManager.getRoute(Long.parseLong(routeId));
+    }
+
     @ApiMethod(name = "session.get", httpMethod = "post")
     public StatInfo getStat(Route route) throws IllegalArgumentException {
         StatInfo statInfo = new StatInfo();

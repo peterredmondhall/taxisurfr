@@ -355,6 +355,7 @@ public class BookingServiceManager extends Manager
         route11.setCents(101L);
         route11.setAgentCents(100L);
         route11.setContractorId(contractor1.id);
+        route11.setLink("hikkaduwa");
         ObjectifyService.ofy().save().entity(route11).now();
 
         //route 2 contractor 1

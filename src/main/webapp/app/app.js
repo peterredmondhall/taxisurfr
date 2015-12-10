@@ -22,6 +22,16 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
             .state('form.transport', {
                 url: '/transport',
                 templateUrl: 'app/form-transport.html'
+
+            })
+
+            .state('form.route', {
+                url: '/route?route',
+                templateUrl: 'app/form-transport.html',
+                controller: function($scope, $stateParams) {
+                    $state.routeId = $stateParams.route;
+                }
+
             })
 
             // url will be /form/interests
@@ -52,7 +62,12 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
 
         // catch all route
         // send users to the form page
-        $urlRouterProvider.otherwise('/form/transport');
+        //$urlRouterProvider.otherwise('/form/transport');
+
+        $urlRouterProvider.otherwise(function ($injector, $location) {
+            var searchObject = $location.search().route;
+            return '/form/transport';
+        });
     })
 
     //.config(function (GApi) {
@@ -80,6 +95,7 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
             GApi.load('calendar', 'v3');
             GAuth.setClient(CLIENT);
             GAuth.setScope('https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/calendar.readonly');
+
 
             GApi.execute('taxisurfr', 'session.get')
                 .then(function (response) {
@@ -113,18 +129,27 @@ angular.module('formApp', ['ngAnimate', 'ui.router', 'ui.bootstrap', 'angular-go
             //    numPassengers: '1',
             //    numBoards: '2'
             //};
-
+            if ($state.params.route){
+                GApi.execute('taxisurfr', 'route.link', {routeId: $state.params.route}
+                ).then(function (response) {
+                    $scope.route = response;
+                    $state.go('form.transport');
+                });
+            }
             //$scope.expMonth =  $scope.cardData.expMonth;
             //$scope.expYear = $scope.cardData.expYear;
 
             $scope.processing = false;
+            $scope.inputready = true;
 
             //$scope.formData = {};
             $scope.getLocation = function (val) {
-                if (val.length > 3) {
+                if (val.length > 3 && $scope.inputready) {
+                    $scope.inputready = false;
                     return GApi.execute('taxisurfr', 'routes.query', {query: val}
                     ).then(function (response) {
                         return response.items.map(function (item) {
+                            $scope.inputready = true;
                             return item;
                         });
                     });
