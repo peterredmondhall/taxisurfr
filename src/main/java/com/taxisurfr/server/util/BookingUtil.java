@@ -45,7 +45,7 @@ public class BookingUtil
         List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
 
         list.add(Pair.of(ROUTE, bookingInfo.getRouteInfo().getKey("")));
-        list.add(Pair.of(DATE, sdf.print(new DateTime(bookingInfo.getDate()))));
+        list.add(Pair.of(DATE, bookingInfo.getDateText()));
         RouteInfo.PickupType pickupType = bookingInfo.getRouteInfo().getPickupType();
         list.add(Pair.of(pickupType.getLocationType(), bookingInfo.getFlightNo()));
         list.add(Pair.of(pickupType.getTimeType(), bookingInfo.getLandingTime()));
@@ -64,7 +64,7 @@ public class BookingUtil
         List<Pair<String, String>> list = new ArrayList<Pair<String, String>>();
 
         list.add(Pair.of(ROUTE, route.getStart()+" to "+route.getEnd()));
-        list.add(Pair.of(DATE, sdf.print(new DateTime(booking.getDate()))));
+        list.add(Pair.of(DATE, booking.getDateText()));
         RouteInfo.PickupType pickupType = route.getPickupType();
         list.add(Pair.of(pickupType.getLocationType(), booking.getFlightNo()));
         list.add(Pair.of(pickupType.getTimeType(), booking.getLandingTime()));

@@ -32,7 +32,7 @@ public class ImageServlet extends HttpServlet
         }
         catch (Exception ex)
         {
-            log.severe("could parse image");
+            log.severe("could not parse image with id:"+imageStr);
         }
         if (imageId != null)
         {

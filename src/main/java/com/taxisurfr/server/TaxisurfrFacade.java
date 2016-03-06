@@ -2,13 +2,16 @@ package com.taxisurfr.server;
 
 import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.*;
+import com.taxisurfr.server.js.NewSessionJS;
 import com.taxisurfr.server.util.Mailer;
 import com.taxisurfr.shared.model.StatInfo;
 
 import javax.inject.Named;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -24,6 +27,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
 /**
  * The server-side implementation of the RPC service.
  */
+
 @SuppressWarnings("serial")
 public class TaxisurfrFacade {
     private static final Logger logger = Logger.getLogger(TaxisurfrFacade.class.getName());
@@ -36,12 +40,32 @@ public class TaxisurfrFacade {
     private final ContractorManager contractorManager = new ContractorManager();
     private final AgentManager agentManager = new AgentManager();
 
+    public static final class Query{
+        public String start;
+        public String end;
+    }
 
 
+    @ApiMethod(name = "routes.start", httpMethod = "post")
+    public Set<String> getRoutesStart(@Named("query") String query) throws IllegalArgumentException {
+        logger.info("query start:"+query);
+        Set<String> result = routeServiceManager.getRoutesStart(query);
+        logger.info("result size:"+result.size());
+        return result;
+    }
+
+    @ApiMethod(name = "routes.end", httpMethod = "post")
+    public List<Route> getRoutesEnd(Query query) throws IllegalArgumentException {
+        logger.info("query start:"+query.start+" end:"+query.end);
+        List<Route> result = routeServiceManager.getRoutesFromQuery(query.start, query.end);
+        logger.info("result size:"+result.size());
+        return result;
+
+    }
 
     @ApiMethod(name = "routes.query", httpMethod = "post")
     public List<Route> getRoutesByQuery(@Named("query") String query) throws IllegalArgumentException {
-        System.out.println("query:" + query);
+        logger.info("query:" + query);
         return routeServiceManager.getRoutesAsEntities(query);
     }
 
@@ -52,22 +76,21 @@ public class TaxisurfrFacade {
 
     @ApiMethod(name = "session.get", httpMethod = "post")
     public StatInfo getStat(Route route) throws IllegalArgumentException {
+        ObjectifyService.begin();
         StatInfo statInfo = new StatInfo();
         statInfo.setStripePublishable(bookingManager.getProfil().getStripePublishable());
         return statInfo;
     }
 
     @ApiMethod(name = "session.new", httpMethod = "post")
-    public SessionStat addSession(Route route) throws IllegalArgumentException {
-        System.out.println("addSession");
-        SessionStat sessionStat = new SessionStat();
-        sessionStat.setRoute(route.getStart() + " to " + route.getEnd());
-        return statManager.createSessionStat(sessionStat);
+    public SessionStat addSession(NewSessionJS newSessionJS) throws IllegalArgumentException {
+        logger.info("session.new"+newSessionJS.start+" to "+newSessionJS.end);
+        return statManager.addRoute(newSessionJS.reference, newSessionJS.route, newSessionJS.start, newSessionJS.end);
     }
 
     @ApiMethod(name = "booking.new", httpMethod = "post")
     public Booking addBooking(Booking booking) throws IllegalArgumentException {
-        System.out.println("addBooking");
+        logger.info("addBooking");
         return bookingManager.createBooking(booking);
     }
 

@@ -1,196 +1,170 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
               http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
+         version="2.5" xmlns="http://java.sun.com/xml/ns/javaee">
 
-	<servlet>
-		<servlet-name>BookingServiceServlet</servlet-name>
-		<servlet-class>com.taxisurfr.server.BookingServiceImpl</servlet-class>
-	</servlet>
+    <servlet>
+        <servlet-name>BookingServiceServlet</servlet-name>
+        <servlet-class>com.taxisurfr.server.BookingServiceImpl</servlet-class>
+    </servlet>
 
-	<servlet-mapping>
-		<servlet-name>BookingServiceServlet</servlet-name>
-		<url-pattern>/taxisurfr/service</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>BookingServiceServlet</servlet-name>
-		<url-pattern>/taxisurfr_dashboard/service</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingServiceServlet</servlet-name>
+        <url-pattern>/taxisurfr/service</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>BookingServiceServlet</servlet-name>
+        <url-pattern>/taxisurfr_dashboard/service</url-pattern>
+    </servlet-mapping>
 
-	<servlet-mapping>
-		<servlet-name>ImageUploadServlet</servlet-name>
-		<url-pattern>*.gupld</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>DatasetUploadServlet</servlet-name>
-		<url-pattern>*.datasetupld</url-pattern>
-	</servlet-mapping>
-		<servlet-mapping>
-		<servlet-name>DumpServlet</servlet-name>
-		<url-pattern>/dataset</url-pattern>
-	</servlet-mapping>
-	
-	<servlet-mapping>
-		<servlet-name>StatServlet</servlet-name>
-		<url-pattern>/stat</url-pattern>
-	</servlet-mapping>
-			
-	<servlet-mapping>
-		<servlet-name>ImageServlet</servlet-name>
-		<url-pattern>/imageservice</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageUploadServlet</servlet-name>
+        <url-pattern>*.gupld</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DatasetUploadServlet</servlet-name>
+        <url-pattern>*.datasetupld</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DumpServlet</servlet-name>
+        <url-pattern>/dataset</url-pattern>
+    </servlet-mapping>
 
 
-	<servlet>
-		<servlet-name>DumpServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.DumpServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>ImageServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.ImageServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>LoginServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.LoginServlet</servlet-class>
-	</servlet>
-
-	<servlet-mapping>
-		<servlet-name>LoginServlet</servlet-name>
-		<url-pattern>/taxisurfr/login</url-pattern>
-	</servlet-mapping>
-
-	<servlet>
-		<servlet-name>ImageUploadServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.ImageUploadServlet</servlet-class>
-	</servlet>
-	<servlet>
-		<servlet-name>DatasetUploadServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.DatasetUploadServlet</servlet-class>
-	</servlet>
-	
-	<servlet>
-		<servlet-name>PDFRendererServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.PDFRendererServlet</servlet-class>
-	</servlet>
-
-	<servlet>
-		<servlet-name>RatingServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.RatingServlet</servlet-class>
-	</servlet>
-
-		<servlet>
-		<servlet-name>StatServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.StatServlet</servlet-class>
-	</servlet>
-
-		<servlet-mapping>
-		<servlet-name>PDFRendererServlet</servlet-name>
-		<url-pattern>/orderform</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>RatingServlet</servlet-name>
-		<url-pattern>/rating</url-pattern>
-	</servlet-mapping>
-		
-	<servlet>
-	    <servlet-name>remoteLogging</servlet-name>
-	    <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-	    <servlet-name>remoteLogging</servlet-name>
-	    <url-pattern>/taxisurfr/remote_logging</url-pattern>
-	</servlet-mapping>
-	
-	
-	<servlet>
-		<servlet-name>FacebookServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.FacebookServlet</servlet-class>
-	</servlet>
-	
-	<servlet-mapping>
-		<servlet-name>FacebookServlet</servlet-name>
-		<url-pattern>/facebookapp</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImageServlet</servlet-name>
+        <url-pattern>/imageservice</url-pattern>
+    </servlet-mapping>
 
 
-	<servlet>
-		<servlet-name>RecommendationServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.RecommendedServlet</servlet-class>
-	</servlet>
+    <servlet>
+        <servlet-name>DumpServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.DumpServlet</servlet-class>
+    </servlet>
 
-	<servlet-mapping>
-		<servlet-name>RecommendationServlet</servlet-name>
-		<url-pattern>/recommended</url-pattern>
-	</servlet-mapping>
+    <servlet>
+        <servlet-name>ImageServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.ImageServlet</servlet-class>
+    </servlet>
 
-	<servlet>
-		<servlet-name>InitServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.InitServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>InitServlet</servlet-name>
-		<url-pattern>/init</url-pattern>
-	</servlet-mapping>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.LoginServlet</servlet-class>
+    </servlet>
 
-	<servlet>
-		<servlet-name>JQueryLoggingServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.JQueryLoggingServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>JQueryLoggingServlet</servlet-name>
-		<url-pattern>/taxisurfr/logging</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/taxisurfr/login</url-pattern>
+    </servlet-mapping>
 
-	<servlet>
-		<servlet-name>LinkServlet</servlet-name>
-		<servlet-class>com.taxisurfr.servlet.LinkServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>LinkServlet</servlet-name>
-		<url-pattern>/sf/*</url-pattern>
-	</servlet-mapping>
+    <servlet>
+        <servlet-name>ImageUploadServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.ImageUploadServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DatasetUploadServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.DatasetUploadServlet</servlet-class>
+    </servlet>
 
+    <servlet>
+        <servlet-name>PDFRendererServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.PDFRendererServlet</servlet-class>
+    </servlet>
 
-	<!--<servlet>-->
-	<!--<servlet-name>RouteServlet</servlet-name>-->
-	<!--<servlet-class>com.taxisurfr.servlet.RouteServlet</servlet-class>-->
-	<!--</servlet>-->
-	<!--<servlet-mapping>-->
-	<!--<servlet-name>RouteServlet</servlet-name>-->
-	<!--<url-pattern>/loadall</url-pattern>-->
-	<!--</servlet-mapping>-->
+    <servlet>
+        <servlet-name>RatingServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.RatingServlet</servlet-class>
+    </servlet>
 
 
-	<filter>
-		<filter-name>ObjectifyFilter</filter-name>
-		<filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
-	</filter>
-	<filter-mapping>
-		<filter-name>ObjectifyFilter</filter-name>
-		<url-pattern>/*</url-pattern>
-	</filter-mapping>
+    <servlet-mapping>
+        <servlet-name>PDFRendererServlet</servlet-name>
+        <url-pattern>/orderform</url-pattern>
+    </servlet-mapping>
 
-	<servlet>
-		<servlet-name>SystemServiceServlet</servlet-name>
-		<servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
-		<init-param>
-			<param-name>services</param-name>
-			<param-value>com.taxisurfr.server.TaxisurfrFacade</param-value>
-		</init-param>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>SystemServiceServlet</servlet-name>
-		<url-pattern>/_ah/spi/*</url-pattern>
-	</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RatingServlet</servlet-name>
+        <url-pattern>/rating</url-pattern>
+    </servlet-mapping>
 
-	<!-- Default page to serve -->
-	<welcome-file-list>
-		<welcome-file>index.html</welcome-file>
-	</welcome-file-list>
+    <servlet>
+        <servlet-name>remoteLogging</servlet-name>
+        <servlet-class>com.google.gwt.logging.server.RemoteLoggingServiceImpl</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>remoteLogging</servlet-name>
+        <url-pattern>/taxisurfr/remote_logging</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>FacebookServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.FacebookServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>FacebookServlet</servlet-name>
+        <url-pattern>/facebookapp</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>RecommendationServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.RecommendedServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>RecommendationServlet</servlet-name>
+        <url-pattern>/recommended</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>JQueryLoggingServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.JQueryLoggingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JQueryLoggingServlet</servlet-name>
+        <url-pattern>/taxisurfr/logging</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SessionServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.SessionServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>SessionServlet</servlet-name>
+        <url-pattern>/taxisurfr/session</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LinkServlet</servlet-name>
+        <servlet-class>com.taxisurfr.servlet.LinkServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LinkServlet</servlet-name>
+        <url-pattern>/sf/*</url-pattern>
+    </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>SystemServiceServlet</servlet-name>
+        <servlet-class>com.google.api.server.spi.SystemServiceServlet</servlet-class>
+        <init-param>
+            <param-name>services</param-name>
+            <param-value>com.taxisurfr.server.TaxisurfrFacade</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SystemServiceServlet</servlet-name>
+        <url-pattern>/_ah/spi/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- Default page to serve -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+    </welcome-file-list>
 
 </web-app>

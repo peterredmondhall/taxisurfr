@@ -46,6 +46,7 @@ public class Contractor extends ArugamEntity<ContractorInfo> {
 
     public static Contractor getContractor(ContractorInfo contractorInfo) {
         Contractor contractor = new Contractor();
+        contractor.setId(contractorInfo.getId());
         contractor.setName(contractorInfo.getName());
         contractor.setAgentId(contractorInfo.getAgentId());
         contractor.setAddress(contractorInfo.getAddress());
@@ -94,4 +95,7 @@ public class Contractor extends ArugamEntity<ContractorInfo> {
         return mobile;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

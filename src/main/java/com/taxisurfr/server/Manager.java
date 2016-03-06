@@ -1,8 +1,10 @@
 package com.taxisurfr.server;
 
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.Agent;
 import com.taxisurfr.server.entity.ArugamEntity;
@@ -53,15 +55,12 @@ public class Manager<T extends Info, K extends ArugamEntity<?>>
         return agents;
     }
 
-    public void importDataset(String dataset, Class<?> type)
-    {
+    public void importDataset(String dataset, Class<?> type) {
         deleteAll(type);
 
         String[] datasets = dataset.split("<list>");
-        for (String ds : datasets)
-        {
-            if (ds.contains(type.getSimpleName() + "Info"))
-            {
+        for (String ds : datasets) {
+            if (ds.contains(type.getSimpleName() + "Info")) {
                 dataset = "<list>" + ds;
                 break;
             }

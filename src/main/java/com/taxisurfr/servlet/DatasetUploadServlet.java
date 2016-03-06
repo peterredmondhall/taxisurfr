@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.AgentManager;
 import com.taxisurfr.server.RouteServiceManager;
 import com.taxisurfr.server.entity.Agent;
@@ -45,6 +46,7 @@ public class DatasetUploadServlet extends HttpServlet
     {
         try
         {
+            ObjectifyService.begin();
             ServletFileUpload upload = new ServletFileUpload();
             res.setContentType("text/plain");
 
@@ -64,10 +66,10 @@ public class DatasetUploadServlet extends HttpServlet
                             ", name = " + item.getName());
 
                     String dataset = new String(ByteStreams.toByteArray(stream));
-
-                    bookingServiceManager.importDataset(dataset, Booking.class);
-                    ratingManager.importDataset(dataset, Rating.class);
-                    imageManager.importDataset(dataset, ArugamImage.class);
+//
+//                    bookingServiceManager.importDataset(dataset, Booking.class);
+//                    ratingManager.importDataset(dataset, Rating.class);
+//                    imageManager.importDataset(dataset, ArugamImage.class);
                     routeServiceManager.importDataset(dataset, Route.class);
                     contractorManager.importDataset(dataset, Contractor.class);
                     agentManager.importDataset(dataset, Agent.class);

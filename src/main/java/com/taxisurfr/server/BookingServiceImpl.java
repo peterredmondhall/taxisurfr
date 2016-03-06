@@ -6,6 +6,8 @@ import com.google.api.server.spi.config.ApiMethod;
 import com.google.appengine.api.users.User;
 import com.google.common.collect.Lists;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.googlecode.objectify.ObjectifyFilter;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.client.service.BookingService;
 import com.taxisurfr.server.entity.Agent;
 import com.taxisurfr.server.entity.Profil;
@@ -55,6 +57,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "bookings.add", httpMethod = "post")
     public BookingInfo addBooking(BookingInfo bookingInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return bookingServiceManager.addBookingWithClient(bookingInfo, getClient());
     }
 
@@ -62,18 +65,21 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "route.delete", httpMethod = "post")
     public List<RouteInfo> deleteRoute(AgentInfo userInfo, RouteInfo placeInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return routeServiceManager.deleteRoute(userInfo, placeInfo);
     }
 
     @Override
     public List<RouteInfo> saveRoute(AgentInfo userInfo, RouteInfo placeInfo, @Named("mode")RouteInfo.SaveMode mode) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return routeServiceManager.saveRoute(userInfo, placeInfo, mode);
     }
 
     @Override
     public List<RouteInfo> getRoutesByAgent(AgentInfo userInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return routeServiceManager.getRoutes(userInfo);
     }
 
@@ -81,6 +87,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     @ApiMethod(name = "routes.get.query", httpMethod = "post")
     public List<RouteInfo> getRoutesByQuery(@Named("query")String query) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return routeServiceManager.getRoutes(query);
     }
 
@@ -88,6 +95,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     @ApiMethod(name = "bookings.agent", path = "bookingsagent",httpMethod = "post")
     public List<BookingInfo> getBookingsForAgent(AgentInfo agentInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return bookingServiceManager.getBookingsAsInfo(agentInfo.getId());
     }
 
@@ -96,6 +104,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "profil.get", httpMethod = "post")
     public ProfilInfo getPaypalProfil() throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         ProfilInfo profilInfo = bookingServiceManager.getProfil().getInfo();
         logger.info(profilInfo.toString());
         return profilInfo;
@@ -111,6 +120,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     @ApiMethod(name = "bookings.route", path = "bookingsroute",httpMethod = "post")
     public List<BookingInfo> getBookingsForRoute(RouteInfo routeInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         logger.info("route inquiry:" + routeInfo.getStart() + " -> " + routeInfo.getEnd());
         return bookingServiceManager.getBookingsForRoute(routeInfo);
     }
@@ -119,6 +129,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     @ApiMethod(name = "bookings.share.accepted", httpMethod = "post")
     public List<BookingInfo> handleShareAccepted(@Named("id")Long sharerId) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         BookingInfo sharer = bookingServiceManager.getBookingAsInfo(sharerId);
         BookingInfo parentBookingInfo = bookingServiceManager.getBookingAsInfo(sharer.getParentId());
 
@@ -140,6 +151,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "share.request.send", httpMethod = "post")
     public BookingInfo sendShareRequest(BookingInfo bookingInfo)
     {
+        ObjectifyService.begin();
         Profil profil = bookingServiceManager.getProfil();
         BookingInfo parentBooking = bookingServiceManager.getBookingAsInfo(bookingInfo.getParentId());
         Mailer.sendShareRequest(parentBooking, bookingInfo, profil);
@@ -149,6 +161,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     @Override
     public BookingInfo payWithStripe(@Named("token")String token, BookingInfo bookingInfo)
     {
+        ObjectifyService.begin();
         logger.info("payWithStripe" + bookingInfo.getPaidPrice());
         Profil profil = bookingServiceManager.getProfil();
         logger.info("payWithStripe" + bookingInfo.getPaidPrice());
@@ -182,6 +195,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "stat.send", httpMethod = "post")
     public void sendStat(StatInfo statInfo)
     {
+        ObjectifyService.begin();
         logger.info(statInfo.getDetail());
         statManager.updateSessionStat(statInfo);
     }
@@ -190,6 +204,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "agent.get", httpMethod = "post")
     public AgentInfo getUser() throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         AgentInfo userInfo = null;
         User user = getUserFromSession();
         if (user != null)
@@ -213,6 +228,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "ratings.get", httpMethod = "post")
     public List<RatingInfo> getRatings(RouteInfo routeInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return ratingManager.getRatings(routeInfo);
     }
 
@@ -220,6 +236,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "ratings.add", httpMethod = "post")
     public void addRating(RatingInfo ratingInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         ratingManager.add(ratingInfo);
     }
 
@@ -227,6 +244,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "contractors.get", httpMethod = "post")
     public List<ContractorInfo> getContractors(AgentInfo agentInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return contractorManager.getContractors(agentInfo);
     }
 
@@ -234,6 +252,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "contractor.delete", httpMethod = "post")
     public List<ContractorInfo> deleteContractor(AgentInfo agentInfo, ContractorInfo contractorInfo) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return contractorManager.deleteContractor(agentInfo, contractorInfo);
     }
 
@@ -241,6 +260,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "contractor.save", httpMethod = "post")
     public List<ContractorInfo> saveContractor(AgentInfo agentInfo, ContractorInfo contractorInfo, @Named("mode")ContractorInfo.SaveMode mode) throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return contractorManager.saveContractor(agentInfo, contractorInfo, mode);
     }
 
@@ -248,6 +268,7 @@ public class BookingServiceImpl extends RemoteServiceServlet implements
     //@ApiMethod(name = "agents.get", httpMethod = "post")
     public List<AgentInfo> getAgents() throws IllegalArgumentException
     {
+        ObjectifyService.begin();
         return agentManager.getAgents();
     }
 

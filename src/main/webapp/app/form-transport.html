@@ -49,17 +49,44 @@
         </ul>
     </div>
 </script>
-
 <div class='container-fluid typeahead-route'>
 
     <form name="transportForm" novalidate>
 
-        <input type="text" ng-model="asyncSelected" placeholder="e.g. Colombo Airport Arugam Bay"
-               uib-typeahead="route as (route.start + ' to ' +route.end) for route in getLocation($viewValue)"
-               typeahead-loading="loadingRoutes"
-               typeahead-no-results="noResults"
-               typeahead-on-select="onSelect($item, $model, $label)"
-               class="form-control">
+        <div class="form-group row" ng-hide="route">
+            <div class="col-sm-6">
+                <label >Start</label>
+                <input id="startRoute" type="text" ng-model="asyncStart" placeholder="e.g. Colombo Airport"
+                       ng-keydown="$event.keyCode == 13 && ignoreEnter($event)"
+                       uib-typeahead="route for route in getStart($viewValue)"
+                       typeahead-loading="loadingStarts"
+                       typeahead-no-results="noStartResults"
+                       typeahead-on-select="onSelectStart($item, $model, $label);"
+                       class="form-control"
+                       focus="true"
+                       autocomplete="off">
+                <i ng-show="loadingStarts" class="glyphicon glyphicon-refresh"></i>
+                <div ng-show="noStartResults">
+                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                </div>
+            </div>
+            <div class="col-sm-6" ng-hide="asyncStart===null">
+                <label >Destination</label>
+                <input id="endRoute" type="text" ng-model="asyncSelectedEnd" placeholder="e.g. Arugam Bay or Galle"
+                       ng-keydown="$event.keyCode == 13 && ignoreEnter($event)"
+                       uib-typeahead="route as (route.end) for route in getEnd($viewValue)"
+                       typeahead-loading="loadingEnds"
+                       typeahead-no-results="noEndResults"
+                       typeahead-on-select="onSelectEnd($item, $model, $label);asyncStart = null;asyncSelectedEnd = null;"
+                       class="form-control"
+                       focus-on="newItemAdded"
+                       autocomplete="off"
+                       >
+                <i ng-show="loadingEnds" class="glyphicon glyphicon-refresh"></i>
+                <div ng-show="noEndResults">
+                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                </div>            </div>
+        </div>
         <!--<i ng-show="loadingRoutes" class="glyphicon glyphicon-refresh"></i>-->
 
         <!--<div ng-show="noResults">-->
@@ -85,8 +112,8 @@
             <div class="form-group row">
 
                 <h4>Description</h4>
-                <pre class="bg-primary"><em>{{route.start + ' to '+route.end}}</em></pre>
-                <pre class="bg-primary"><em>{{' Price $US'+ route.cents/100}}</em></pre>
+                <pre class="bg-primary">{{route.start + ' to '+route.end}}</pre>
+                <pre class="bg-primary">{{' Price $US'+ route.cents/100}}</pre>
 
                 <div class="row">
                     <div class="col-sm-9">
@@ -105,7 +132,13 @@
                     Booking. <span class="glyphicon glyphicon-circle-arrow-right"></span>
                 </button>
             </div>
+            <div class="col-xs-6">
+                <button ng-show="route" class="btn btn-block btn-info" ng-click="resetRoute()">
+                    New Route.
+                </button>
+            </div>
         </div>
+
     </form>
 </div>
 

@@ -1,5 +1,7 @@
 package com.taxisurfr.server.entity;
 
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -27,8 +29,29 @@ public class SessionStat extends ArugamEntity<StatInfo>
 
     String type;
     String route;
+    String userAgent;
     Currency currency;
     Float currencyRate;
+    Integer interactions = 0;
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
+
+    @Index
+    String reference;
+
+    public String getReference() {
+        return reference;
+    }
+
+    public void setReference(String reference) {
+        this.reference = reference;
+    }
+
     String referer;
     String routeKey;
     Date time;
@@ -52,8 +75,29 @@ public class SessionStat extends ArugamEntity<StatInfo>
     String cardToken;
     Long bookingId;
 
-    @Index
-    String ip;
+    public Currency getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(Currency currency) {
+        this.currency = currency;
+    }
+
+    public Float getCurrencyRate() {
+        return currencyRate;
+    }
+
+    public void setCurrencyRate(Float currencyRate) {
+        this.currencyRate = currencyRate;
+    }
+
+    public String getReferer() {
+        return referer;
+    }
+
+    public void setReferer(String referer) {
+        this.referer = referer;
+    }
 
     public String getRoute()
     {
@@ -88,7 +132,6 @@ public class SessionStat extends ArugamEntity<StatInfo>
         stat.setCountry(statInfo.getCountry());
         stat.setType(statInfo.getDetail());
         stat.src = statInfo.getSrc();
-        stat.ip = statInfo.getIp();
         stat.currency = statInfo.getCurrency();
         stat.currencyRate = statInfo.getCurrencyRate();
         return stat;
@@ -113,10 +156,16 @@ public class SessionStat extends ArugamEntity<StatInfo>
         statInfo.setTime(time);
         statInfo.setCountry(country);
         statInfo.setSrc(src);
-        statInfo.setIp(ip);
         statInfo.setCurrency(currency);
         statInfo.setCurrencyRate(currencyRate);
         return statInfo;
     }
 
+    public void setUserAgent(String userAgent) {
+        this.userAgent = userAgent;
+    }
+
+    public void incInteractions(){
+        interactions++;
+    }
 }

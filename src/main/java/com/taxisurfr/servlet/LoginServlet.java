@@ -3,6 +3,7 @@ package com.taxisurfr.servlet;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.AgentManager;
 import com.taxisurfr.shared.model.AgentInfo;
 
@@ -57,6 +58,7 @@ public class LoginServlet extends HttpServlet
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException
     {
+        ObjectifyService.begin();
         doPost(req, resp);
     }
 }

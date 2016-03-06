@@ -3,7 +3,7 @@
   <component name="FacetManager">
     <facet type="google-app-engine" name="Google App Engine">
       <configuration>
-        <sdk-home-path>$MAVEN_REPOSITORY$/com/google/appengine/appengine-java-sdk/1.9.30/appengine-java-sdk/appengine-java-sdk-1.9.30</sdk-home-path>
+        <sdk-home-path>$MAVEN_REPOSITORY$/com/google/appengine/appengine-java-sdk/1.9.32/appengine-java-sdk/appengine-java-sdk-1.9.32</sdk-home-path>
         <run-enhancer-on-make>true</run-enhancer-on-make>
         <files-to-enhance>
           <file path="$MODULE_DIR$/src/main/java/com/taxisurfr/server/entity" />
@@ -56,7 +56,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.google.appengine:appengine-api-1.0-sdk:1.9.30" level="project" />
+    <orderEntry type="library" name="Maven: com.google.appengine:appengine-api-1.0-sdk:1.9.32" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: javax.servlet:servlet-api:2.5" level="project" />
     <orderEntry type="library" name="Maven: jstl:jstl:1.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.gwt:gwt-user:2.7.0" level="project" />
@@ -80,7 +80,7 @@
     <orderEntry type="library" name="Maven: xmlpull:xmlpull:1.1.3.1" level="project" />
     <orderEntry type="library" name="Maven: xpp3:xpp3_min:1.1.4c" level="project" />
     <orderEntry type="library" name="Maven: joda-time:joda-time:2.8.1" level="project" />
-    <orderEntry type="library" name="Maven: com.stripe:stripe-java:1.33.0" level="project" />
+    <orderEntry type="library" name="Maven: com.stripe:stripe-java:1.40.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
     <orderEntry type="library" name="Maven: gwt-maps:gwt-maps:1.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.api.client:google-api-client-http:1.2.3-alpha" level="project" />
@@ -89,15 +89,15 @@
     <orderEntry type="library" name="Maven: com.google.api.client:google-api-client-util:1.2.3-alpha" level="project" />
     <orderEntry type="library" name="Maven: com.restfb:restfb:1.14.0" level="project" />
     <orderEntry type="library" name="Maven: com.itextpdf:itextpdf:5.5.6" level="project" />
-    <orderEntry type="library" name="Maven: com.google.guava:guava:19.0-rc1" level="project" />
-    <orderEntry type="library" name="Maven: com.googlecode.objectify:objectify:5.1.8" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />
+    <orderEntry type="library" name="Maven: com.googlecode.objectify:objectify:5.1.10" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.objectify:objectify-gwt:1.2.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: junit:junit:4.12" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.hamcrest:hamcrest-core:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.mockito:mockito-all:2.0.2-beta" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.google.appengine:appengine-testing:1.9.30" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: com.google.appengine:appengine-api-stubs:1.9.30" level="project" />
-    <orderEntry type="library" name="Maven: com.google.guava:guava-gwt:19.0-rc1" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.google.appengine:appengine-testing:1.9.32" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: com.google.appengine:appengine-api-stubs:1.9.32" level="project" />
+    <orderEntry type="library" name="Maven: com.google.guava:guava-gwt:19.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.findbugs:jsr305:1.3.9" level="project" />
     <orderEntry type="library" name="Maven: com.google.errorprone:error_prone_annotations:2.0.2" level="project" />
     <orderEntry type="library" name="Maven: com.google.j2objc:j2objc-annotations:0.1" level="project" />
@@ -119,9 +119,9 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.apache.commons:commons-exec:1.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.applitools:eyes-selenium-java:2.19" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: com.applitools:eyes-sdk-java:2.15" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-java:2.48.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-edge-driver:2.48.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-htmlunit-driver:2.48.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-java:2.52.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-edge-driver:2.52.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-htmlunit-driver:2.52.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: net.sourceforge.htmlunit:htmlunit:2.18" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: xalan:xalan:2.7.2" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: xalan:serializer:2.7.2" level="project" />
@@ -138,20 +138,19 @@
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty:jetty-io:9.2.12.v20150709" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty.websocket:websocket-common:9.2.12.v20150709" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.eclipse.jetty.websocket:websocket-api:9.2.12.v20150709" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-ie-driver:2.48.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-safari-driver:2.48.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: commons-collections:commons-collections:3.2.2" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-ie-driver:2.52.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-safari-driver:2.52.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: org.webbitserver:webbit:0.4.14" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: io.netty:netty:3.5.2.Final" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-leg-rc:2.48.2" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: io.appium:java-client:3.2.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: org.seleniumhq.selenium:selenium-leg-rc:2.52.0" level="project" />
+    <orderEntry type="library" scope="TEST" name="Maven: io.appium:java-client:3.3.0" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: cglib:cglib:3.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-validator:commons-validator:1.4.1" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-beanutils:commons-beanutils:1.8.3" level="project" />
     <orderEntry type="library" scope="TEST" name="Maven: commons-digester:commons-digester:1.8.1" level="project" />
-    <orderEntry type="library" scope="TEST" name="Maven: commons-collections:commons-collections:3.2.1" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.9" level="project" />
-    <orderEntry type="library" name="Maven: taxisurfr:business-client:1.0.1" level="project" />
-    <orderEntry type="library" name="Maven: com.google.appengine:appengine-endpoints:1.9.30" level="project" />
+    <orderEntry type="library" name="Maven: com.google.appengine:appengine-endpoints:1.9.32" level="project" />
     <orderEntry type="library" name="Maven: javax.inject:javax.inject:1" level="project" />
   </component>
 </module>

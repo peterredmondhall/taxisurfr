@@ -275,7 +275,7 @@ public class PdfUtil
         table.addCell(SURFBOARDS);
         table.addCell("" + booking.getSurfboards());
         table.addCell(DATE);
-        table.addCell(fmt.print(new DateTime((booking.getDate()))));
+        table.addCell(booking.getDateText());
         table.addCell(route.getPickupType().getLocationType());
         table.addCell(booking.getFlightNo());
         table.addCell(route.getPickupType().getTimeType());

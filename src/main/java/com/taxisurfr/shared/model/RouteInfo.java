@@ -36,7 +36,17 @@ public class RouteInfo extends Info
     private Long cents;
     private Long agentCents;
     private Long associatedRoute;
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
+
     private String startEnd;
+    private String link;
 
     private boolean inactive;
 

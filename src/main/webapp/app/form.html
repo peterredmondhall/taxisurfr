@@ -1,20 +1,22 @@
 <div class="row">
-    <div class="col-sm-8 col-sm-offset-2">
+    <div class="col-sm-12 col-sm-offset-0">
 
         <div id="form-container">
 
             <div class="page-header text-center">
-                <h2>taxisurfr</h2>
+                <!--<h2>taxisurfr</h2>-->
 
                 <!-- the links to our nested states using relative paths -->
                 <!-- add the active class if the state matches our ui-sref -->
-                <div id="status-buttons" class="text-center">
-                    <a ng-hide="bookingPaid" ui-sref-active="false" ui-sref=".transport"><span>1</span>
+                <div ng-hide="bookingPaid" id="status-buttons" class="text-center">
+                    <a ng-show="active1" ui-sref-active="active" ui-sref=".transport"><span>1</span>
                         Transport</a>
-                    <a ng-hide="bookingPaid" ui-sref-active="active" ui-sref=".details"><span>2</span> Details</a>
-                    <a ng-hide="bookingPaid" ui-sref-active="active" ui-sref=".summary"><span>3</span> Summary</a>
-                    <a ng-hide="bookingPaid" ui-sref-active="active" ui-sref=".payment"><span>4</span> Payment</a>
-                    <a ng-show="bookingPaid" ui-sref-active="active" ui-sref=".confirmation"><span></span>
+                    <a ng-show="active2" ui-sref-active="active" ui-sref=".details"><span>2</span> Details</a>
+                    <a ng-show="active3" ui-sref-active="active" ui-sref=".summary"><span>3</span> Summary</a>
+                    <a ng-show="active4" ui-sref-active="active" ui-sref=".payment"><span>4</span> Payment</a>
+                </div>
+                <div ng-show="bookingPaid" id="status-buttons_paid" class="text-center">
+                    <a ui-sref-active="active" ui-sref=".confirmation"><span></span>
                         Confirmation</a>
                 </div>
             </div>

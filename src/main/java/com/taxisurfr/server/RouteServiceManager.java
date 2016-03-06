@@ -1,5 +1,6 @@
 package com.taxisurfr.server;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Splitter;
 import com.google.common.collect.FluentIterable;
@@ -14,6 +15,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import static com.googlecode.objectify.ObjectifyService.*;
@@ -157,7 +159,7 @@ public class RouteServiceManager extends Manager {
 
     public List<Route> getRoutesAsEntities(String query) {
 
-        final String queryForPredicate = query.trim().replace(" to","").toUpperCase();
+        final String queryForPredicate = query.trim().replace(" to", "").toUpperCase();
         return FluentIterable.from(ofy().load().type(Route.class).list()).filter(new Predicate<Route>() {
             @Override
             public boolean apply(@Nullable Route route) {
@@ -168,9 +170,41 @@ public class RouteServiceManager extends Manager {
 
     public Route getRouteFromLink(String link) {
         List<Route> list = ofy().load().type(Route.class).filter("link =", link).list();
-        if (list.isEmpty()){
+        if (list.isEmpty()) {
             return null;
         }
         return list.get(0);
+    }
+
+    public List<Route> getRoutesFromQuery(final String start, final String end) {
+        List<Route> result = new ArrayList<>();
+        if (start != null && end != null) {
+
+            final String startUpper = start.toUpperCase();
+            final String endUpper = end.toUpperCase();
+            result = FluentIterable.from(ofy().load().type(Route.class).list()).filter(new Predicate<Route>() {
+                @Override
+                public boolean apply(@Nullable Route route) {
+                    return route.getStart().toUpperCase().equals(startUpper) && route.getEnd().toUpperCase().startsWith(endUpper);
+                }
+            }).toList();
+        }
+        return result;
+    }
+
+    public Set<String> getRoutesStart(String query) {
+        final String queryForPredicate = query.trim().replace(" to", "").toUpperCase();
+        return FluentIterable.from(ofy().load().type(Route.class).list()).filter(new Predicate<Route>() {
+            @Override
+            public boolean apply(@Nullable Route route) {
+                return route.getStart().toUpperCase().startsWith(queryForPredicate);
+            }
+        }).transform(new Function<Route, String>() {
+            @Nullable
+            @Override
+            public String apply(@Nullable Route route) {
+                return route.getStart().trim();
+            }
+        }).toSet();
     }
 }

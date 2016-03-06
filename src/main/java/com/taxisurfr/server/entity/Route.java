@@ -20,6 +20,7 @@ public class Route extends ArugamEntity<RouteInfo>
     private String start;
     private String end;
     private String description;
+
     private Long contractorId;
     private RouteInfo.PickupType pickupType;
     private Long cents;
@@ -124,6 +125,7 @@ public class Route extends ArugamEntity<RouteInfo>
         route.setImage(routeInfo.getImage());
         route.setContractorId(routeInfo.getContractorId());
         route.setAssociatedRoute(routeInfo.getAssociatedRoute());
+        route.setLink(routeInfo.getLink());
         return route;
     }
 
@@ -139,6 +141,7 @@ public class Route extends ArugamEntity<RouteInfo>
         routeInfo.setAgentCents(agentCents);
         routeInfo.setInactive(inactive);
         routeInfo.setAssociatedRoute(associatedRoute);
+        routeInfo.setLink(link);
 
         routeInfo.setPickupType(pickupType);
         routeInfo.setImage(image);

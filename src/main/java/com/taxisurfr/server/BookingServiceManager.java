@@ -1,8 +1,10 @@
 package com.taxisurfr.server;
 
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.FluentIterable;
+import com.googlecode.objectify.LoadResult;
 import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.entity.*;
 import com.taxisurfr.shared.OrderStatus;
@@ -29,20 +31,18 @@ import static org.joda.time.DateTime.now;
  * The server-side implementation of the RPC service.
  */
 @SuppressWarnings("serial")
-public class BookingServiceManager extends Manager
-{
+public class BookingServiceManager extends Manager {
     private static final Logger logger = Logger.getLogger(BookingServiceManager.class.getName());
     static final DateTimeFormatter fmt = DateTimeFormat.forPattern("dd.MM.yyyy");
 
-    public BookingServiceManager()
-    {
+    public BookingServiceManager() {
         ObjectifyService.register(Booking.class);
         ObjectifyService.register(Profil.class);
         ObjectifyService.register(ArchivedBooking.class);
+        ObjectifyService.register(Config.class);
     }
 
-    public BookingInfo addBookingWithClient(BookingInfo bookingInfo, String client) throws IllegalArgumentException
-    {
+    public BookingInfo addBookingWithClient(BookingInfo bookingInfo, String client) throws IllegalArgumentException {
         Booking booking = Booking.getBooking(bookingInfo, client);
 
         booking.setRoute(bookingInfo.getRouteId());
@@ -52,66 +52,57 @@ public class BookingServiceManager extends Manager
 
     }
 
-    final Function<Booking, BookingInfo> BOOKING_TO_INFO = new Function<Booking, BookingInfo>()
-    {
+    final Function<Booking, BookingInfo> BOOKING_TO_INFO = new Function<Booking, BookingInfo>() {
         @Override
-        public BookingInfo apply(Booking booking)
-        {
+        public BookingInfo apply(Booking booking) {
 
             RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
             return booking.getBookingInfo(routeInfo);
         }
     };
 
-    public List<Booking> getBookings()
-    {
+    public List<Booking> getBookings() {
         return ofy().load().type(Booking.class).list();
     }
 
     @Deprecated
-    public List<BookingInfo> getBookingsAsInfo()
-    {
+    public List<BookingInfo> getBookingsAsInfo() {
         return FluentIterable.from(ofy().load().type(Booking.class).list()).transform(BOOKING_TO_INFO).toList();
     }
 
-    public List<BookingInfo> getBookingsAsInfo(Long agentId) throws IllegalArgumentException
-    {
+    public List<BookingInfo> getBookingsAsInfo(Long agentId) throws IllegalArgumentException {
         List<Booking> resultList = ofy().load().type(Booking.class).list();
+        logger.info("getBookingsAsInfo:" + agentId + " entries:" + resultList.size());
         List<BookingInfo> bookings = newArrayList();
-        for (Booking booking : resultList)
-        {
-            RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
-            if (routeInfo != null)
-            {
-                BookingInfo bookingInfo = booking.getBookingInfo(routeInfo);
-                if (bookingInfo != null)
-                {
-                    Contractor contractor = ofy().load().type(Contractor.class).id(routeInfo.getContractorId()).now();
+        for (Booking booking : resultList) {
+            if (booking.getRoute() != null) {
+                LoadResult<Route> result = ofy().load().type(Route.class).id(booking.getRoute());
+                if (result != null) {
+                    RouteInfo routeInfo = result.now().getInfo();
+                    if (routeInfo != null) {
+                        BookingInfo bookingInfo = booking.getBookingInfo(routeInfo);
+                        if (bookingInfo != null) {
+                            Contractor contractor = ofy().load().type(Contractor.class).id(routeInfo.getContractorId()).now();
 
-                    if (contractor != null)
-                    {
-                        if (contractor.getAgentId().equals(agentId))
-                        {
-                            bookings.add(bookingInfo);
+                            if (contractor != null) {
+                                if (contractor.getAgentId().equals(agentId)) {
+                                    bookings.add(bookingInfo);
+                                }
+                            } else {
+                                logger.severe("no contractor for id:" + routeInfo.getContractorId() + " from route id:" + routeInfo.getContractorId());
+                            }
                         }
-                    }
-                    else
-                    {
-                        logger.severe("no contractor for id:" + routeInfo.getContractorId() + " from route id:" + routeInfo.getContractorId());
+                    } else {
+                        logger.severe("no route for id:" + booking.getRoute() + " from booking" + booking.getInfo().getId());
                     }
                 }
-            }
-            else
-            {
-                logger.severe("no route for id:" + booking.getRoute() + " from booking" + booking.getInfo().getId());
             }
         }
         return bookings;
     }
 
-@Deprecated
-    public BookingInfo setPayed(Profil profil, BookingInfo bi, OrderStatus orderStatus, String orderRef) throws IllegalArgumentException
-    {
+    @Deprecated
+    public BookingInfo setPayed(Profil profil, BookingInfo bi, OrderStatus orderStatus, String orderRef) throws IllegalArgumentException {
         Booking booking = ofy().load().type(Booking.class).id(bi.getId()).now();
         booking.setStatus(orderStatus);
         booking.setRef(orderRef);
@@ -120,35 +111,29 @@ public class BookingServiceManager extends Manager
         return booking.getBookingInfo(routeInfo);
     }
 
-    public Booking setPayed(Profil profil, Booking bi) throws IllegalArgumentException
-    {
+    public Booking setPayed(Profil profil, Booking bi) throws IllegalArgumentException {
         Booking booking = ofy().load().type(Booking.class).id(bi.getId()).now();
         booking.setStatus(OrderStatus.PAID);
         long id = ofy().save().entity(booking).now().getId();
         return ofy().load().type(Booking.class).id(id).now();
     }
 
-    public boolean getMaintenceAllowed()
-    {
+    public boolean getMaintenceAllowed() {
 
         boolean maintenanceAllowed = false;
         Config config = Config.getConfig();
-        if (config.getMaintenceAllowed() == null)
-        {
+        if (config.getMaintenceAllowed() == null) {
             logger.info("maintence allowed not avail - setting false");
             config.setMaintenceAllowed(false);
             ofy().save().entity(config);
 
-        }
-        else
-        {
+        } else {
             maintenanceAllowed = config.getMaintenceAllowed();
         }
         return maintenanceAllowed;
     }
 
-    public Profil getProfil()
-    {
+    public Profil getProfil() {
         Config config = new ConfigManager().getConfig();
         return ofy().load().type(Profil.class).filter("name", config.getProfil()).first().now();
     }
@@ -158,30 +143,23 @@ public class BookingServiceManager extends Manager
         return ofy().load().type(Booking.class).id(id).now();
     }
 
-    public class BookingInfoComparator implements Comparator<BookingInfo>
-    {
+    public class BookingInfoComparator implements Comparator<BookingInfo> {
 
         @Override
-        public int compare(BookingInfo bi1, BookingInfo bi2)
-        {
+        public int compare(BookingInfo bi1, BookingInfo bi2) {
             return (new DateTime(bi1.getDate()).isAfter(new DateTime(bi2.getDate()))) ? 1 : -1;
         }
     }
 
     @SuppressWarnings("rawtypes")
-    public List<BookingInfo> getBookingsForRoute(final RouteInfo routeInfo) throws IllegalArgumentException
-    {
-        final Predicate<Booking> accept = new Predicate<Booking>()
-        {
+    public List<BookingInfo> getBookingsForRoute(final RouteInfo routeInfo) throws IllegalArgumentException {
+        final Predicate<Booking> accept = new Predicate<Booking>() {
             @Override
-            public boolean apply(Booking booking)
-            {
+            public boolean apply(Booking booking) {
                 boolean applies = false;
-                if (new DateTime(booking.getDate()).isAfter(now()) && booking.getOrderType() != null)
-                {
+                if (new DateTime(booking.getDate()).isAfter(now()) && booking.getOrderType() != null) {
                     boolean bookingForRoute = (booking.getRoute().equals(routeInfo.getId())) || (booking.getRoute().equals(routeInfo.getAssociatedRoute()));
-                    switch (booking.getOrderType())
-                    {
+                    switch (booking.getOrderType()) {
                         case BOOKING:
                             applies = bookingForRoute && (OrderStatus.PAID == booking.getStatus() && booking.getShareWanted());
                             break;
@@ -205,8 +183,7 @@ public class BookingServiceManager extends Manager
 
         List<BookingInfo> listBookingInfo = newArrayList();
         List<Booking> current = from(routes).filter(accept).toList();
-        for (Booking booking : current)
-        {
+        for (Booking booking : current) {
             Route route = ofy().load().type(Route.class).id(booking.getRoute()).now();
             listBookingInfo.add(booking.getBookingInfo(route.getInfo()));
         }
@@ -216,8 +193,7 @@ public class BookingServiceManager extends Manager
 
     }
 
-    public BookingInfo setShareAccepted(BookingInfo bookingInfo)
-    {
+    public BookingInfo setShareAccepted(BookingInfo bookingInfo) {
         Booking booking = ofy().load().type(Booking.class).id(bookingInfo.getId()).now();
         booking.setStatus(OrderStatus.SHARE_ACCEPTED);
         ofy().save().entity(booking).now();
@@ -225,32 +201,25 @@ public class BookingServiceManager extends Manager
     }
 
     @Deprecated
-    public BookingInfo getBookingAsInfo(Long id)
-    {
+    public BookingInfo getBookingAsInfo(Long id) {
         BookingInfo bookingInfo = ofy().load().type(Booking.class).id(id).now().getInfo();
         RouteInfo routeInfo = ofy().load().type(Route.class).id(bookingInfo.getRouteId()).now().getInfo();
         bookingInfo.setRouteInfo(routeInfo);
         return bookingInfo;
     }
-    public Booking getBooking(Long id)
-    {
+
+    public Booking getBooking(Long id) {
         return ofy().load().type(Booking.class).id(id).now();
     }
 
 
-
-
-    public List<BookingInfo> getListFeedbackRequest()
-    {
+    public List<BookingInfo> getListFeedbackRequest() {
         List<BookingInfo> bookings = new ArrayList<>();
         List<Booking> resultList = ofy().load().type(Booking.class).list();
-        for (Booking booking : resultList)
-        {
-            if (booking.getRated() != null && !booking.getRated() && OrderStatus.PAID.equals(booking.getStatus()))
-            {
+        for (Booking booking : resultList) {
+            if (booking.getRated() != null && !booking.getRated() && OrderStatus.PAID.equals(booking.getStatus())) {
                 DateTime bookingDate = new DateTime(booking.getDate());
-                if (bookingDate.plusDays(1).isBefore(DateTime.now()))
-                {
+                if (bookingDate.plusDays(1).isBefore(DateTime.now())) {
                     booking.setRated(true);
                     ofy().save().entity(booking).now();
 
@@ -263,66 +232,57 @@ public class BookingServiceManager extends Manager
         return bookings;
     }
 
-    public List<BookingInfo> getArchiveList()
-    {
+    public List<BookingInfo> getArchiveList() {
         List<Booking> resultList = ofy().load().type(Booking.class).list();
         List<BookingInfo> bookings = new ArrayList<>();
-        for (Booking booking : resultList)
-        {
-            if (new DateTime(booking.getDate()).plusDays(7).isBefore(DateTime.now()))
-            {
-                RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
-                bookings.add(booking.getBookingInfo(routeInfo));
+        for (Booking booking : resultList) {
+            if (new DateTime(booking.getDate()).plusDays(7).isBefore(DateTime.now())) {
+                if (booking.getRoute() != null) {
+                    RouteInfo routeInfo = ofy().load().type(Route.class).id(booking.getRoute()).now().getInfo();
+                    bookings.add(booking.getBookingInfo(routeInfo));
+                }
             }
         }
         return bookings;
     }
 
-    public void archive(BookingInfo bookingInfo)
-    {
+    public void archive(BookingInfo bookingInfo) {
         Booking booking = ofy().load().type(Booking.class).id(bookingInfo.getId()).now();
         ArchivedBooking achivedBooking = booking.getArchivedBooking();
         ofy().save().entity(achivedBooking).now();
         ofy().delete().entity(booking).now();
     }
 
-    public void cancel(BookingInfo bookingInfo)
-    {
+    public void cancel(BookingInfo bookingInfo) {
         Booking booking = ofy().load().type(Booking.class).id(bookingInfo.getId()).now();
 
         booking.setStatus(OrderStatus.CANCELED);
         ofy().save().entity(booking).now();
     }
 
-    public ContractorInfo getContractor(BookingInfo bookingInfo)
-    {
+    public ContractorInfo getContractor(BookingInfo bookingInfo) {
         Route route = ofy().load().type(Route.class).id(bookingInfo.getRouteInfo().getId()).now();
-        if (route != null)
-        {
+        if (route != null) {
             Contractor contractor = ofy().load().type(Contractor.class).id(route.getContractorId()).now();
             return contractor.getInfo();
         }
         return null;
     }
 
-    public Contractor getContractor(Booking booking)
-    {
+    public Contractor getContractor(Booking booking) {
         Route route = ofy().load().type(Route.class).id(booking.getRoute()).now();
-        if (route != null)
-        {
+        if (route != null) {
             Contractor contractor = ofy().load().type(Contractor.class).id(route.getContractorId()).now();
             return contractor;
         }
         return null;
     }
 
-    public AgentInfo getAgent(ContractorInfo contractorInfo)
-    {
+    public AgentInfo getAgent(ContractorInfo contractorInfo) {
         return ofy().load().type(Agent.class).id(contractorInfo.getAgentId()).now().getInfo();
     }
 
-    public AgentInfo createAgentWithRoutes(String agentEmail)
-    {
+    public AgentInfo createAgentWithRoutes(String agentEmail) {
         ConfigManager configManager = new ConfigManager();
         configManager.createTestConfig();
         BookingServiceManager bookingServiceManager = new BookingServiceManager();
@@ -369,7 +329,7 @@ public class BookingServiceManager extends Manager
         ObjectifyService.ofy().save().entity(route21).now();
 
         //route 1 contractor 2
-        Route route12= new Route();
+        Route route12 = new Route();
         route12.setStart("testAgent:" + "simple_Contractor2");
         route12.setEnd("testAgent:" + "end");
         route12.setPickupType(RouteInfo.PickupType.AIRPORT);
@@ -388,7 +348,7 @@ public class BookingServiceManager extends Manager
         route22.setContractorId(contractor2.id);
         ObjectifyService.ofy().save().entity(route22).now();
 
-        return  testAgentEntity.getInfo();
+        return testAgentEntity.getInfo();
     }
 
 }

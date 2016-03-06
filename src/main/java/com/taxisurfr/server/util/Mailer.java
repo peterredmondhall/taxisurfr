@@ -69,8 +69,6 @@ public class Mailer
     @Deprecated
     public static void sendConfirmation(BookingInfo bookingInfo, Profil profil, AgentInfo agentInfo, ContractorInfo contractorInfo)
     {
-        SMSUtil smsUtil = new SMSUtil();
-
         String html = "error";
         html = BookingUtil.toConfirmationEmailHtml(bookingInfo, getFile(CONFIRMATION), profil);
         html = html.replace("__CONFIMATION__", "Booking Confirmation");
@@ -79,22 +77,15 @@ public class Mailer
         String email = bookingInfo.getEmail();
         send(email, html, pdfData, "customer");
         send(profil.getMonitorEmail(), html, pdfData, "monitor");
-        smsUtil.add(profil.getMonitorMobile());
         send(agentInfo.getEmail(), html, pdfData, "agent");
-        smsUtil.add(agentInfo.getMobile());
         if (contractorInfo != null)
         {
             send(contractorInfo.getEmail(), html, pdfData, "contractor");
-            smsUtil.add(contractorInfo.getMobile());
         }
-        //smsUtil.send(bookingInfo, profil);
-        //emailit(pdfData, bookingInfo.getOrderRef());
     }
 
     public static void sendConfirmation(Booking booking, Route route, Profil profil, Agent agent, Contractor contractor)
     {
-        SMSUtil smsUtil = new SMSUtil();
-
         String html = "error";
         html = BookingUtil.toConfirmationEmailHtml(booking, route, getFile(CONFIRMATION), profil);
         html = html.replace("__CONFIMATION__", "Booking Confirmation");
@@ -103,15 +94,11 @@ public class Mailer
         String email = booking.getEmail();
         send(email, html, pdfData, "customer");
         send(profil.getMonitorEmail(), html, pdfData, "monitor");
-        smsUtil.add(profil.getMonitorMobile());
         send(agent.getEmail(), html, pdfData, "agent");
-        smsUtil.add(agent.getMobile());
         if (contractor != null)
         {
             send(contractor.getEmail(), html, pdfData, "contractor");
-            smsUtil.add(contractor.getMobile());
         }
-        smsUtil.send(booking, route, profil);
         emailit(pdfData, booking.getRef());
     }
 

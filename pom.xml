@@ -10,36 +10,26 @@
 
     <properties>
         <app.id>taxigangsurf</app.id>
-        <app.version>52</app.version>
-        <!--CHANGE BASE<app.id>gobygang</app.id>-->
+        <app.version>57</app.version>
+        <!--<app.id>gobygang</app.id>-->
         <!--<app.version>1</app.version>-->
-        <appengine.version>1.9.30</appengine.version>
+        <appengine.version>1.9.32</appengine.version>
         <gwt.version>2.7.0</gwt.version>
         <gcloud.plugin.version>1.9.17a</gcloud.plugin.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 
-        <objectify.version>5.1.8</objectify.version>
+        <objectify.version>5.1.10</objectify.version>
         <objectify-gwt.version>1.2.1</objectify-gwt.version>
-        <guava.version>19.0-rc1</guava.version>
+        <guava.version>19.0</guava.version>
         <selenium.version>2.46.0</selenium.version>
         <selenium.version>2.46.0</selenium.version>
+        <stripe.version>1.40.0</stripe.version>
 
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
     </properties>
 
 
-    <!--com.fasterxml.jackson.core:jackson-databind ........... 2.4.6 -> 2.6.1-->
-    <!--[INFO]   com.google.guava:guava .............................. 18.0 -> 19.0-rc1-->
-    <!--[INFO]   com.google.guava:guava-gwt .......................... 18.0 -> 19.0-rc1-->
-    <!--[INFO]   com.stripe:stripe-java .............................. 1.32.1 -> 1.33.0-->
-    <!--[INFO]   commons-codec:commons-codec .............................. 1.9 -> 1.10-->
-    <!--[INFO]   javax.servlet:servlet-api ......................... 2.5 -> 3.0-alpha-1-->
-    <!--[INFO]   joda-time:joda-time ................................... 2.8.1 -> 2.8.2-->
-    <!--[INFO]   org.seleniumhq.selenium:selenium-api ................ 2.46.0 -> 2.47.1-->
-    <!--[INFO]   org.seleniumhq.selenium:selenium-chrome-driver ...... 2.46.0 -> 2.47.1-->
-    <!--[INFO]   org.seleniumhq.selenium:selenium-firefox-driver ..... 2.46.0 -> 2.47.1-->
-    <!--[INFO]   org.seleniumhq.selenium:selenium-support ............ 2.46.0 -> 2.47.1-->
 
     <prerequisites>
         <maven>3.1.0</maven>
@@ -99,7 +89,7 @@
         <dependency>
             <groupId>com.stripe</groupId>
             <artifactId>stripe-java</artifactId>
-            <version>1.33.0</version>
+            <version>${stripe.version}</version>
         </dependency>
         <dependency>
             <groupId>gwt-maps</groupId>
@@ -220,11 +210,6 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.9</version>
-        </dependency>
-        <dependency>
-            <groupId>taxisurfr</groupId>
-            <artifactId>business-client</artifactId>
-            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.google.appengine</groupId>

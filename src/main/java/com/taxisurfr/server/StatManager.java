@@ -1,7 +1,6 @@
 package com.taxisurfr.server;
 
-import com.googlecode.objectify.Key;
-import com.googlecode.objectify.ObjectifyService;
+import com.taxisurfr.server.entity.Route;
 import com.taxisurfr.server.entity.SessionStat;
 import com.taxisurfr.server.util.Mailer;
 import com.taxisurfr.shared.model.StatInfo;
@@ -10,7 +9,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.googlecode.objectify.ObjectifyService.*;
+import static com.googlecode.objectify.ObjectifyService.ofy;
+import static com.googlecode.objectify.ObjectifyService.register;
 
 public class StatManager extends Manager
 {
@@ -71,8 +71,26 @@ public class StatManager extends Manager
         return sessionStat.getInfo();
     }
 
-    public SessionStat createSessionStat(SessionStat sessionStat) {
-        Long id = ofy().save().entity(sessionStat).now().getId();
-        return ofy().load().type(SessionStat.class).id(id).now();
+    public SessionStat createSessionStat(SessionStat ss) {
+        SessionStat sessionStat = ofy().load().type(SessionStat.class).filter("reference =", ss.getReference()).first().now();
+        if (sessionStat != null){
+            sessionStat.incInteractions();
+            ofy().save().entity(sessionStat).now();
+            return sessionStat;
+        }else {
+            Long id = ofy().save().entity(ss).now().getId();
+            return ofy().load().type(SessionStat.class).id(id).now();
+        }
     }
+
+    public SessionStat addRoute(String reference, Route route, String start, String end) {
+        SessionStat sessionStat = ofy().load().type(SessionStat.class).filter("reference =", reference).first().now();
+        if (sessionStat != null)
+        {
+            sessionStat.setRoute(start+" to "+end);
+            ofy().save().entity(sessionStat).now();
+        }
+        return sessionStat;
+    }
+
 }

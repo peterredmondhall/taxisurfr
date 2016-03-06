@@ -12,4 +12,5 @@ abstract public class ArugamEntity<T extends Info> implements Serializable
    // abstract public void setKey(Key key);
 
     abstract public T getInfo();
+
 }

@@ -5,17 +5,17 @@
     <form name="detailsForm" novalidate>
         <!-- novalidate prevents HTML5 validation since we will be validating ourselves -->
 
-        <div class="form-group  ">
+        <div class="form-group">
             <div class="col-xs-12">
                 <label>Date of arrival</label>
 
                 <p class="input-group">
-                    <input type="text" class="form-control" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="booking.date"
+                    <input id="dateText" type="text" class="form-control" uib-datepicker-popup="dd-MMMM-yyyy" ng-model="booking.date"
                            is-open="status.opened" min-date="tomorrow" max-date="maxDate"
-                           datepicker-options="dateOptions"  ng-required="true"
+                           datepicker-options="dateOptions" ng-required="true"
                            close-text="Close"/>
               <span class="input-group-btn">
-                <button type="button" class="btn btn-default" ng-click="open($event)"><i
+                  <button type="button" class="btn btn-default" ng-click="open($event)"><i
                         class="glyphicon glyphicon-calendar"></i></button>
               </span>
                 </p>
@@ -62,13 +62,13 @@
 
         <div class="form-group col-xs-6">
             <label>Number of Passengers</label>
-            <input type="number" class="form-control" id="numPassengers" placeholder="1"
+            <input type="number" class="form-control" id="numPassengers"
                    ng-model="booking.pax">
         </div>
 
         <div class="form-group col-xs-6">
             <label>Number of Surfboards</label>
-            <input type="number" class="form-control" id="numSurfboards" placeholder="0"
+            <input type="number" class="form-control" id="numSurfboards"
                    ng-model="booking.surfboards">
         </div>
 

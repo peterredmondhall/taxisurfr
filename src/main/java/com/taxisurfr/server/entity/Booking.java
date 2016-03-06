@@ -1,11 +1,5 @@
 package com.taxisurfr.server.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-
-
-
-import com.google.appengine.api.datastore.Key;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.taxisurfr.shared.Currency;
@@ -15,6 +9,9 @@ import com.taxisurfr.shared.model.BookingInfo;
 import com.taxisurfr.shared.model.FinanceInfo;
 import com.taxisurfr.shared.model.Info;
 import com.taxisurfr.shared.model.RouteInfo;
+
+import java.io.Serializable;
+import java.util.Date;
 
 @Entity
 public class Booking<T extends Info, K extends ArugamEntity> extends ArugamEntity implements Serializable, Comparable<Booking>

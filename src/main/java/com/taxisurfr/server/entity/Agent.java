@@ -53,6 +53,7 @@ public class Agent extends ArugamEntity<AgentInfo>
         Agent agent = new Agent();
         agent.setEmail(agentInfo.getEmail());
         agent.setMobile(agentInfo.getMobile());
+        agent.setId(agentInfo.getId());
         return agent;
 
     }
@@ -70,4 +71,7 @@ public class Agent extends ArugamEntity<AgentInfo>
         return mobile;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

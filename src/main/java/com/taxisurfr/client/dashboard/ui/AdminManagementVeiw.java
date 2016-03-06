@@ -20,11 +20,14 @@ import com.taxisurfr.client.service.BookingServiceAsync;
 import com.taxisurfr.shared.model.AgentInfo;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import static com.taxisurfr.client.DashboardEntryPoint.getAgentInfo;
 
 public class AdminManagementVeiw extends Composite
 {
+    public static final Logger logger = Logger.getLogger(AdminManagementVeiw.class.getName());
+
     private final BookingServiceAsync service = GWT.create(BookingService.class);
 
     private static AdminManagementVeiwUiBinder uiBinder = GWT.create(AdminManagementVeiwUiBinder.class);
@@ -89,6 +92,7 @@ public class AdminManagementVeiw extends Composite
                 int i = 0;
                 for (AgentInfo agent : agents)
                 {
+                    logger.info("adding agent:"+agent.getEmail());
                     agentListBox.addItem(agent.getEmail());
                     if (agent.getEmail().equals(getAgentInfo().getEmail()))
                     {

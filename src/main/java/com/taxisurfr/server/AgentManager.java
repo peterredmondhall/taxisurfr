@@ -1,5 +1,6 @@
 package com.taxisurfr.server;
 
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.collect.Lists;
 import com.googlecode.objectify.Objectify;
 import com.googlecode.objectify.ObjectifyService;
@@ -45,7 +46,7 @@ public class AgentManager extends Manager
     private Agent createAgent(String email,boolean admin)
     {
 
-        Agent agent = ObjectifyService.ofy().load().type(Agent.class).filter("userEmail", email).first().now();
+        Agent agent = ObjectifyService.ofy().load().type(Agent.class).filter("email", email).first().now();
         if (agent == null)
         {
             agent = new Agent();
@@ -59,11 +60,18 @@ public class AgentManager extends Manager
     public AgentInfo getAgent(String email)
     {
         AgentInfo agentInfo = null;
-        Agent agent = ObjectifyService.ofy().load().type(Agent.class).filter("userEmail =", email).first().now();
+        Agent agent = ObjectifyService.ofy().load().type(Agent.class).filter("email =", email).first().now();
         if (agent != null)
         {
             agentInfo = agent.getInfo();
             logger.info("getUser for email " + email + " returned " + agentInfo.getEmail() + "  " + agentInfo.getId() + " " + agentInfo.isAdmin());
+        } else
+        {
+            if (SystemProperty.environment.value() !=
+                    SystemProperty.Environment.Value.Production && "test@example.com".equals(email)) {
+                    agentInfo = new AgentInfo();
+                    agentInfo.setEmail(email);
+            }
         }
         return agentInfo;
     }
@@ -75,6 +83,8 @@ public class AgentManager extends Manager
 
         for (Agent agent : agents)
         {
+            AgentInfo agentInfo = agent.getInfo();
+            logger.info("getAgents:agent "+agentInfo.getEmail());
             list.add(agent.getInfo());
         }
         return list;
