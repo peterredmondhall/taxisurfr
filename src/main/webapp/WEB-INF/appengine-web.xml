@@ -4,9 +4,23 @@
     <module>default</module>
     <version>${app.version}</version>
     <threadsafe>true</threadsafe>
-    <instance-class>B2</instance-class>
-    <manual-scaling>
-        <instances>1</instances>
-    </manual-scaling>
+
+    <instance-class>F4</instance-class>
+
+    <automatic-scaling>
+        <min-idle-instances>1</min-idle-instances>
+        <!-- ‘automatic’ is the default value. -->
+        <max-idle-instances>automatic</max-idle-instances>
+        <!-- ‘automatic’ is the default value. -->
+        <min-pending-latency>30ms</min-pending-latency>
+        <max-pending-latency>automatic</max-pending-latency>
+        <max-concurrent-requests>50</max-concurrent-requests>
+    </automatic-scaling>
+
+    <!--<basic-scaling>-->
+        <!--<max-instances>1</max-instances>-->
+        <!--<idle-timeout>10m</idle-timeout>-->
+    <!--</basic-scaling>-->
+
     <sessions-enabled>true</sessions-enabled>
 </appengine-web-app>

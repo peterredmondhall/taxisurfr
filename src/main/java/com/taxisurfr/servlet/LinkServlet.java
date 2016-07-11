@@ -2,6 +2,7 @@ package com.taxisurfr.servlet;
 
 import com.google.common.base.Splitter;
 import com.google.gwt.thirdparty.guava.common.collect.Lists;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.RouteServiceManager;
 import com.taxisurfr.server.entity.Route;
 
@@ -25,6 +26,7 @@ public class LinkServlet extends HttpServlet {
     @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest request, HttpServletResponse resp) throws ServletException, IOException {
 
+        ObjectifyService.begin();
         String returnLink = ("/");
         String pathInfo = request.getPathInfo();
         List<String> strings = Lists.newArrayList(Splitter.on('/').omitEmptyStrings().split(pathInfo));

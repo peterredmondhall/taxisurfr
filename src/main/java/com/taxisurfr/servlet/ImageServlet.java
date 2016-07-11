@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.ImageManager;
 
 public class ImageServlet extends HttpServlet
@@ -22,6 +23,7 @@ public class ImageServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        ObjectifyService.begin();
         String imageStr = req.getParameter("image");
         log.info("doGet:"+imageStr);
         Long imageId = null;

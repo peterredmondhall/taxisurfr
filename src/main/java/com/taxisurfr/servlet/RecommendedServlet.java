@@ -2,6 +2,7 @@ package com.taxisurfr.servlet;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Resources;
+import com.googlecode.objectify.ObjectifyService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,6 +20,7 @@ public class RecommendedServlet extends HttpServlet
             HttpServletResponse response)
             throws ServletException, IOException
     {
+        ObjectifyService.begin();
         load(response);
     }
 

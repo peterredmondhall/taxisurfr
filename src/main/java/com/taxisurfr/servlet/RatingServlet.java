@@ -19,6 +19,7 @@ import com.google.appengine.api.urlfetch.HTTPResponse;
 import com.google.appengine.api.urlfetch.URLFetchService;
 import com.google.appengine.api.urlfetch.URLFetchServiceFactory;
 import com.google.common.collect.Maps;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.BookingServiceImpl;
 import com.taxisurfr.server.ConfigManager;
 import com.taxisurfr.server.CurrencyManager;
@@ -37,6 +38,7 @@ public class RatingServlet extends HttpServlet
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        ObjectifyService.begin();
         log.info("rating");
         bookingServiceManager.sendRatingRequest();
         statManager.report();

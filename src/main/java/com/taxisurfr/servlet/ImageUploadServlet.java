@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.googlecode.objectify.ObjectifyService;
 import org.apache.commons.fileupload.FileItemIterator;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -30,6 +31,7 @@ public class ImageUploadServlet extends HttpServlet
     {
         try
         {
+            ObjectifyService.begin();
             ServletFileUpload upload = new ServletFileUpload();
             res.setContentType("text/plain");
 

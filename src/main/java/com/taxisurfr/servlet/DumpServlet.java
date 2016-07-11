@@ -1,6 +1,7 @@
 package com.taxisurfr.servlet;
 
 import com.google.common.collect.ImmutableList;
+import com.googlecode.objectify.ObjectifyService;
 import com.taxisurfr.server.*;
 import com.taxisurfr.server.entity.*;
 
@@ -30,6 +31,7 @@ public class DumpServlet extends HttpServlet
     @SuppressWarnings("unchecked")
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
     {
+        ObjectifyService.begin();
 
         if (!bookingServiceManager.getMaintenceAllowed())
         {

@@ -10,10 +10,10 @@
 
     <properties>
         <app.id>taxigangsurf</app.id>
-        <app.version>57</app.version>
+        <app.version>61</app.version>
         <!--<app.id>gobygang</app.id>-->
         <!--<app.version>1</app.version>-->
-        <appengine.version>1.9.32</appengine.version>
+        <appengine.version>1.9.38</appengine.version>
         <gwt.version>2.7.0</gwt.version>
         <gcloud.plugin.version>1.9.17a</gcloud.plugin.version>
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>

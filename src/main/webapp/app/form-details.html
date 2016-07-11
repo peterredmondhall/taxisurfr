@@ -24,8 +24,8 @@
 
         <!--flightNo-->
         <div class="form-group col-xs-12">
-            <label for="flightNoId">Flight no.</label>
-            <input type="text" class="form-control" name="flightNo" id="flightNoId" placeholder="Flight no."
+            <label for="flightNoId"/>{{route.pickupTypeText}}</label>
+            <input type="text" class="form-control" name="flightNo" id="flightNoId" placeholder={{route.pickupTypeText}}
                    ng-model="booking.flightNo"
                    required/>
 
@@ -34,8 +34,8 @@
         </div>
 
         <div class="form-group col-xs-12">
-            <label for="flightNoId">Landing Time.</label>
-            <input type="text" class="form-control" name="landingTime" placeholder="Landing time"
+            <label for="flightNoId">{{route.pickupTimeText}}</label>
+            <input type="text" class="form-control" name="landingTime" placeholder={{route.pickupTimeText}}
                    ng-model="booking.landingTime"
                    required/>
 
